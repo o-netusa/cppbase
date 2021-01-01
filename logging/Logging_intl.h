@@ -24,7 +24,7 @@ public:
         fs::path log_conf = fs::path(filesystem::GetConfigDir())/filesystem::LogConfigFilename;
         if (fs::exists(log_conf))
         {
-            spdlog_setup::from_file(log_conf.c_str());
+            spdlog_setup::from_file(log_conf.generic_string());
         }
         else
         {

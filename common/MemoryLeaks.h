@@ -19,8 +19,8 @@
 #endif
 
 #if defined(_MSC_VER)
-#define VLD_FORCE_ENABLE
-#include <vld.h>
+// #define VLD_FORCE_ENABLE
+// #include <vld.h>
 #endif
 
 // See tests/common/MemoryLeaksTests.cpp for examples

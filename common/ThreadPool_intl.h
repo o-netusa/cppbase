@@ -12,6 +12,8 @@
 
 namespace cppbase {
 
+static auto logger = logging::GetLoggerForCurrentModule();
+
 // #ifdef __linux__
 #if 0
 int32_t SetThreadPriority(ThreadPriority priority)
@@ -67,7 +69,7 @@ int32_t SetThreadPriority(ThreadPriority)
     return 0;
 }
 
-int32_t GetThreadPriority(ino64_t)
+int32_t GetThreadPriority(int64_t)
 {
     return 0;
 }
@@ -83,6 +85,7 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
     auto set_affinity = [&](uint32_t index, std::thread& thread) {
         if (cpu_reserved && cpu_reserved < cpu_nums)
         {
+#ifdef __linux__
             uint32_t cpu_id = index % (cpu_nums - cpu_reserved);
             cpu_set_t cpuset;
             CPU_ZERO(&cpuset);
@@ -91,8 +94,9 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
                                              sizeof(cpu_set_t), &cpuset);
             if (rc != 0)
             {
-                // olog_error("ThreadPool", "Error calling pthread_setaffinity_np: {}", rc);
+                logger->error("Error calling pthread_setaffinity_np: {}", rc);
             }
+#endif
         }
     };
 
@@ -116,9 +120,8 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
         });
         set_affinity(i, m_threads[i]);
     }
-    // olog_info("ThreadPool",
-    //           "Created thread pool with {} threads at priority {}, {} CPU core(s) reserved",
-    //           threads, priority, cpu_reserved);
+    logger->info("Created thread pool with {} threads at priority {}, {} CPU core(s) reserved",
+        threads, priority, cpu_reserved);
 }
 
 // the destructor joins all threads

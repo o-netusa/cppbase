@@ -17,7 +17,7 @@ target_include_directories(common_test PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
-set_target_warnings_as_error(TARGET common_test)
+# set_target_warnings_as_error(TARGET common_test)
 target_compile_features(common_test PRIVATE ${CXX_STD})
 
 target_link_libraries(common_test gtest spdlog)

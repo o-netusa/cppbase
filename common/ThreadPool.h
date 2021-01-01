@@ -59,7 +59,7 @@ public:
      *        the thread affinity for the 4 threads in the thread pool will be
      *        set to CPU1, CPU2, CPU3, CPU1, and CPU0 is not used.
      */
-    ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_reserved = 0);
+    explicit ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_reserved = 0);
     ~ThreadPool();
 
     template<class F, class... Args>

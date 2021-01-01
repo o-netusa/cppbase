@@ -98,6 +98,7 @@ add_subdirectory(${sigslot_SOURCE_DIR} ${sigslot_BINARY_DIR})
 #                        spdlog
 # ============================================================
 #
+set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "")
 download_project(
   PROJ     spdlog
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.8.2.tar.gz
@@ -119,15 +120,16 @@ download_project(
 add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
 
-if (MSVC)
+if (FALSE)
 # ============================================================
 #                        vld
 # ============================================================
 #
+set(VLD_FMT_EXTERNAL ON CACHE BOOL "")
 download_project(
   PROJ     vld
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/vld/2.5.2.tar.gz
-  URL_HASH MD5=44d2edc7e006b97be4bdf43de7b5f3b5
+  URL_HASH MD5=daa96b5e7427411ba7258fcf8e72df92
   QUIET
 )
 add_subdirectory(${vld_SOURCE_DIR} ${vld_BINARY_DIR})

@@ -21,8 +21,10 @@ TEST(ThreadPoolTests, SimpleTest)
     for(int32_t i = 0; i < 8; ++i)
     {
         results.emplace_back(pool.Enqueue([i] {
+#ifdef __linux__
             std::cout << "ThreadPoolTests::SimpleTest thread=" << i
                       << " running on CPU=" << sched_getcpu() << std::endl;
+#endif
             std::this_thread::sleep_for(std::chrono::seconds(1));
             return i*i;
         }));
@@ -45,8 +47,10 @@ TEST(ThreadPoolTests, PriorityAndCpuTest)
     for(int32_t i = 0; i < 8; ++i)
     {
         results.emplace_back(pool.Enqueue([i] {
+#ifdef __linux__
             std::cout << "ThreadPoolTests::PriorityAndCpuTest thread=" << i
                       << " running on CPU=" << sched_getcpu() << std::endl;
+#endif
             std::this_thread::sleep_for(std::chrono::seconds(1));
             return i*i;
         }));

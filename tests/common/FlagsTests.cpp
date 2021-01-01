@@ -27,7 +27,7 @@ TEST(FlagsTests, FlagsTests)
 {
     // build flags
     FooFlags flags{FooFlag::FLAG_A, FooFlag::FLAG_B, FooFlag::FLAG_C};
-    EXPECT_EQ(flags, 0x1 | 0x2 | 0x4);
+    EXPECT_EQ(static_cast<int>(flags), 0x1 | 0x2 | 0x4);
 
     // check flags
     EXPECT_TRUE(flags & FooFlag::FLAG_A);
@@ -44,9 +44,9 @@ TEST(FlagsTests, FlagsTests)
     flags.SetFlag(FooFlag::FLAG_D, false); // set D off
     EXPECT_FALSE(flags & FooFlag::FLAG_D);
     flags.SetFlags({FooFlag::FLAG_A, FooFlag::FLAG_B}, false); // set A/B off
-    EXPECT_EQ(flags, 0x4);
+    EXPECT_EQ(static_cast<int>(flags), 0x4);
     flags |= {FooFlag::FLAG_E, FooFlag::FLAG_F}; // set E/F on
-    EXPECT_EQ(flags, 0x4 | 0x10 | 0x20);
+    EXPECT_EQ(static_cast<int>(flags), 0x4 | 0x10 | 0x20);
     flags &= ~FooFlags{FooFlag::FLAG_E, FooFlag::FLAG_F}; // set E/F off
-    EXPECT_EQ(flags, 0x4);
+    EXPECT_EQ(static_cast<int>(flags), 0x4);
 }

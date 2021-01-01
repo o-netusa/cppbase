@@ -13,7 +13,7 @@ target_include_directories(logging_test PUBLIC
   $<INSTALL_INTERFACE:include>
 )
 
-set_target_warnings_as_error(TARGET logging_test)
+# set_target_warnings_as_error(TARGET logging_test)
 target_compile_features(logging_test PRIVATE ${CXX_STD})
 
 target_link_libraries(logging_test gtest spdlog)
