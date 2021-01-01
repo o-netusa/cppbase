@@ -18,7 +18,7 @@ download_project(
   QUIET
 )
 add_library(asio INTERFACE)
-target_include_directories(asio INTERFACE ${asio_SOURCE_DIR/include})
+target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
 
 # ============================================================
 #                        fmt

@@ -25,7 +25,7 @@
 
 namespace cppbase {
 
-enum class ThreadPriority
+enum class ThreadPriority : int32_t
 {
     IDLE = 10,
     LOW = 30,
@@ -60,6 +60,7 @@ public:
      *        set to CPU1, CPU2, CPU3, CPU1, and CPU0 is not used.
      */
     explicit ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_reserved = 0);
+    ThreadPool() = delete;
     ~ThreadPool();
 
     template<class F, class... Args>

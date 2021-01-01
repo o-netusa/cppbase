@@ -9,8 +9,6 @@ add_executable(logging_test ${SOURCE})
 
 target_include_directories(logging_test PUBLIC
   ${CMAKE_SOURCE_DIR}
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
-  $<INSTALL_INTERFACE:include>
 )
 
 # set_target_warnings_as_error(TARGET logging_test)
