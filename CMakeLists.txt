@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 project(cppbase CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
+# set(CMAKE_INCLUDE_CURRENT_DIR ON) # this causes capnproto build to fail
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(BUILD_SHARED ON)
@@ -21,6 +21,7 @@ else()
 endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
+# MODULE_NAME is useful for logger naming
 add_compile_definitions(MODULE_NAME="cppbase")
 
 if (MSVC)
@@ -41,4 +42,8 @@ endif()
 enable_testing()
 
 add_subdirectory(thirdparty)
-add_subdirectory(tests)
+
+# Build unit tests for standalone build only
+if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+  add_subdirectory(tests)
+endif()

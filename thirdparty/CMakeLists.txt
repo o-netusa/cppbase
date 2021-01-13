@@ -7,6 +7,8 @@ message(STATUS "===============================")
 message(STATUS "Thirdparty Libs (${CMAKE_BUILD_TYPE})")
 message(STATUS "===============================")
 
+set(BUILD_TESTING OFF CACHE BOOL "")
+
 # Many libs may depend on zlib, so put it at the beginning
 # ============================================================
 #                        zlib
@@ -16,7 +18,7 @@ message("Building zlib")
 download_project(
   PROJ     zlib
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zlib-1.2.11.tar.gz
-  URL_HASH MD5=1c9f62f0778697a09d36121ead88e08e
+  URL_HASH MD5=5cd021884a9e9aca588a427ad096662b
   QUIET
 )
 add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
@@ -41,14 +43,13 @@ target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
 # ============================================================
 #
 message("Building capnproto")
-set(BUILD_TESTING OFF CACHE BOOL "")
 download_project(
   PROJ     capnproto
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/capnproto/capnproto-0.8.0.tar.gz
   URL_HASH MD5=1601022b45a083e7f0f8803e50f7e06b
   QUIET
 )
-add_subdirectory(${capnproto_SOURCE_DIR}/c++ ${capnproto_BINARY_DIR})
+add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR})
 
 # ============================================================
 #                        fmt
@@ -69,8 +70,8 @@ add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
 #
 message("Building googletest")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
-set(INSTALL_GMOCK ON CACHE BOOL "")
-set(INSTALL_GTEST ON CACHE BOOL "")
+set(INSTALL_GMOCK OFF CACHE BOOL "")
+set(INSTALL_GTEST OFF CACHE BOOL "")
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCED)
 
 download_project(
@@ -87,7 +88,6 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 #
 # MESSAGE("Building libcurl")
 # set(BUILD_CURL_EXE      OFF CACHE BOOL "")
-# set(BUILD_TESTING       OFF CACHE BOOL "")
 # set(ENABLE_MANUAL       OFF CACHE BOOL "")
 # set(CURL_CA_PATH_SET    OFF CACHE BOOL "")
 # set(CMAKE_USE_OPENSSL   OFF CACHE BOOL "")
