@@ -114,6 +114,19 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 # add_subdirectory(${curl_SOURCE_DIR} ${curl_BINARY_DIR})
 
 # ============================================================
+#                        rapidjson
+# ============================================================
+#
+message("Building rapidjson")
+download_project(
+  PROJ     rapidjson
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidjson/rapidjson-master.zip
+  URL_HASH MD5=fb721489c7f4aa384372050993e37d1d
+  QUIET
+)
+add_subdirectory(${rapidjson_SOURCE_DIR} ${rapidjson_BINARY_DIR})
+
+# ============================================================
 #                        sigslot
 # ============================================================
 #
