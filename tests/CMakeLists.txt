@@ -1,4 +1,6 @@
 add_subdirectory(common)
 add_subdirectory(logging)
 add_subdirectory(network)
+if(UNIX)
 add_subdirectory(serialization)
+endif()

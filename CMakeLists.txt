@@ -5,7 +5,7 @@ project(cppbase CXX)
 # set(CMAKE_INCLUDE_CURRENT_DIR ON) # this causes capnproto build to fail
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(BUILD_SHARED ON)
+# set(BUILD_SHARED ON)
 set(CXX_STD cxx_std_17)
 
 # Custom CMake modules/scripts
@@ -23,21 +23,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # MODULE_NAME is useful for logger naming
 add_compile_definitions(MODULE_NAME="cppbase")
-
-if (MSVC)
-add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
-add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-
-# -DWIN32_LEAN_AND_MEAN is for winsock.h has already been included error
-# -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING is for warning STL4009
-#   std::allocator<void> is deprecated in C++17
-add_definitions(
-    -D_WIN32_WINNT=0x0A00
-    -DNOMINMAX
-    -DWIN32_LEAN_AND_MEAN
-    -D_SILENCE_CXX17_ALLOCATOR_VOID_DEPRECATION_WARNING
-    -D_CRT_SECURE_NO_WARNINGS)
-endif()
 
 add_subdirectory(thirdparty)
 

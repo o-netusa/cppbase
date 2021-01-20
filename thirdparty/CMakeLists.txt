@@ -14,7 +14,7 @@ set(BUILD_TESTING OFF CACHE BOOL "")
 #                        zlib
 # ============================================================
 #
-message("Building zlib")
+message("Configuring zlib")
 download_project(
   PROJ     zlib
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zlib-1.2.11.tar.gz
@@ -28,7 +28,7 @@ add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
 #                        asio
 # ============================================================
 #
-message("Building asio")
+message("Configuring asio")
 download_project(
   PROJ     asio
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/asio/asio-1.18.0.tar.gz
@@ -38,6 +38,15 @@ download_project(
 add_library(asio INTERFACE)
 target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
 
+##
+# For encoding/decoding and client/server communications, following options
+# have been considered, but no decision has been made yet:
+# capnproto: this is the most likely choice, and there is only some cmake issue unresolved for Windows
+# nanopb: functionality is limited
+# protobuf: client/server communication is limited to http2
+# rpclib: inactive development
+
+if(UNIX)
 # ============================================================
 #                        capnproto
 # ============================================================
@@ -50,12 +59,13 @@ download_project(
   QUIET
 )
 add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR})
+endif()
 
 # ============================================================
 #                        fmt
 # ============================================================
 #
-message("Building fmt")
+message("Configuring fmt")
 download_project(
   PROJ     fmt
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/fmt-6.2.0.tar.gz
@@ -68,7 +78,7 @@ add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
 #                        googletest
 # ============================================================
 #
-message("Building googletest")
+message("Configuring googletest")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 set(INSTALL_GMOCK OFF CACHE BOOL "")
 set(INSTALL_GTEST OFF CACHE BOOL "")
@@ -86,7 +96,7 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 #                        libcurl
 # ============================================================
 #
-# MESSAGE("Building libcurl")
+# MESSAGE("Configuring libcurl")
 # set(BUILD_CURL_EXE      OFF CACHE BOOL "")
 # set(ENABLE_MANUAL       OFF CACHE BOOL "")
 # set(CURL_CA_PATH_SET    OFF CACHE BOOL "")
@@ -117,7 +127,7 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 #                        rapidjson
 # ============================================================
 #
-message("Building rapidjson")
+message("Configuring rapidjson")
 download_project(
   PROJ     rapidjson
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidjson/rapidjson-master.zip
@@ -130,7 +140,7 @@ add_subdirectory(${rapidjson_SOURCE_DIR} ${rapidjson_BINARY_DIR})
 #                        sigslot
 # ============================================================
 #
-message("Building sigslot")
+message("Configuring sigslot")
 set(SIGSLOT_COMPILE_EXAMPLES OFF CACHE BOOL "")
 set(SIGSLOT_COMPILE_TESTS    OFF CACHE BOOL "")
 download_project(
@@ -145,7 +155,7 @@ add_subdirectory(${sigslot_SOURCE_DIR} ${sigslot_BINARY_DIR})
 #                        spdlog
 # ============================================================
 #
-message("Building spdlog")
+message("Configuring spdlog")
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "")
 download_project(
   PROJ     spdlog
@@ -159,7 +169,8 @@ add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
 #                        stduuid
 # ============================================================
 #
-message("Building stduuid")
+message("Configuring stduuid")
+set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
   PROJ     stduuid
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/stduuid-master.zip
@@ -167,14 +178,16 @@ download_project(
   QUIET
 )
 add_library(stduuid INTERFACE)
-target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
+target_include_directories(stduuid INTERFACE
+  ${stduuid_SOURCE_DIR}/include
+  ${stduuid_SOURCE_DIR}/gsl)
 
 if (FALSE)
 # ============================================================
 #                        vld
 # ============================================================
 #
-message("Building vld")
+message("Configuring vld")
 set(VLD_FMT_EXTERNAL ON CACHE BOOL "")
 download_project(
   PROJ     vld
