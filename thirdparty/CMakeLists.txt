@@ -128,6 +128,7 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 # ============================================================
 #
 message("Configuring rapidjson")
+set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
   PROJ     rapidjson
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidjson/rapidjson-master.zip
@@ -173,14 +174,12 @@ message("Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
   PROJ     stduuid
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/stduuid-master.zip
-  URL_HASH MD5=aae5218f4e0e8be3e1a48f2de520ef81
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/stduuid-1.0.tar.gz
+  URL_HASH MD5=05ac92614b195dee6b1af0ba04684c57
   QUIET
 )
 add_library(stduuid INTERFACE)
-target_include_directories(stduuid INTERFACE
-  ${stduuid_SOURCE_DIR}/include
-  ${stduuid_SOURCE_DIR}/gsl)
+target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
 
 if (FALSE)
 # ============================================================
