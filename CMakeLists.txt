@@ -2,6 +2,13 @@ cmake_minimum_required(VERSION 3.10)
 
 project(cppbase CXX)
 
+set(CPPBASE_STANDALONE_PROJECT OFF)
+if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    set(CPPBASE_STANDALONE_PROJECT ON)
+endif()
+
+option(CPPBASE_BUILD_TESTING "Build unit tests" ${CPPBASE_STANDALONE_PROJECT})
+
 # set(CMAKE_INCLUDE_CURRENT_DIR ON) # this causes capnproto build to fail
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -26,8 +33,7 @@ add_compile_definitions(MODULE_NAME="cppbase")
 
 add_subdirectory(thirdparty)
 
-# Build unit tests for standalone build only
-if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_CURRENT_SOURCE_DIR})
+if(CPPBASE_BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
 endif()

@@ -2,10 +2,10 @@
  * @file:  FileSyste.h
  * @brief:
  *
- * Copyright(c) 2020-present O-Net Communications (ShenZhen) Limited.
- * This code is licensed under MIT license (see LICENSE for details)
- *
+ * Copyright 2021 O-Net Technologies (Group) Limited.
  *************************************************************************/
+
+#pragma once
 
 #if defined(_WIN32)
 
@@ -32,19 +32,19 @@ namespace cppbase { namespace filesystem {
 
 constexpr const char LogConfigFilename[] = "log.conf";
 
-std::string GetConfigDir() noexcept
+inline std::string GetConfigDir() noexcept
 {
     // For debug only
     return "./config";
 }
 
-std::string GetWorkspaceDir() noexcept
+inline std::string GetWorkspaceDir() noexcept
 {
     // For debug only
     return "./workspace";
 }
 
-std::string GetLogDir() noexcept
+inline std::string GetLogDir() noexcept
 {
     // For debug only
     return "./log";

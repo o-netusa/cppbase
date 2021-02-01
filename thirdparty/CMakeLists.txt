@@ -9,26 +9,11 @@ message(STATUS "===============================")
 
 set(BUILD_TESTING OFF CACHE BOOL "")
 
-# Many libs may depend on zlib, so put it at the beginning
-# ============================================================
-#                        zlib
-# ============================================================
-#
-message("Configuring zlib")
-download_project(
-  PROJ     zlib
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/zlib/zlib-1.2.11.tar.gz
-  URL_HASH MD5=5cd021884a9e9aca588a427ad096662b
-  QUIET
-)
-add_subdirectory(${zlib_SOURCE_DIR} ${zlib_BINARY_DIR})
-
-
 # ============================================================
 #                        asio
 # ============================================================
 #
-message("Configuring asio")
+message("==> Configuring asio")
 download_project(
   PROJ     asio
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/asio/asio-1.18.0.tar.gz
@@ -41,31 +26,32 @@ target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
 ##
 # For encoding/decoding and client/server communications, following options
 # have been considered, but no decision has been made yet:
+# [2021/02/01] rttr: RTTR is a reflection library and could also be used for serialization
+# because it indeed encodes/decodes types, and it seems planning to support JSON as well.
 # capnproto: this is the most likely choice, and there is only some cmake issue unresolved for Windows
 # nanopb: functionality is limited
 # protobuf: client/server communication is limited to http2
 # rpclib: inactive development
 
-if(UNIX)
 # ============================================================
-#                        capnproto
+#                        cxxopts
 # ============================================================
 #
-message("Building capnproto")
+message("==> Configuring cxxopts")
 download_project(
-  PROJ     capnproto
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/capnproto/capnproto-0.8.0.tar.gz
-  URL_HASH MD5=1601022b45a083e7f0f8803e50f7e06b
+  PROJ     cxxopts
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts/cxxopts-2.2.1.tar.gz
+  URL_HASH MD5=6e70da4fc17a09f32612443f1866042e
   QUIET
 )
-add_subdirectory(${capnproto_SOURCE_DIR} ${capnproto_BINARY_DIR})
-endif()
+add_library(cxxopts INTERFACE)
+target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
 
 # ============================================================
 #                        fmt
 # ============================================================
 #
-message("Configuring fmt")
+message("==> Configuring fmt")
 download_project(
   PROJ     fmt
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/fmt-6.2.0.tar.gz
@@ -78,7 +64,7 @@ add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
 #                        googletest
 # ============================================================
 #
-message("Configuring googletest")
+message("==> Configuring googletest")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 set(INSTALL_GMOCK OFF CACHE BOOL "")
 set(INSTALL_GTEST OFF CACHE BOOL "")
@@ -93,42 +79,13 @@ download_project(
 add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 
 # ============================================================
-#                        libcurl
-# ============================================================
-#
-# MESSAGE("Configuring libcurl")
-# set(BUILD_CURL_EXE      OFF CACHE BOOL "")
-# set(ENABLE_MANUAL       OFF CACHE BOOL "")
-# set(CURL_CA_PATH_SET    OFF CACHE BOOL "")
-# set(CMAKE_USE_OPENSSL   OFF CACHE BOOL "")
-# set(CURL_DISABLE_TELNET ON  CACHE BOOL "")
-# set(CURL_DISABLE_DICT   ON  CACHE BOOL "")
-# set(CURL_DISABLE_FILE   ON  CACHE BOOL "")
-# set(CURL_DISABLE_TFTP   ON  CACHE BOOL "")
-# set(CURL_DISABLE_LDAP   ON  CACHE BOOL "")
-# set(CURL_DISABLE_LDAPS  ON  CACHE BOOL "")
-# set(CURL_DISABLE_HTTP   ON  CACHE BOOL "")
-# set(CURL_DISABLE_RTSP   ON  CACHE BOOL "")
-# set(CURL_DISABLE_PROXY  ON  CACHE BOOL "")
-# set(CURL_DISABLE_POP3   ON  CACHE BOOL "")
-# set(CURL_DISABLE_IMAP   ON  CACHE BOOL "")
-# set(CURL_DISABLE_SMTP   ON  CACHE BOOL "")
-# set(CURL_DISABLE_GOPHER ON  CACHE BOOL "")
-
-# download_project(
-#   PROJ     curl
-#   URL      ${CMAKE_CURRENT_SOURCE_DIR}/curl/curl-7_74_0.tar.gz
-#   URL_HASH MD5=f9eb1ef3867584da7c8dc5f57ed4d95f
-#   QUIET
-# )
-# add_subdirectory(${curl_SOURCE_DIR} ${curl_BINARY_DIR})
-
-# ============================================================
 #                        rapidjson
 # ============================================================
 #
-message("Configuring rapidjson")
+message("==> Configuring rapidjson")
 set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "")
+set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "")
+set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "")
 download_project(
   PROJ     rapidjson
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidjson/rapidjson-master.zip
@@ -138,10 +95,24 @@ download_project(
 add_subdirectory(${rapidjson_SOURCE_DIR} ${rapidjson_BINARY_DIR})
 
 # ============================================================
+#                        rapidxml
+# ============================================================
+#
+message("==> Configuring rapidxml")
+download_project(
+  PROJ     rapidxml
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml/rapidxml.zip
+  URL_HASH MD5=113b9040ccaba2cc652f8aeac7fd9536
+  QUIET
+)
+add_library(rapidxml INTERFACE)
+target_include_directories(rapidxml INTERFACE ${rapidxml_SOURCE_DIR})
+
+# ============================================================
 #                        sigslot
 # ============================================================
 #
-message("Configuring sigslot")
+message("==> Configuring sigslot")
 set(SIGSLOT_COMPILE_EXAMPLES OFF CACHE BOOL "")
 set(SIGSLOT_COMPILE_TESTS    OFF CACHE BOOL "")
 download_project(
@@ -156,7 +127,7 @@ add_subdirectory(${sigslot_SOURCE_DIR} ${sigslot_BINARY_DIR})
 #                        spdlog
 # ============================================================
 #
-message("Configuring spdlog")
+message("==> Configuring spdlog")
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "")
 download_project(
   PROJ     spdlog
@@ -170,7 +141,7 @@ add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
 #                        stduuid
 # ============================================================
 #
-message("Configuring stduuid")
+message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
   PROJ     stduuid
@@ -180,19 +151,3 @@ download_project(
 )
 add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
-
-if (FALSE)
-# ============================================================
-#                        vld
-# ============================================================
-#
-message("Configuring vld")
-set(VLD_FMT_EXTERNAL ON CACHE BOOL "")
-download_project(
-  PROJ     vld
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/vld/2.5.2.tar.gz
-  URL_HASH MD5=daa96b5e7427411ba7258fcf8e72df92
-  QUIET
-)
-add_subdirectory(${vld_SOURCE_DIR} ${vld_BINARY_DIR})
-endif()

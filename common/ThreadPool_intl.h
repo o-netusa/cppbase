@@ -2,9 +2,7 @@
  * @file: ThreadPool_intl.h
  * @brief:
  *
- * Copyright(c) 2020-present O-Net Communications (ShenZhen) Limited.
- * This code is licensed under MIT license (see LICENSE for details)
- *
+ * Copyright 2021 O-Net Technologies (Group) Limited.
  ****************************************************************************/
 
 #include "ThreadPool.h"

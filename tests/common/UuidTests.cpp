@@ -2,9 +2,7 @@
  * @file:  UuidTests.cpp
  * @brief:
  *
- * Copyright(c) 2020-present O-Net Communications (ShenZhen) Limited.
- * This code is licensed under MIT license (see LICENSE for details)
- *
+ * Copyright 2021 O-Net Technologies (Group) Limited.
 **************************************************************************/
 
 #include <gtest/gtest.h>
@@ -21,12 +19,20 @@ TEST(UuidTests, Basic)
 
 TEST(UuidTests, Parse)
 {
-   EXPECT_TRUE(uuid::is_valid_uuid("47183823-2574-4bfd-b411-99ed177d3e43"));
-   EXPECT_TRUE(uuid::is_valid_uuid("{47183823-2574-4bfd-b411-99ed177d3e43}"));
-   EXPECT_TRUE(uuid::is_valid_uuid(L"47183823-2574-4bfd-b411-99ed177d3e43"));
-   EXPECT_TRUE(uuid::is_valid_uuid(L"{47183823-2574-4bfd-b411-99ed177d3e43}"));
-   EXPECT_TRUE(uuid::is_valid_uuid("00000000-0000-0000-0000-000000000000"));
-   EXPECT_TRUE(uuid::is_valid_uuid("{00000000-0000-0000-0000-000000000000}"));
-   EXPECT_TRUE(uuid::is_valid_uuid(L"00000000-0000-0000-0000-000000000000"));
-   EXPECT_TRUE(uuid::is_valid_uuid(L"{00000000-0000-0000-0000-000000000000}"));
+    {
+        auto guid = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e43");
+        EXPECT_EQ("47183823-2574-4bfd-b411-99ed177d3e43", uuids::to_string(guid));
+    }
+    {
+        auto str = "";
+        EXPECT_THROW(uuids::uuid::from_string(str), uuids::uuid_error);
+    }
+    {
+        auto guid = uuids::uuid::from_string(L"47183823-2574-4bfd-b411-99ed177d3e43");
+        EXPECT_EQ("47183823-2574-4bfd-b411-99ed177d3e43", uuids::to_string(guid));
+    }
+    {
+        auto guid = uuids::uuid::from_string("00000000-0000-0000-0000-000000000000");
+        EXPECT_EQ("00000000-0000-0000-0000-000000000000", uuids::to_string(guid));
+    }
 }

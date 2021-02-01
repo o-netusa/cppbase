@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.10)
 set(SOURCE
   main.cpp
   BlockingQueueTests.cpp
-  FlagsTests.cpp
   MemoryLeaksTests.cpp
   TimerTests.cpp
   ThreadPoolTests.cpp
+  SemaphoreTests.cpp
   UuidTests.cpp
 )
 

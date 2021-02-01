@@ -2,9 +2,7 @@
  * @file:  Global.h
  * @brief:
  *
- * Copyright(c) 2020-present O-Net Communications (ShenZhen) Limited.
- * This code is licensed under MIT license (see LICENSE for details)
- *
+ * Copyright 2021 O-Net Technologies (Group) Limited.
  *************************************************************************/
 
 #pragma once
@@ -17,7 +15,7 @@
 #  define DECL_IMPORT __attribute__((visibility("default")))
 #endif
 
-#if defined(ONET_LIBRARY)
+#if defined(API_EXPORTS)
 #  define DLLEXPORT DECL_EXPORT
 #else
 #  define DLLEXPORT DECL_IMPORT

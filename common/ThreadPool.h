@@ -2,9 +2,7 @@
  * @file: ThreadPool.cpp
  * @brief: Based on ThreadPool @ https://github.com/progschj/ThreadPool.git
  *
- * Copyright(c) 2020-present O-Net Communications (ShenZhen) Limited.
- * This code is licensed under MIT license (see LICENSE for details)
- *
+ * Copyright 2021 O-Net Technologies (Group) Limited.
  ****************************************************************************/
 
 #pragma once
@@ -109,7 +107,6 @@ auto ThreadPool::Enqueue(F&& f, Args&&... args)
             (*task)();
             auto stop = high_resolution_clock::now();
             auto duration = duration_cast<microseconds>(stop - start);
-            // olog_infod("ThreadPool", "Thread pool task execution time: {} us", duration.count());
         });
     }
     m_condition.notify_one();

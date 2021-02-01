@@ -1,20 +1,21 @@
 ## 第三方软件
-### Google Test (https://github.com/google/googletest)
+### asio (https://github.com/chriskohlhoff/asio) provides cross-platform network socket and serial port APIs
 
-### asio (https://github.com/chriskohlhoff/asio)
+### cxxopts (https://github.com/jarro2783/cxxopts) provides cross-platform command line options support
 
-### curl (https://github.com/curl/curl)
+### fmt (https://github.com/fmtlib/fmt) provides cross-platform C++ string formatting
 
-### fmt (https://github.com/fmtlib/fmt)
+### Google Test (https://github.com/google/googletest) C++ unit test framework
 
-### sigslot (https://github.com/palacaze/sigslot)
+### rapidjson (https://github.com/Tencent/rapidjson) provides JSON encoding/decoding functionalities
 
-### spdlog (https://github.com/gabime/spdlog)
+### rapidxml (http://rapidxml.sourceforge.net/) provides XML encoding/decoding functionalities
 
-### stduuid (https://github.com/mariusbancila/stduuid)
+### sigslot (https://github.com/palacaze/sigslot) provides cross-platform event and handler functionalities similar to Qt signal/slot
 
-### vld (https://github.com/KindDragon/vld) [MSVC Only]
-* Using fork at https://github.com/razor950/vld for VS 2017/2019
+### spdlog (https://github.com/gabime/spdlog) provides cross-platform logging functionality
+
+### stduuid (https://github.com/mariusbancila/stduuid) provides cross-platform uuid functionality
 
 ## 如何添加新的第三方软件
 * 在代码仓库根目录下生成第三方库的文件夹并加入第三方库的压缩包（可以是.zip, .tar.gz等格式）
