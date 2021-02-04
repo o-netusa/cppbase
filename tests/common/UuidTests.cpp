@@ -2,7 +2,7 @@
  * @file:  UuidTests.cpp
  * @brief:
  *
- * Copyright 2021 O-Net Technologies (Group) Limited.
+ * Copyright (c) 2021 O-Net Technologies (Group) Limited.
 **************************************************************************/
 
 #include <gtest/gtest.h>

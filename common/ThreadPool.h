@@ -2,7 +2,7 @@
  * @file: ThreadPool.cpp
  * @brief: Based on ThreadPool @ https://github.com/progschj/ThreadPool.git
  *
- * Copyright 2021 O-Net Technologies (Group) Limited.
+ * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  ****************************************************************************/
 
 #pragma once

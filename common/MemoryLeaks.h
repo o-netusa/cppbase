@@ -3,7 +3,7 @@
  * @brief: Include this file to detect memory leaks for MSVC builds.
  *         See details at https://github.com/KindDragon/vld
  *
- * Copyright 2021 O-Net Technologies (Group) Limited.
+ * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  *************************************************************************/
 
 #pragma once
