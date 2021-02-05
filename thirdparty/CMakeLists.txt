@@ -128,6 +128,7 @@ add_subdirectory(${sigslot_SOURCE_DIR} ${sigslot_BINARY_DIR})
 # ============================================================
 #
 message("==> Configuring spdlog")
+set(SPDLOG_BUILD_SHARED ON CACHE BOOL "")
 set(SPDLOG_FMT_EXTERNAL ON CACHE BOOL "")
 download_project(
   PROJ     spdlog

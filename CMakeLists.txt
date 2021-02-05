@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 
 project(cppbase CXX)
 
+find_package(Threads)
+
 set(CPPBASE_STANDALONE_PROJECT OFF)
 if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(CPPBASE_STANDALONE_PROJECT ON)
@@ -18,6 +20,7 @@ set(CXX_STD cxx_std_17)
 # Custom CMake modules/scripts
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(Common)
+include(CompilerWarnings)
 include(UseGoldLinker)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -32,6 +35,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 add_compile_definitions(MODULE_NAME="cppbase")
 
 add_subdirectory(thirdparty)
+
+# ccache relies on thirdparty config
+include(Cache)
 
 if(CPPBASE_BUILD_TESTING)
   enable_testing()

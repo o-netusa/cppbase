@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 set(SOURCE
   main.cpp
   TcpTests.cpp
+  UdpTests.cpp
 )
 
 add_executable(network_test ${SOURCE})
@@ -13,6 +14,7 @@ target_include_directories(network_test PUBLIC
 
 # set_target_warnings_as_error(TARGET network_test)
 target_compile_features(network_test PRIVATE ${CXX_STD})
+target_compile_definitions(network_test PRIVATE API_EXPORTS)
 
 target_link_libraries(network_test gtest asio spdlog)
 if(UNIX)
