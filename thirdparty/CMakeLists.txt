@@ -52,6 +52,7 @@ target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
 # ============================================================
 #
 message("==> Configuring fmt")
+set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 download_project(
   PROJ     fmt
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/fmt-6.2.0.tar.gz

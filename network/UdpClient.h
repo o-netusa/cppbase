@@ -9,8 +9,12 @@
 
 #include "Common.h"
 
-class DLLEXPORT UdpClient
+namespace cppbase {
+
+class DLLEXPORT UdpClient : public NetworkBase
 {
 public:
 private:
 };
+
+}

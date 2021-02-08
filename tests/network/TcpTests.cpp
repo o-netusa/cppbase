@@ -24,7 +24,6 @@ TEST(TCPTests, TCPServerClient)
         ret = connection->Send(buf, strlen(text));
         EXPECT_EQ(strlen(text), ret);
     });
-    // io_context.run();
 
     auto tcp_client = std::make_shared<TcpClient>();
     EXPECT_TRUE(tcp_client->Connect("127.0.0.1", 1234));

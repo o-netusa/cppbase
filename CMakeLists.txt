@@ -36,9 +36,6 @@ add_compile_definitions(MODULE_NAME="cppbase")
 
 add_subdirectory(thirdparty)
 
-# ccache relies on thirdparty config
-include(Cache)
-
 if(CPPBASE_BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
