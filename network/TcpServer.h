@@ -39,9 +39,9 @@ public:
         asio::error_code error;
         ret = m_socket.write_some(asio::buffer(buffer, bufsz), error);
         if (error)
-	    NetworkBase::logger->error("TcpConnection::Send: error sending data: {}", error.message());
+            network::logger->error("TcpConnection::Send: error sending data: {}", error.message());
 
-	NetworkBase::logger->debug("TcpConnection::Send: sent {} bytes data", ret);
+        network::logger->debug("TcpConnection::Send: sent {} bytes data", ret);
 
         return ret;
     }
@@ -55,9 +55,9 @@ public:
         asio::error_code error;
         ret = m_socket.read_some(asio::buffer(buffer, bufsz), error);
         if (error)
-	    NetworkBase::logger->error("TcpConnection::Receive: error reading data: {}", error.message());
+            network::logger->error("TcpConnection::Receive: error reading data: {}", error.message());
 
-	NetworkBase::logger->debug("TcpConnection::Receive: read {} bytes data", ret);
+        network::logger->debug("TcpConnection::Receive: read {} bytes data", ret);
 
         return ret;
     }
@@ -69,11 +69,11 @@ private:
     tcp::socket m_socket;
 };
 
-class DLLEXPORT TcpServer : public NetworkBase
+class DLLEXPORT TcpServer
 {
 public:
     TcpServer(uint16_t port_num)
-	: m_acceptor(m_io_context, tcp::endpoint(tcp::v4(), port_num))
+        : m_acceptor(network::io_context, tcp::endpoint(tcp::v4(), port_num))
     {}
 
     void Start(std::function<void(std::shared_ptr<TcpConnection>)> accept_handler)
@@ -99,16 +99,16 @@ public:
 private:
     void StartAccept()
     {
-        auto new_connection = TcpConnection::Create(m_io_context);
+        auto new_connection = TcpConnection::Create(network::io_context);
         m_acceptor.async_accept(new_connection->GetSocket(),
                                 [new_connection, this](const asio::error_code& ec) {
             if (ec)
             {
-		NetworkBase::logger->error("TcpServer::StartAccept: accept handler error: {}", ec.message());
+                network::logger->error("TcpServer::StartAccept: accept handler error: {}", ec.message());
                 return;
             }
             auto client_addr = new_connection->GetSocket().local_endpoint().address().to_string();
-	    NetworkBase::logger->debug("TcpServer::StartAccept: accepted connection from: {}", client_addr);
+            network::logger->debug("TcpServer::StartAccept: accepted connection from: {}", client_addr);
             m_accept_handler(new_connection);
             StartAccept();
         });

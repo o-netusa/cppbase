@@ -11,7 +11,7 @@
 
 namespace cppbase {
 
-class DLLEXPORT TcpClient : public NetworkBase
+class DLLEXPORT TcpClient
 {
 public:
     TcpClient() = default;
@@ -25,19 +25,19 @@ public:
         asio::error_code ec;
         if (m_is_connected)
         {
-            NetworkBase::logger->error("TcpClient::Connect: already connected.");
+            network::logger->error("TcpClient::Connect: already connected.");
             return false;
         }
         auto address = asio::ip::address::from_string(ip_addr.c_str(), ec);
         if (ec)
         {
-            NetworkBase::logger->error("TcpClient::Connect: invalid ip address({}): {}", ip_addr, ec.message());
+            network::logger->error("TcpClient::Connect: invalid ip address({}): {}", ip_addr, ec.message());
             return false;
         }
         m_sock.connect(tcp::endpoint(address, port_num), ec);
         if (ec)
         {
-            NetworkBase::logger->error("TcpClient::Connect: connect to {}:{} error: ", ip_addr, port_num, ec.message());
+            network::logger->error("TcpClient::Connect: connect to {}:{} error: ", ip_addr, port_num, ec.message());
             return false;
         }
 
@@ -54,7 +54,7 @@ public:
             m_sock.close(ec);
             if (ec)
             {
-                NetworkBase::logger->error("TcpClient::Disconnect: error closing socket: {}", ec.message());
+                network::logger->error("TcpClient::Disconnect: error closing socket: {}", ec.message());
             }
         }
         m_is_connected = false;
@@ -70,7 +70,7 @@ public:
         asio::error_code ec;
         ret = m_sock.send(asio::buffer(buffer, size), 0, ec);
         if (ec)
-            NetworkBase::logger->error("TcpClient::Send: error sending buffer: {}", ec.message());
+            network::logger->error("TcpClient::Send: error sending buffer: {}", ec.message());
 
         return ret;
     }
@@ -85,13 +85,13 @@ public:
         asio::error_code ec;
         ret = m_sock.receive(asio::buffer(buffer, size), 0, ec);
         if (ec)
-	    NetworkBase::logger->error("TcpClient::Receive: error receiving buffer: {}", ec.message());
+            network::logger->error("TcpClient::Receive: error receiving buffer: {}", ec.message());
 
         return ret;
     }
 
 private:
-    tcp::socket m_sock{m_io_context};
+    tcp::socket m_sock{network::io_context};
     bool m_is_connected{false};
 };
 

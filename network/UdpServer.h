@@ -12,11 +12,11 @@
 
 namespace cppbase {
 
-class DLLEXPORT UdpServer : public NetworkBase
+class DLLEXPORT UdpServer
 {
 public:
     UdpServer(uint16_t port_num)
-        : m_socket(m_io_context, udp::endpoint(udp::v4(), port_num))
+        : m_socket(network::io_context, udp::endpoint(udp::v4(), port_num))
     {}
 
     void Start(std::function<void()> receive_handler)

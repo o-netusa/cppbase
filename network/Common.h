@@ -14,35 +14,30 @@
 #include <common/Global.h>
 #include <logging/Logging.h>
 
-namespace cppbase {
+namespace cppbase { namespace network {
 
-class DLLEXPORT NetworkBase
+static logging::LoggerPtr logger{logging::GetLoggerForCurrentModule()};
+static asio::io_context io_context;
+// executor_work_guard prevents io_context from returning
+static asio::executor_work_guard<asio::io_context::executor_type> work_guard{asio::make_work_guard(io_context)};
+// io_thread keeps io_context running
+static std::thread io_thread;
+
+static void Init()
 {
-public:
-    inline static logging::LoggerPtr logger{logging::GetLoggerForCurrentModule()};
+    io_thread = std::thread([]{ io_context.run(); });
+}
 
-    NetworkBase()
-    {}
-
-    ~NetworkBase()
-    {
-        m_io_context.stop();
-        m_thread.join();
-    }
-
-    asio::io_context& GetIOContext()
-    {
-        return m_io_context;
-    }
-
-protected:
-    asio::io_context m_io_context{};
-    asio::executor_work_guard<asio::io_context::executor_type> m_work_guard
-    { asio::make_work_guard(m_io_context) };
-    std::thread m_thread{ [this]{ m_io_context.run(); } };
-};
+static void Terminate()
+{
+    io_context.stop();
+    io_thread.join();
+}
 
 }
 
 using tcp = asio::ip::tcp;
 using udp = asio::ip::udp;
+
+}
+

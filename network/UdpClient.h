@@ -11,7 +11,7 @@
 
 namespace cppbase {
 
-class DLLEXPORT UdpClient : public NetworkBase
+class DLLEXPORT UdpClient
 {
 public:
 private:
