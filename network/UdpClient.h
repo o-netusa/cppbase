@@ -14,7 +14,85 @@ namespace cppbase {
 class DLLEXPORT UdpClient
 {
 public:
+    UdpClient() = default;
+    ~UdpClient()
+    {
+        Disconnect();
+    }
+
+    bool Connect(const std::string& ip_addr, uint16_t port_num)
+    {
+        asio::error_code ec;
+        if (m_is_connected)
+        {
+            network::logger->error("UdpClient::Connect: already connected.");
+            return false;
+        }
+        auto address = asio::ip::address::from_string(ip_addr.c_str(), ec);
+        if (ec)
+        {
+            network::logger->error("UdpClient::Connect: invalid ip address({}): {}", ip_addr, ec.message());
+            return false;
+        }
+        m_sock.connect(udp::endpoint(address, port_num), ec);
+        if (ec)
+        {
+            network::logger->error("UdpClient::Connect: connect to {}:{} error: ", ip_addr, port_num, ec.message());
+            return false;
+        }
+
+        m_is_connected = true;
+
+        return true;
+    }
+
+    void Disconnect()
+    {
+        if (m_is_connected)
+        {
+            asio::error_code ec;
+            m_sock.close(ec);
+            if (ec)
+            {
+                network::logger->error("UdpClient::Disconnect: error closing socket: {}", ec.message());
+            }
+        }
+        m_is_connected = false;
+    }
+
+    uint32_t Send(const uint8_t* buffer, uint32_t size)
+    {
+        uint32_t ret = 0;
+
+        if (!buffer || size == 0 || !m_is_connected)
+            return ret;
+
+        asio::error_code ec;
+        ret = m_sock.send(asio::buffer(buffer, size), 0, ec);
+        if (ec)
+            network::logger->error("UdpClient::Send: error sending buffer: {}", ec.message());
+
+        return ret;
+    }
+
+    uint32_t Receive(uint8_t* buffer, uint32_t size)
+    {
+        uint32_t ret = 0;
+
+        if (!buffer || size == 0 || !m_is_connected)
+            return ret;
+
+        asio::error_code ec;
+        ret = m_sock.receive(asio::buffer(buffer, size), 0, ec);
+        if (ec)
+            network::logger->error("UdpClient::Receive: error receiving buffer: {}", ec.message());
+
+        return ret;
+    }
+
 private:
+    udp::socket m_sock{network::io_context};
+    bool m_is_connected{false};
 };
 
 }

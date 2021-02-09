@@ -14,6 +14,8 @@
 #include <common/Global.h>
 #include <logging/Logging.h>
 
+#define DEFAULT_BUFSZ 4096
+
 namespace cppbase { namespace network {
 
 static logging::LoggerPtr logger{logging::GetLoggerForCurrentModule()};
