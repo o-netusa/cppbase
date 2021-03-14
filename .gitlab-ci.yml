@@ -1,0 +1,17 @@
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja
+
+test:
+  stage: test
+  script:
+    - ctest
