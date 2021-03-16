@@ -9,8 +9,33 @@ stages:
   - build
   - test
 
-build:
+build_windows:
   stage: build
+  tags:
+    - windows
+  script:
+    - Remove-Item build -Force  -Recurse -ErrorAction SilentlyContinue
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake --build .
+  artifacts:
+    paths:
+      - build
+
+test_windows:
+  stage: test
+  tags:
+    - windows
+  script:
+    - cd build
+    - ctest
+  needs: ["build_windows"]
+
+build_linux:
+  stage: build
+  tags:
+    - linux
   script:
     - rm -rf build
     - mkdir build
@@ -21,8 +46,11 @@ build:
     paths:
       - build
 
-test:
+test_linux:
   stage: test
+  tags:
+    - linux
   script:
     - cd build
     - ctest
+  needs: ["build_linux"]
