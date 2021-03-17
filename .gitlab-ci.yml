@@ -14,11 +14,10 @@ build_windows:
   tags:
     - windows
   script:
-    - Remove-Item build -Force  -Recurse -ErrorAction SilentlyContinue
-    - mkdir build
+    - New-Item -ItemType Directory -Path "build" -Force
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - cmake --build .
+    - cmake -DCMAKE_BUILD_TYPE=Debug -GNinja ..
+    - ninja
   artifacts:
     paths:
       - build
