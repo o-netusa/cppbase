@@ -22,17 +22,6 @@ target_compile_features(common_test PRIVATE ${CXX_STD})
 target_link_libraries(common_test gtest spdlog stduuid)
 target_link_libraries(common_test $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    FILE(GLOB dll_list ${CMAKE_SOURCE_DIR}/bin/x64/debug/*.dll)
-  else()
-    FILE(GLOB dll_list ${CMAKE_SOURCE_DIR}/bin/x64/release/*.dll)
-  endif()
-  add_custom_command(TARGET common_test PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-    ${dll_list} $<TARGET_FILE_DIR:common_test>)
-endif()
-
 include(CTest)
 
 include(GoogleTest)
