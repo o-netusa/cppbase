@@ -90,6 +90,12 @@ public:
         return ret;
     }
 
+    void SetRecvBufSize(uint32_t size)
+    {
+        asio::socket_base::receive_buffer_size option(size);
+        m_sock.set_option(option);
+    }
+
 private:
     udp::socket m_sock{network::io_context};
     bool m_is_connected{false};
