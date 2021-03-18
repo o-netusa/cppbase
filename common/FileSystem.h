@@ -31,11 +31,12 @@ namespace fs = std::experimental::filesystem;
 namespace cppbase { namespace filesystem {
 
 constexpr const char LogConfigFilename[] = "log.conf";
+constexpr const char ConfigFolderName[] = "config";
 
 inline std::string GetConfigDir() noexcept
 {
-    // For debug only
-    return "./config";
+    auto path = fs::current_path() / ConfigFolderName;
+    return path.string();
 }
 
 inline std::string GetWorkspaceDir() noexcept
