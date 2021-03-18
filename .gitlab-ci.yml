@@ -1,6 +1,6 @@
-workflow:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+# workflow:
+#   rules:
+#    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 #    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
 #      when: never
 #    - if: '$CI_COMMIT_BRANCH'
@@ -9,7 +9,34 @@ stages:
   - build
   - test
 
+nightly_windows:
+  only:
+    - schedules
+  tags:
+    - windows
+  script:
+    - New-Item -ItemType Directory -Path "build" -Force
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
+    - ninja
+    - ctest
+
+nightly_linux:
+  only:
+    - schedules
+  tags:
+    - linux
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+    - ninja
+    - ctest
+
 build_windows:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: build
   tags:
     - windows
@@ -26,6 +53,8 @@ build_windows:
       - build/CTestTestfile.cmake
 
 test_windows:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: test
   tags:
     - windows
@@ -35,6 +64,8 @@ test_windows:
   needs: ["build_windows"]
 
 build_linux:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: build
   tags:
     - linux
@@ -52,6 +83,8 @@ build_linux:
       - build/CTestTestfile.cmake
 
 test_linux:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: test
   tags:
     - linux
