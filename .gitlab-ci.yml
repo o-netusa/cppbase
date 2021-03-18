@@ -20,7 +20,10 @@ build_windows:
     - ninja
   artifacts:
     paths:
-      - build
+      - build/bin
+      - build/lib
+      - build/tests
+      - build/CTestTestfile.cmake
 
 test_windows:
   stage: test
@@ -43,7 +46,10 @@ build_linux:
     - ninja
   artifacts:
     paths:
-      - build
+      - build/bin
+      - build/lib
+      - build/tests
+      - build/CTestTestfile.cmake
 
 test_linux:
   stage: test
