@@ -44,7 +44,7 @@ int32_t SetThreadPriority(ThreadPriority priority);
  */
 int32_t GetThreadPriority(int64_t id);
 
-class DLLEXPORT ThreadPool
+class ThreadPool
 {
 public:
     /**

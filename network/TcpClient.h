@@ -11,7 +11,7 @@
 
 namespace cppbase {
 
-class DLLEXPORT TcpClient
+class TcpClient
 {
 public:
     TcpClient() = default;

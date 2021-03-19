@@ -11,7 +11,7 @@
 
 namespace cppbase {
 
-class DLLEXPORT TcpConnection
+class TcpConnection
 {
 public:
     static std::shared_ptr<TcpConnection> Create(asio::io_context& io_context)
@@ -69,7 +69,7 @@ private:
     tcp::socket m_socket;
 };
 
-class DLLEXPORT TcpServer
+class TcpServer
 {
 public:
     TcpServer(uint16_t port_num)
