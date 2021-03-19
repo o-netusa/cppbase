@@ -11,7 +11,7 @@
 
 namespace cppbase {
 
-class DLLEXPORT UdpClient
+class UdpClient
 {
 public:
     UdpClient() = default;

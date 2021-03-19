@@ -12,7 +12,7 @@
 
 namespace cppbase {
 
-class DLLEXPORT UdpServer
+class UdpServer
 {
 public:
     UdpServer(uint16_t port_num)

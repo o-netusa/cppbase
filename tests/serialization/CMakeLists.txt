@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.10...3.20 FATAL_ERROR)
 
 include(CapnProto)
 CAPNP_GENERATE_CPP(addressbookSources addressbookHeaders addressbook.capnp)
