@@ -84,16 +84,14 @@ add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
 # ============================================================
 #
 message("==> Configuring rapidjson")
-set(RAPIDJSON_BUILD_TESTS OFF CACHE BOOL "")
-set(RAPIDJSON_BUILD_DOC OFF CACHE BOOL "")
-set(RAPIDJSON_BUILD_EXAMPLES OFF CACHE BOOL "")
 download_project(
   PROJ     rapidjson
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidjson/rapidjson-master.zip
   URL_HASH MD5=fb721489c7f4aa384372050993e37d1d
   QUIET
 )
-add_subdirectory(${rapidjson_SOURCE_DIR} ${rapidjson_BINARY_DIR})
+add_library(rapidjson INTERFACE)
+target_include_directories(rapidjson INTERFACE ${rapidjson_SOURCE_DIR}/include)
 
 # ============================================================
 #                        rapidxml
@@ -114,15 +112,14 @@ target_include_directories(rapidxml INTERFACE ${rapidxml_SOURCE_DIR})
 # ============================================================
 #
 message("==> Configuring sigslot")
-set(SIGSLOT_COMPILE_EXAMPLES OFF CACHE BOOL "")
-set(SIGSLOT_COMPILE_TESTS    OFF CACHE BOOL "")
 download_project(
   PROJ     sigslot
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/sigslot/sigslot-master.zip
   URL_HASH MD5=209a71004526e5d66025ab233200da0f
   QUIET
 )
-add_subdirectory(${sigslot_SOURCE_DIR} ${sigslot_BINARY_DIR})
+add_library(sigslot INTERFACE)
+target_include_directories(sigslot INTERFACE ${sigslot_SOURCE_DIR}/include)
 
 # ============================================================
 #                        spdlog
@@ -152,3 +149,5 @@ download_project(
 )
 add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
+install(DIRECTORY ${stduuid_SOURCE_DIR}/include/gsl DESTINATION include)
+install(FILES ${stduuid_SOURCE_DIR}/include/uuid.h DESTINATION include)

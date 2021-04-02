@@ -55,3 +55,9 @@ if(CPPBASE_BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
 endif()
+
+install(FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/Global.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/common/Semaphore.h
+    DESTINATION include/common
+)
