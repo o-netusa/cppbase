@@ -19,7 +19,7 @@ nightly_windows:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
     - ninja
-    - ctest
+    - ctest --output-on-failure
 
 nightly_linux:
   image: ubuntu:lidar_dev
@@ -33,7 +33,7 @@ nightly_linux:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja
-    - ctest
+    - ctest --output-on-failure
 
 build_windows:
   rules:
@@ -46,7 +46,7 @@ build_windows:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -GNinja ..
     - ninja
-    - ctest
+    - ctest --output-on-failure
 
 build_linux:
   image: ubuntu:lidar_dev
@@ -61,4 +61,4 @@ build_linux:
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
     - ninja
-    - ctest
+    - ctest --output-on-failure
