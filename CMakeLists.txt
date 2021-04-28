@@ -42,15 +42,6 @@ endif()
 
 add_subdirectory(thirdparty)
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-  if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-    file(GLOB dll_list ${CMAKE_CURRENT_SOURCE_DIR}/bin/x64/debug/*.dll)
-  else()
-    file(GLOB dll_list ${CMAKE_CURRENT_SOURCE_DIR}/bin/x64/release/*.dll)
-  endif()
-  file(COPY ${dll_list} DESTINATION ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-endif()
-
 if(CPPBASE_BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
