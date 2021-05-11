@@ -15,7 +15,7 @@ nightly_windows:
   tags:
     - windows
   script:
-    - New-Item -ItemType Directory -Path "build" -Force
+    - mkdir build
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
     - ninja
@@ -42,7 +42,7 @@ build_windows:
   tags:
     - windows
   script:
-    - New-Item -ItemType Directory -Path "build" -Force
+    - mkdir build
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -GNinja ..
     - ninja
