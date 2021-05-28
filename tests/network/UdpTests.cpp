@@ -23,10 +23,10 @@ TEST(UDPTests, UDPServerClient)
     auto udp_server = std::make_shared<UdpServer>(port);
     udp_server->Start([udp_server,&conn_port](uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint) {
         static char text[] = "hello";
+        conn_port = endpoint.port();
         EXPECT_EQ(strlen(text), bufsz);
         EXPECT_STREQ(reinterpret_cast<char*>(buffer), text);
         auto ret = udp_server->Send(buffer, bufsz, endpoint);
-        conn_port = endpoint.port();
         EXPECT_EQ(strlen(text), ret);
     });
 
