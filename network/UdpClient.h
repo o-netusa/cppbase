@@ -98,6 +98,14 @@ public:
         m_sock.set_option(option);
     }
 
+    void ShutDown()
+    {
+        asio::error_code ec;
+        m_sock.shutdown(asio::socket_base::shutdown_both, ec);
+        if (ec)
+            network::logger->error("UdpClient::ShutDown: error stopping socket : {}", ec.message());
+    }
+
 private:
     udp::socket m_sock;
     bool m_is_connected{false};
