@@ -98,7 +98,7 @@ public:
         m_sock.set_option(option);
     }
 
-    void ShutDown()
+    void Shutdown()
     {
         asio::error_code ec;
         m_sock.shutdown(asio::socket_base::shutdown_both, ec);
