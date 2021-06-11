@@ -32,7 +32,7 @@ nightly_linux:
     - mkdir build
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
-    - ninja
+    - ninja -j 4
     - ctest --output-on-failure
 
 build_windows:
@@ -60,5 +60,5 @@ build_linux:
     - mkdir build
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
-    - ninja
+    - ninja -j 4
     - ctest --output-on-failure
