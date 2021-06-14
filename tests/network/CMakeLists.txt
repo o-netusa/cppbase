@@ -15,7 +15,7 @@ target_include_directories(network_test PUBLIC
 # set_target_warnings_as_error(TARGET network_test)
 target_compile_features(network_test PRIVATE ${CXX_STD})
 
-target_link_libraries(network_test gtest asio spdlog)
+target_link_libraries(network_test gtest asio spdlog_header_only)
 if(UNIX)
   target_link_libraries(network_test
       $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
