@@ -55,8 +55,8 @@ message("==> Configuring fmt")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 download_project(
   PROJ     fmt
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/fmt-6.2.0.tar.gz
-  URL_HASH MD5=0a7d2dfb5d0877e88c0d7c389408b369
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/7.1.3.tar.gz
+  URL_HASH MD5=2522ec65070c0bda0ca288677ded2831
   QUIET
 )
 add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
@@ -128,8 +128,8 @@ target_include_directories(sigslot INTERFACE ${sigslot_SOURCE_DIR}/include)
 message("==> Configuring spdlog")
 download_project(
   PROJ     spdlog
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.8.2.tar.gz
-  URL_HASH MD5=22518fb28d4be66c92a703c67d99b1d1
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.8.5.tar.gz
+  URL_HASH MD5=8755cdbc857794730a022722a66d431a
   QUIET
 )
 add_library(spdlog INTERFACE)
