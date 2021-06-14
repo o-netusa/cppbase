@@ -126,14 +126,14 @@ target_include_directories(sigslot INTERFACE ${sigslot_SOURCE_DIR}/include)
 # ============================================================
 #
 message("==> Configuring spdlog")
+set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "")
 download_project(
   PROJ     spdlog
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.8.5.tar.gz
   URL_HASH MD5=8755cdbc857794730a022722a66d431a
   QUIET
 )
-add_library(spdlog INTERFACE)
-target_include_directories(spdlog INTERFACE ${spdlog_SOURCE_DIR}/include)
+add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
 
 # ============================================================
 #                        stduuid
