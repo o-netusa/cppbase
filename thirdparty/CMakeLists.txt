@@ -55,8 +55,8 @@ message("==> Configuring fmt")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 download_project(
   PROJ     fmt
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/7.1.3.tar.gz
-  URL_HASH MD5=2522ec65070c0bda0ca288677ded2831
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/6.2.1.tar.gz
+  URL_HASH MD5=f77569874b25ff3ece7f0229a4236feb
   QUIET
 )
 add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
