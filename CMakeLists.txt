@@ -47,6 +47,9 @@ if(CPPBASE_BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
+include(ClangFormat)
+clang_format_recurse("common" "logging" "network" "tests")
+
 install(FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Global.h
     ${CMAKE_CURRENT_SOURCE_DIR}/common/Semaphore.h
