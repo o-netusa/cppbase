@@ -48,6 +48,19 @@ add_library(cxxopts INTERFACE)
 target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
 
 # ============================================================
+#                        eigen
+# ============================================================
+#
+message("==> Configuring eigen")
+download_project(
+  PROJ     eigen
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-v2.8.5.tar.gz
+  URL_HASH MD5=8115d08b9089fe861b9288d9facd3bdd
+  QUIET
+)
+add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR})
+
+# ============================================================
 #                        fmt
 # ============================================================
 #
