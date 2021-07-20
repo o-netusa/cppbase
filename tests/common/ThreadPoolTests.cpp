@@ -3,10 +3,9 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
 
 #include <common/ThreadPool.h>
-
 #include <gtest/gtest.h>
 
 using namespace cppbase;
@@ -16,7 +15,7 @@ TEST(ThreadPoolTests, SimpleTest)
     ThreadPool pool(4, ThreadPriority::NORMAL);
     std::vector<std::future<int32_t>> results;
 
-    for(int32_t i = 0; i < 8; ++i)
+    for (int32_t i = 0; i < 8; ++i)
     {
         results.emplace_back(pool.Enqueue([i] {
 #ifdef __linux__
@@ -24,14 +23,14 @@ TEST(ThreadPoolTests, SimpleTest)
                       << " running on CPU=" << sched_getcpu() << std::endl;
 #endif
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            return i*i;
+            return i * i;
         }));
     }
 
     int32_t ret = 0;
-    for(auto && result: results)
+    for (auto&& result : results)
     {
-        EXPECT_EQ(result.get(), ret*ret);
+        EXPECT_EQ(result.get(), ret * ret);
         ret++;
     }
 }
@@ -42,7 +41,7 @@ TEST(ThreadPoolTests, PriorityAndCpuTest)
     ThreadPool pool(4, ThreadPriority::HIGH, cpu_nums - 1);
     std::vector<std::future<int32_t>> results;
 
-    for(int32_t i = 0; i < 8; ++i)
+    for (int32_t i = 0; i < 8; ++i)
     {
         results.emplace_back(pool.Enqueue([i] {
 #ifdef __linux__
@@ -50,14 +49,14 @@ TEST(ThreadPoolTests, PriorityAndCpuTest)
                       << " running on CPU=" << sched_getcpu() << std::endl;
 #endif
             std::this_thread::sleep_for(std::chrono::seconds(1));
-            return i*i;
+            return i * i;
         }));
     }
 
     int32_t ret = 0;
-    for(auto && result: results)
+    for (auto&& result : results)
     {
-        EXPECT_EQ(result.get(), ret*ret);
+        EXPECT_EQ(result.get(), ret * ret);
         ret++;
     }
 }

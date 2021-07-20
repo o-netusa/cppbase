@@ -3,7 +3,7 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
 
 #include <common/Encoding.h>
 #include <gtest/gtest.h>
@@ -49,5 +49,6 @@ TEST(EncodingTests, Base64Encoding)
     EXPECT_EQ("U2FtcGxlIEJhc2U2NCBlbmNvZGluZzogfmAnIiE/QCMkJV4mKigpe31bXTw+LC46Oy0rPV98L1w=",
               Base64Encode("Sample Base64 encoding: ~`'\"!?@#$%^&*(){}[]<>,.:;-+=_|/\\"));
     EXPECT_EQ("Sample Base64 encoding: ~`'\"!?@#$%^&*(){}[]<>,.:;-+=_|/\\",
-              Base64Decode("U2FtcGxlIEJhc2U2NCBlbmNvZGluZzogfmAnIiE/QCMkJV4mKigpe31bXTw+LC46Oy0rPV98L1w="));
+              Base64Decode(
+                  "U2FtcGxlIEJhc2U2NCBlbmNvZGluZzogfmAnIiE/QCMkJV4mKigpe31bXTw+LC46Oy0rPV98L1w="));
 }

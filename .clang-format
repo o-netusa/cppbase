@@ -3,15 +3,9 @@
 Language: Cpp
 BasedOnStyle: Google
 AccessModifierOffset: -4
-AllowShortEnumsOnASingleLine: true
-AllowShortBlocksOnASingleLine: Never
-AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
-AllowShortLambdasOnASingleLine: All
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLoopsOnASingleLine: false
-AlwaysBreakBeforeMultilineStrings: false
-AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Custom
 BraceWrapping:
   AfterCaseLabel:  true
@@ -26,14 +20,14 @@ BraceWrapping:
   AfterExternBlock: true
   BeforeCatch:     false
   BeforeElse:      false
-  BeforeLambdaBody: false
-  BeforeWhile:     false
+#  BeforeLambdaBody: false
+#  BeforeWhile:     false
   IndentBraces:    false
   SplitEmptyFunction: false
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
 BreakBeforeTernaryOperators: false
-ColumnLimit: 129
+ColumnLimit: 100
 CompactNamespaces: true
 IndentWidth: 4
 ...

@@ -15,8 +15,9 @@ namespace spdlog_setup {
 /**
  * Set-up error with textual description.
  */
-class setup_error : public std::exception {
-  public:
+class setup_error : public std::exception
+{
+public:
     /**
      * Constructor accepting the error message.
      * @param msg Error message to contain.
@@ -37,7 +38,7 @@ class setup_error : public std::exception {
      */
     auto what() const noexcept -> const char * override;
 
-  private:
+private:
     std::string msg;
 };
 
@@ -47,7 +48,8 @@ inline setup_error::setup_error(const char *const msg) : msg(msg) {}
 
 inline setup_error::setup_error(std::string msg) : msg(std::move(msg)) {}
 
-inline auto setup_error::what() const noexcept -> const char * {
+inline auto setup_error::what() const noexcept -> const char *
+{
     return msg.c_str();
 }
-} // namespace spdlog_setup
+}  // namespace spdlog_setup

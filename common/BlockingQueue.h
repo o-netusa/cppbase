@@ -78,10 +78,7 @@ public:
         return true;
     }
 
-    bool Empty() const
-    {
-        return m_queue.empty();
-    }
+    bool Empty() const { return m_queue.empty(); }
 
     void Clear()
     {
@@ -90,10 +87,7 @@ public:
         std::swap(m_queue, empty);
     }
 
-    size_t Size() const
-    {
-        return m_queue.size();
-    }
+    size_t Size() const { return m_queue.size(); }
 
 private:
     std::queue<T> m_queue;
@@ -101,4 +95,4 @@ private:
     std::condition_variable m_signal;
 };
 
-} // namespace cppbase
+}  // namespace cppbase
