@@ -8,6 +8,7 @@
 #pragma once
 
 #include <functional>
+
 #include "Common.h"
 
 namespace cppbase {
@@ -15,20 +16,17 @@ namespace cppbase {
 class UdpServer
 {
 public:
-    UdpServer(uint16_t port_num)
-        : m_socket(network::io_context, udp::endpoint(udp::v4(), port_num))
+    UdpServer(uint16_t port_num) : m_socket(network::io_context, udp::endpoint(udp::v4(), port_num))
     {}
-    ~UdpServer()
-    {
-        Stop();
-    }
+    ~UdpServer() { Stop(); }
 
-    void Start(std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)> receive_handler)
+    void Start(std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)>
+                   receive_handler)
     {
         if (m_started)
             return;
         m_receive_handler = receive_handler;
-        m_receive_future = std::async(std::launch::async, [this](){ StartReceive(); });
+        m_receive_future = std::async(std::launch::async, [this]() { StartReceive(); });
         m_started = true;
     }
 
@@ -77,6 +75,7 @@ private:
             return;
         StartReceive();
     }
+
 private:
     udp::socket m_socket;
     std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)> m_receive_handler;
@@ -85,4 +84,4 @@ private:
     uint8_t m_buffer[DEFAULT_BUFSZ];
 };
 
-}
+}  // namespace cppbase

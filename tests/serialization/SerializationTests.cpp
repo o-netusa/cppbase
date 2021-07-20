@@ -3,17 +3,17 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
 
-#include <gtest/gtest.h>
-
-#include "addressbook.capnp.h"
 #include <capnp/message.h>
 #include <capnp/serialize-packed.h>
 #include <capnp/serialize-text.h>
+#include <common/FileSystem.h>
+#include <gtest/gtest.h>
+
 #include <iostream>
 
-#include <common/FileSystem.h>
+#include "addressbook.capnp.h"
 
 #ifdef __linux__
 #include <fcntl.h>
@@ -65,57 +65,55 @@ void PrintAddressBook(int fd)
 
     for (Person::Reader person : address_book.getPeople())
     {
-        std::cout << person.getName().cStr() << ": "
-                  << person.getEmail().cStr() << std::endl;
+        std::cout << person.getName().cStr() << ": " << person.getEmail().cStr() << std::endl;
         for (Person::PhoneNumber::Reader phone : person.getPhones())
         {
             const char *type_name = "UNKNOWN";
             switch (phone.getType())
             {
-            case Person::PhoneNumber::Type::MOBILE:
-                type_name = "mobile";
-                break;
-            case Person::PhoneNumber::Type::HOME:
-                type_name = "home";
-                break;
-            case Person::PhoneNumber::Type::WORK:
-                type_name = "work";
-                break;
-            default:
-                break;
+                case Person::PhoneNumber::Type::MOBILE:
+                    type_name = "mobile";
+                    break;
+                case Person::PhoneNumber::Type::HOME:
+                    type_name = "home";
+                    break;
+                case Person::PhoneNumber::Type::WORK:
+                    type_name = "work";
+                    break;
+                default:
+                    break;
             }
-            std::cout << "  " << type_name << " phone: "
-                      << phone.getNumber().cStr() << std::endl;
+            std::cout << "  " << type_name << " phone: " << phone.getNumber().cStr() << std::endl;
         }
         Person::Employment::Reader employment = person.getEmployment();
         switch (employment.which())
         {
-        case Person::Employment::UNEMPLOYED:
-            std::cout << "  unemployed" << std::endl;
-            break;
-        case Person::Employment::EMPLOYER:
-            std::cout << "  employer: "
-                      << employment.getEmployer().cStr() << std::endl;
-            break;
-        case Person::Employment::SCHOOL:
-            std::cout << "  student at: "
-                      << employment.getSchool().cStr() << std::endl;
-            break;
-        case Person::Employment::SELF_EMPLOYED:
-            std::cout << "  self-employed" << std::endl;
-            break;
-        default:
-            break;
+            case Person::Employment::UNEMPLOYED:
+                std::cout << "  unemployed" << std::endl;
+                break;
+            case Person::Employment::EMPLOYER:
+                std::cout << "  employer: " << employment.getEmployer().cStr() << std::endl;
+                break;
+            case Person::Employment::SCHOOL:
+                std::cout << "  student at: " << employment.getSchool().cStr() << std::endl;
+                break;
+            case Person::Employment::SELF_EMPLOYED:
+                std::cout << "  self-employed" << std::endl;
+                break;
+            default:
+                break;
         }
     }
 }
 
-#include "addressbook.capnp.h"
-#include <capnp/message.h>
-#include <capnp/serialize-packed.h>
-#include <iostream>
-#include <capnp/schema.h>
 #include <capnp/dynamic.h>
+#include <capnp/message.h>
+#include <capnp/schema.h>
+#include <capnp/serialize-packed.h>
+
+#include <iostream>
+
+#include "addressbook.capnp.h"
 
 using ::capnp::DynamicEnum;
 using ::capnp::DynamicList;
@@ -141,14 +139,11 @@ void DynamicWriteAddressBook(int fd, StructSchema schema)
 
     // Types shown for explanation purposes; normally you'd
     // use auto.
-    DynamicStruct::Builder addressBook =
-        message.initRoot<DynamicStruct>(schema);
+    DynamicStruct::Builder addressBook = message.initRoot<DynamicStruct>(schema);
 
-    DynamicList::Builder people =
-        addressBook.init("people", 2).as<DynamicList>();
+    DynamicList::Builder people = addressBook.init("people", 2).as<DynamicList>();
 
-    DynamicStruct::Builder alice =
-        people[0].as<DynamicStruct>();
+    DynamicStruct::Builder alice = people[0].as<DynamicStruct>();
     alice.set("id", 123);
     alice.set("name", "Alice");
     alice.set("email", "alice@example.com");
@@ -184,85 +179,82 @@ void DynamicPrintValue(DynamicValue::Reader value)
 
     switch (value.getType())
     {
-    case DynamicValue::VOID:
-        std::cout << "";
-        break;
-    case DynamicValue::BOOL:
-        std::cout << (value.as<bool>() ? "true" : "false");
-        break;
-    case DynamicValue::INT:
-        std::cout << value.as<int64_t>();
-        break;
-    case DynamicValue::UINT:
-        std::cout << value.as<uint64_t>();
-        break;
-    case DynamicValue::FLOAT:
-        std::cout << value.as<double>();
-        break;
-    case DynamicValue::TEXT:
-        std::cout << '\"' << value.as<Text>().cStr() << '\"';
-        break;
-    case DynamicValue::LIST:
-    {
-        std::cout << "[";
-        bool first = true;
-        for (auto element : value.as<DynamicList>())
+        case DynamicValue::VOID:
+            std::cout << "";
+            break;
+        case DynamicValue::BOOL:
+            std::cout << (value.as<bool>() ? "true" : "false");
+            break;
+        case DynamicValue::INT:
+            std::cout << value.as<int64_t>();
+            break;
+        case DynamicValue::UINT:
+            std::cout << value.as<uint64_t>();
+            break;
+        case DynamicValue::FLOAT:
+            std::cout << value.as<double>();
+            break;
+        case DynamicValue::TEXT:
+            std::cout << '\"' << value.as<Text>().cStr() << '\"';
+            break;
+        case DynamicValue::LIST:
         {
-            if (first)
+            std::cout << "[";
+            bool first = true;
+            for (auto element : value.as<DynamicList>())
             {
-                first = false;
+                if (first)
+                {
+                    first = false;
+                } else
+                {
+                    std::cout << ", ";
+                }
+                DynamicPrintValue(element);
+            }
+            std::cout << "]";
+            break;
+        }
+        case DynamicValue::ENUM:
+        {
+            auto enumValue = value.as<DynamicEnum>();
+            KJ_IF_MAYBE(enumerant, enumValue.getEnumerant())
+            {
+                std::cout << enumerant->getProto().getName().cStr();
             }
             else
             {
-                std::cout << ", ";
+                // Unknown enum value; output raw number.
+                std::cout << enumValue.getRaw();
             }
-            DynamicPrintValue(element);
+            break;
         }
-        std::cout << "]";
-        break;
-    }
-    case DynamicValue::ENUM:
-    {
-        auto enumValue = value.as<DynamicEnum>();
-        KJ_IF_MAYBE(enumerant, enumValue.getEnumerant())
+        case DynamicValue::STRUCT:
         {
-            std::cout << enumerant->getProto().getName().cStr();
-        }
-        else
-        {
-            // Unknown enum value; output raw number.
-            std::cout << enumValue.getRaw();
-        }
-        break;
-    }
-    case DynamicValue::STRUCT:
-    {
-        std::cout << "(";
-        auto structValue = value.as<DynamicStruct>();
-        bool first = true;
-        for (auto field : structValue.getSchema().getFields())
-        {
-            if (!structValue.has(field))
-                continue;
-            if (first)
+            std::cout << "(";
+            auto structValue = value.as<DynamicStruct>();
+            bool first = true;
+            for (auto field : structValue.getSchema().getFields())
             {
-                first = false;
+                if (!structValue.has(field))
+                    continue;
+                if (first)
+                {
+                    first = false;
+                } else
+                {
+                    std::cout << ", ";
+                }
+                std::cout << field.getProto().getName().cStr() << " = ";
+                DynamicPrintValue(structValue.get(field));
             }
-            else
-            {
-                std::cout << ", ";
-            }
-            std::cout << field.getProto().getName().cStr()
-                      << " = ";
-            DynamicPrintValue(structValue.get(field));
+            std::cout << ")";
+            break;
         }
-        std::cout << ")";
-        break;
-    }
-    default:
-        // There are other types, we aren't handling them.
-        std::cout << "?";
-        break;
+        default:
+            // There are other types, we aren't handling them.
+            std::cout << "?";
+            break;
     }
 }
 

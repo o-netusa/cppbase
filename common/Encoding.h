@@ -80,6 +80,6 @@ std::string Base64Encode(std::string_view str);
 */
 std::string Base64Decode(std::string_view str);
 
-}}
+}}  // namespace cppbase::encoding
 
 #include "Encoding_intl.h"

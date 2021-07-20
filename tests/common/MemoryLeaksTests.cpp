@@ -3,7 +3,7 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
 
 #include <common/MemoryLeaks.h>
 #include <gtest/gtest.h>

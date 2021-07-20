@@ -51,4 +51,4 @@ inline std::string GetLogDir() noexcept
     return "./log";
 }
 
-}} // namespace cppbase::filesystem
+}}  // namespace cppbase::filesystem

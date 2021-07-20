@@ -5,8 +5,9 @@
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  ****************************************************************************/
 
-#include "ThreadPool.h"
 #include <logging/Logging.h>
+
+#include "ThreadPool.h"
 
 namespace cppbase {
 
@@ -76,8 +77,7 @@ int32_t GetThreadPriority(int64_t)
 
 // the constructor just launches some amount of workers
 ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_reserved)
-    : m_priority(priority),
-      m_cpu_reserved(cpu_reserved)
+    : m_priority(priority), m_cpu_reserved(cpu_reserved)
 {
     static uint32_t cpu_nums = std::thread::hardware_concurrency();
     auto set_affinity = [&](uint32_t index, std::thread& thread) {
@@ -88,8 +88,7 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
             cpu_set_t cpuset;
             CPU_ZERO(&cpuset);
             CPU_SET(cpu_id, &cpuset);
-            auto rc = pthread_setaffinity_np(thread.native_handle(),
-                                             sizeof(cpu_set_t), &cpuset);
+            auto rc = pthread_setaffinity_np(thread.native_handle(), sizeof(cpu_set_t), &cpuset);
             if (rc != 0)
             {
                 logger->error("Error calling pthread_setaffinity_np: {}", rc);
@@ -98,16 +97,16 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
         }
     };
 
-    for(uint32_t i = 0; i < threads; ++i)
+    for (uint32_t i = 0; i < threads; ++i)
     {
         m_threads.emplace_back([this, priority] {
             SetThreadPriority(priority);
-            for(;;)
+            for (;;)
             {
                 std::function<void()> task;
                 {
                     std::unique_lock<std::mutex> lock(m_queue_mutex);
-                    m_condition.wait(lock, [this]{ return m_stop || !m_tasks.empty(); });
+                    m_condition.wait(lock, [this] { return m_stop || !m_tasks.empty(); });
                     if (m_stop && m_tasks.empty())
                         return;
                     task = std::move(m_tasks.front());
@@ -119,7 +118,7 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
         set_affinity(i, m_threads[i]);
     }
     logger->info("Created thread pool with {} threads at priority {}, {} CPU core(s) reserved",
-        threads, priority, cpu_reserved);
+                 threads, priority, cpu_reserved);
 }
 
 // the destructor joins all threads
@@ -130,7 +129,7 @@ ThreadPool::~ThreadPool()
         m_stop = true;
     }
     m_condition.notify_all();
-    for(std::thread &thread: m_threads)
+    for (std::thread& thread : m_threads)
         thread.join();
 }
 
@@ -144,4 +143,4 @@ uint32_t ThreadPool::GetReservedCpu() const
     return m_cpu_reserved;
 }
 
-} // namespace cppbase
+}  // namespace cppbase

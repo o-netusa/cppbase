@@ -15,10 +15,7 @@ class TcpClient
 {
 public:
     TcpClient() = default;
-    ~TcpClient()
-    {
-        Disconnect();
-    }
+    ~TcpClient() { Disconnect(); }
 
     bool Connect(const std::string& ip_addr, uint16_t port_num)
     {
@@ -31,13 +28,15 @@ public:
         auto address = asio::ip::address::from_string(ip_addr.c_str(), ec);
         if (ec)
         {
-            network::logger->error("TcpClient::Connect: invalid ip address({}): {}", ip_addr, ec.message());
+            network::logger->error("TcpClient::Connect: invalid ip address({}): {}", ip_addr,
+                                   ec.message());
             return false;
         }
         m_sock.connect(tcp::endpoint(address, port_num), ec);
         if (ec)
         {
-            network::logger->error("TcpClient::Connect: connect to {}:{} error: ", ip_addr, port_num, ec.message());
+            network::logger->error("TcpClient::Connect: connect to {}:{} error: ", ip_addr,
+                                   port_num, ec.message());
             return false;
         }
 
@@ -54,7 +53,8 @@ public:
             m_sock.close(ec);
             if (ec)
             {
-                network::logger->error("TcpClient::Disconnect: error closing socket: {}", ec.message());
+                network::logger->error("TcpClient::Disconnect: error closing socket: {}",
+                                       ec.message());
             }
         }
         m_is_connected = false;
@@ -95,4 +95,4 @@ private:
     bool m_is_connected{false};
 };
 
-}
+}  // namespace cppbase

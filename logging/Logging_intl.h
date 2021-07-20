@@ -3,12 +3,12 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
+
+#include <common/FileSystem.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
 
 #include "spdlog_setup/conf.h"
-
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <common/FileSystem.h>
 
 namespace cppbase { namespace logging {
 
@@ -19,12 +19,11 @@ public:
 
     Instance()
     {
-        fs::path log_conf = fs::path(filesystem::GetConfigDir())/filesystem::LogConfigFilename;
+        fs::path log_conf = fs::path(filesystem::GetConfigDir()) / filesystem::LogConfigFilename;
         if (fs::exists(log_conf))
         {
             spdlog_setup::from_file(log_conf.generic_string());
-        }
-        else
+        } else
         {
             spdlog::set_pattern(log_pattern);
         }
@@ -35,25 +34,25 @@ static Instance instance;
 
 LoggerPtr GetLogger(const std::string& logger_name) noexcept
 {
-    if (logger_name.empty()) // return the global logger
+    if (logger_name.empty())  // return the global logger
     {
         return spdlog::default_logger();
-    }
-    else
+    } else
     {
         auto logger = spdlog::get(logger_name);
         if (!logger)
         {
-            try 
+            try
             {
                 // TODO: for debug only
                 logger = spdlog::stdout_color_mt(logger_name.c_str());
-            }
-            catch (std::exception ex)
+            } catch (std::exception ex)
             {
                 logger = spdlog::default_logger();
-                logger->error("Error: unable to create logger with name: {0}, "
-                              "using default logger", logger_name);
+                logger->error(
+                    "Error: unable to create logger with name: {0}, "
+                    "using default logger",
+                    logger_name);
             }
         }
         return logger;
@@ -65,8 +64,8 @@ LoggerPtr GetLogger(const std::string& logger_name) noexcept
 #ifdef MODULE_NAME
     return GetLogger(MODULE_NAME);
 #else
-    #error "Error: MODULE_NAME is not defined. Define it in the module's CMakeLists.txt."
+#error "Error: MODULE_NAME is not defined. Define it in the module's CMakeLists.txt."
 #endif
 }
 
-}} // namespaces
+}}  // namespace cppbase::logging

@@ -3,12 +3,12 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
 
 #include <common/Semaphore.h>
 #include <gtest/gtest.h>
-#include <thread>
 
+#include <thread>
 
 TEST(SemaphoreTests, ProducerAndConsumer)
 {

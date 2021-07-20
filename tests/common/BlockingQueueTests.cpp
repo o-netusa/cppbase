@@ -3,7 +3,7 @@
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
-**************************************************************************/
+ **************************************************************************/
 
 #include <common/BlockingQueue.h>
 #include <gtest/gtest.h>

@@ -7,9 +7,8 @@
 
 #pragma once
 
-#include <spdlog/spdlog.h>
-
 #include <common/Global.h>
+#include <spdlog/spdlog.h>
 
 namespace cppbase { namespace logging {
 
@@ -33,6 +32,6 @@ typedef std::shared_ptr<spdlog::logger> LoggerPtr;
 static LoggerPtr GetLogger(const std::string& logger_name = "") noexcept;
 static LoggerPtr GetLoggerForCurrentModule() noexcept;
 
-}} // namespaces
+}}  // namespace cppbase::logging
 
 #include "Logging_intl.h"

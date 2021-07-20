@@ -18,17 +18,12 @@ public:
     {
         struct make_shared_enabler : public TcpConnection
         {
-            make_shared_enabler(asio::io_context& io_context)
-                : TcpConnection(io_context)
-            {}
+            make_shared_enabler(asio::io_context& io_context) : TcpConnection(io_context) {}
         };
         return std::make_shared<make_shared_enabler>(io_context);
     }
 
-    tcp::socket& GetSocket()
-    {
-        return m_socket;
-    }
+    tcp::socket& GetSocket() { return m_socket; }
 
     uint32_t Send(const uint8_t* buffer, uint32_t bufsz)
     {
@@ -55,7 +50,8 @@ public:
         asio::error_code error;
         ret = m_socket.read_some(asio::buffer(buffer, bufsz), error);
         if (error)
-            network::logger->error("TcpConnection::Receive: error reading data: {}", error.message());
+            network::logger->error("TcpConnection::Receive: error reading data: {}",
+                                   error.message());
 
         network::logger->debug("TcpConnection::Receive: read {} bytes data", ret);
 
@@ -63,9 +59,7 @@ public:
     }
 
 private:
-    TcpConnection(asio::io_context& io_context)
-        : m_socket(io_context)
-    {}
+    TcpConnection(asio::io_context& io_context) : m_socket(io_context) {}
     tcp::socket m_socket;
 };
 
@@ -100,15 +94,17 @@ private:
     void StartAccept()
     {
         auto new_connection = TcpConnection::Create(network::io_context);
-        m_acceptor.async_accept(new_connection->GetSocket(),
-                                [new_connection, this](const asio::error_code& ec) {
+        m_acceptor.async_accept(new_connection->GetSocket(), [new_connection,
+                                                              this](const asio::error_code& ec) {
             if (ec)
             {
-                network::logger->error("TcpServer::StartAccept: accept handler error: {}", ec.message());
+                network::logger->error("TcpServer::StartAccept: accept handler error: {}",
+                                       ec.message());
                 return;
             }
             auto client_addr = new_connection->GetSocket().local_endpoint().address().to_string();
-            network::logger->debug("TcpServer::StartAccept: accepted connection from: {}", client_addr);
+            network::logger->debug("TcpServer::StartAccept: accepted connection from: {}",
+                                   client_addr);
             m_accept_handler(new_connection);
             StartAccept();
         });
@@ -119,4 +115,4 @@ private:
     std::function<void(std::shared_ptr<TcpConnection>)> m_accept_handler;
     bool m_started{false};
 };
-}
+}  // namespace cppbase
