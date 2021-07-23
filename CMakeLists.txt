@@ -11,6 +11,7 @@ endif()
 
 option(CPPBASE_BUILD_TESTING "Build unit tests" ${CPPBASE_STANDALONE_PROJECT})
 option(GLIBCXX_USE_CXX11_ABI "Set -D_GLIBCXX_USE_CXX11_ABI=1" OFF)
+option(CPPBASE_BUILD_GTEST "Build google test" ON)
 
 # set(CMAKE_INCLUDE_CURRENT_DIR ON) # this causes capnproto build to fail
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

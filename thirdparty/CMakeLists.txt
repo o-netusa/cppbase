@@ -78,6 +78,7 @@ add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
 #                        googletest
 # ============================================================
 #
+if(CPPBASE_BUILD_GTEST)
 message("==> Configuring googletest")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 set(INSTALL_GMOCK OFF CACHE BOOL "")
@@ -91,6 +92,7 @@ download_project(
   QUIET
 )
 add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
+endif()
 
 # ============================================================
 #                        rapidjson
