@@ -11,6 +11,9 @@
 
 namespace cppbase {
 
+/**
+ * @brief TCP Connection class
+ */
 class TcpConnection
 {
 public:
@@ -63,6 +66,9 @@ private:
     tcp::socket m_socket;
 };
 
+/**
+ * @brief TCP Server class
+ */
 class TcpServer
 {
 public:

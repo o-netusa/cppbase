@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10...3.20 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.18)
 
 project(cppbase CXX)
 
@@ -11,12 +11,18 @@ endif()
 
 option(CPPBASE_BUILD_TESTING "Build unit tests" ${CPPBASE_STANDALONE_PROJECT})
 option(GLIBCXX_USE_CXX11_ABI "Set -D_GLIBCXX_USE_CXX11_ABI=1" OFF)
-option(CPPBASE_BUILD_GTEST "Build google test" ON)
+option(CPPBASE_BUILD_ASIO      "Build Asio"        ON)
+option(CPPBASE_BUILD_CXXOPTS   "Build cxxopts"     ON)
+option(CPPBASE_BUILD_EIGEN     "Build Eigen"       ON)
+option(CPPBASE_BUILD_FMT       "Build FMT"         ON)
+option(CPPBASE_BUILD_GTEST     "Build Google Test" ON)
+option(CPPBASE_BUILD_RAPIDJSON "Build RapidJson"   ON)
+option(CPPBASE_BUILD_RAPIDXML  "Build RapidXml"    ON)
+option(CPPBASE_BUILD_SIGSLOT   "Build sigslot"     ON)
+option(CPPBASE_BUILD_SPDLOG    "Build spdlog"      ON)
+option(CPPBASE_BUILD_STDUUID   "Build stduuid"     ON)
 
-# set(CMAKE_INCLUDE_CURRENT_DIR ON) # this causes capnproto build to fail
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# set(BUILD_SHARED ON)
 set(CXX_STD cxx_std_17)
 
 # Custom CMake modules/scripts
@@ -32,7 +38,7 @@ else()
 endif()
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
-# MODULE_NAME is useful for logger naming
+# MODULE_NAME is for logger module name
 add_compile_definitions(MODULE_NAME="cppbase")
 
 if(GLIBCXX_USE_CXX11_ABI)

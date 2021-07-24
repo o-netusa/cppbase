@@ -11,6 +11,9 @@
 
 namespace cppbase {
 
+/**
+ * @brief UDP Client class
+ */
 class UdpClient
 {
 public:

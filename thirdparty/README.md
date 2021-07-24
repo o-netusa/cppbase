@@ -1,6 +1,7 @@
-## 第三方软件
+## Thirdparty libraries
 * asio (https://github.com/chriskohlhoff/asio) provides cross-platform network socket and serial port APIs
 * cxxopts (https://github.com/jarro2783/cxxopts) provides cross-platform command line options support
+* eigen (https://gitlab.com/libeigen/eigen) C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
 * fmt (https://github.com/fmtlib/fmt) provides cross-platform C++ string formatting
 * Google Test (https://github.com/google/googletest) C++ unit test framework
 * rapidjson (https://github.com/Tencent/rapidjson) provides JSON encoding/decoding functionalities

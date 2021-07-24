@@ -1,6 +1,6 @@
 /**************************************************************************
  * @file:  Logging.h
- * @brief:
+ * @brief: spdlog based Logger
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  *************************************************************************/
@@ -27,7 +27,7 @@ typedef std::shared_ptr<spdlog::logger> LoggerPtr;
  * @note
  *   By default, in Debug mode, all logs will be logged into std::cout,
  *   while in Release mode, all logs will be logged into a log file.
- *   But the configuration can be changed in the log.conf file.
+ *   But the configuration can be changed in the \b log.conf file.
  */
 static LoggerPtr GetLogger(const std::string& logger_name = "") noexcept;
 static LoggerPtr GetLoggerForCurrentModule() noexcept;
