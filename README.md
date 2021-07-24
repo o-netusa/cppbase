@@ -1,3 +1,5 @@
+![workflow](https://github.com/o-netusa/cppbase/actions/workflows/cmake.yml/badge.svg)
+
 # cppbase
 cppbase是一个跨平台C++17基础库，提供一些C++项目常用的功能，如日志、线程池、TCP/UDP客户端以及服务端等。采用CMake编译和集成一系列第三封库（详见thirdparty)。
 
