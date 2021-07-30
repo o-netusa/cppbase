@@ -10,6 +10,6 @@
 * spdlog (https://github.com/gabime/spdlog) provides cross-platform logging functionality
 * stduuid (https://github.com/mariusbancila/stduuid) provides cross-platform uuid functionality
 
-## 如何添加新的第三方软件
-* 在代码仓库根目录下生成第三方库的文件夹并加入第三方库的压缩包（可以是.zip, .tar.gz等格式）
-* 在CMakeLists.txt中加入相应的配置（详见CMakeLists.txt）
+## How to add new 3rd party library
+* Add the 3rd party library package (.zip, tar.gz and etc.) to the subdirectory with its name (e.g. asio).
+* Add the "DownloadProject" section into the CMakeLists.txt (see CMakeLists.txt for details).
