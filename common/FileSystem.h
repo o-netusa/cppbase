@@ -1,6 +1,6 @@
 /**************************************************************************
- * @file:  FileSyste.h
- * @brief:
+ * @file:  FileSystem.h
+ * @brief: std::filesystem adapter
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  *************************************************************************/

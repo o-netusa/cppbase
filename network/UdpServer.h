@@ -13,6 +13,9 @@
 
 namespace cppbase {
 
+/**
+ * @brief UDP Server class
+ */
 class UdpServer
 {
 public:

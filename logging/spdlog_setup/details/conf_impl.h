@@ -317,7 +317,7 @@ inline void write_to_config_file(const cpptoml::table &config, const std::string
 
 template <class... Ps>
 void read_template_file_into_stringstream(std::stringstream &toml_ss, const std::string &file_path,
-                                          Ps &&...ps)
+                                          Ps &&... ps)
 {
     // fmt
     using fmt::format;

@@ -11,6 +11,9 @@
 
 namespace cppbase {
 
+/**
+ * @brief TCP Client class
+ */
 class TcpClient
 {
 public:

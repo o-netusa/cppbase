@@ -20,7 +20,7 @@ namespace spdlog_setup {
  * @throw setup_error
  */
 template <class... Ps>
-void from_file_with_tag_replacement(const std::string &pre_toml_path, Ps &&...ps);
+void from_file_with_tag_replacement(const std::string &pre_toml_path, Ps &&... ps);
 
 /**
  * Performs spdlog configuration setup from both base and override files, with
@@ -35,7 +35,7 @@ void from_file_with_tag_replacement(const std::string &pre_toml_path, Ps &&...ps
 template <class... Ps>
 auto from_file_and_override_with_tag_replacement(const std::string &base_pre_toml_path,
                                                  const std::string &override_pre_toml_path,
-                                                 const Ps &...ps) -> bool;
+                                                 const Ps &... ps) -> bool;
 
 /**
  * Performs spdlog configuration setup from file.
@@ -87,7 +87,7 @@ auto delete_logger_in_file(const std::string &logger_name, const std::string &to
 // implementation section
 
 template <class... Ps>
-void from_file_with_tag_replacement(const std::string &pre_toml_path, Ps &&...ps)
+void from_file_with_tag_replacement(const std::string &pre_toml_path, Ps &&... ps)
 {
     // std
     using std::exception;
@@ -116,7 +116,7 @@ void from_file_with_tag_replacement(const std::string &pre_toml_path, Ps &&...ps
 template <class... Ps>
 auto from_file_and_override_with_tag_replacement(const std::string &base_pre_toml_path,
                                                  const std::string &override_pre_toml_path,
-                                                 const Ps &...ps) -> bool
+                                                 const Ps &... ps) -> bool
 {
     // std
     using std::exception;
