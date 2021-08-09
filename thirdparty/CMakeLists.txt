@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10...3.20 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(DownloadProject)
@@ -13,6 +13,7 @@ set(BUILD_TESTING OFF CACHE BOOL "")
 #                        asio
 # ============================================================
 #
+if(CPPBASE_BUILD_ASIO)
 message("==> Configuring asio")
 download_project(
   PROJ     asio
@@ -22,6 +23,7 @@ download_project(
 )
 add_library(asio INTERFACE)
 target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
+endif()
 
 ##
 # For encoding/decoding and client/server communications, following options
@@ -37,6 +39,7 @@ target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
 #                        cxxopts
 # ============================================================
 #
+if(CPPBASE_BUILD_CXXOPTS)
 message("==> Configuring cxxopts")
 download_project(
   PROJ     cxxopts
@@ -46,24 +49,28 @@ download_project(
 )
 add_library(cxxopts INTERFACE)
 target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
+endif()
 
 # ============================================================
 #                        eigen
 # ============================================================
 #
+if(CPPBASE_BUILD_EIGEN)
 message("==> Configuring eigen")
 download_project(
   PROJ     eigen
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-v2.8.5.tar.gz
-  URL_HASH MD5=8115d08b9089fe861b9288d9facd3bdd
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-3.3.9.tar.gz
+  URL_HASH MD5=609286804b0f79be622ccf7f9ff2b660
   QUIET
 )
 add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR})
+endif()
 
 # ============================================================
 #                        fmt
 # ============================================================
 #
+if(CPPBASE_BUILD_FMT)
 message("==> Configuring fmt")
 set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 download_project(
@@ -73,6 +80,7 @@ download_project(
   QUIET
 )
 add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
+endif()
 
 # ============================================================
 #                        googletest
@@ -87,8 +95,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCED)
 
 download_project(
   PROJ     googletest
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest-release-1.10.0.tar.gz
-  URL_HASH MD5=ecd1fa65e7de707cd5c00bdac56022cd
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest-release-1.11.0.tar.gz
+  URL_HASH MD5=e8a8df240b6938bb6384155d4c37d937
   QUIET
 )
 add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
@@ -98,6 +106,7 @@ endif()
 #                        rapidjson
 # ============================================================
 #
+if(CPPBASE_BUILD_RAPIDJSON)
 message("==> Configuring rapidjson")
 download_project(
   PROJ     rapidjson
@@ -107,11 +116,13 @@ download_project(
 )
 add_library(rapidjson INTERFACE)
 target_include_directories(rapidjson INTERFACE ${rapidjson_SOURCE_DIR}/include)
+endif()
 
 # ============================================================
 #                        rapidxml
 # ============================================================
 #
+if(CPPBASE_BUILD_RAPIDXML)
 message("==> Configuring rapidxml")
 download_project(
   PROJ     rapidxml
@@ -121,11 +132,13 @@ download_project(
 )
 add_library(rapidxml INTERFACE)
 target_include_directories(rapidxml INTERFACE ${rapidxml_SOURCE_DIR})
+endif()
 
 # ============================================================
 #                        sigslot
 # ============================================================
 #
+if(CPPBASE_BUILD_SIGSLOT)
 message("==> Configuring sigslot")
 download_project(
   PROJ     sigslot
@@ -135,11 +148,13 @@ download_project(
 )
 add_library(sigslot INTERFACE)
 target_include_directories(sigslot INTERFACE ${sigslot_SOURCE_DIR}/include)
+endif()
 
 # ============================================================
 #                        spdlog
 # ============================================================
 #
+if(CPPBASE_BUILD_SPDLOG)
 message("==> Configuring spdlog")
 set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "")
 download_project(
@@ -149,11 +164,13 @@ download_project(
   QUIET
 )
 add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
+endif()
 
 # ============================================================
 #                        stduuid
 # ============================================================
 #
+if(CPPBASE_BUILD_STDUUID)
 message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
@@ -164,5 +181,6 @@ download_project(
 )
 add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
-install(DIRECTORY ${stduuid_SOURCE_DIR}/include/gsl DESTINATION include)
-install(FILES ${stduuid_SOURCE_DIR}/include/uuid.h DESTINATION include)
+# install(DIRECTORY ${stduuid_SOURCE_DIR}/include/gsl DESTINATION include)
+# install(FILES ${stduuid_SOURCE_DIR}/include/uuid.h DESTINATION include)
+endif()

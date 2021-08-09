@@ -1,6 +1,6 @@
 /**************************************************************************
  * @file:  Logging_intl.h
- * @brief:
+ * @brief: Logging internal implementations
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  **************************************************************************/

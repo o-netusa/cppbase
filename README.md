@@ -1,11 +1,43 @@
-[![pipeline status](http://192.168.10.1/lidar/cppbase/badges/master/pipeline.svg)](http://192.168.10.1/lidar/cppbase/commits/master)
-
 # cppbase
-cppbase是一个跨平台C++17基础库，提供一些C++项目常用的功能，如日志、线程池、TCP/UDP客户端以及服务端等。采用CMake编译和集成一系列第三封库（详见thirdparty)。
+Cross-platform C++17 base library providing common features for C++ projects, such as logging, thread pool, TCP/UDP clien and server, etc. It uses CMake [DownloadProject](https://github.com/Crascit/DownloadProject) to build and integrate a set of thirdparty libraries (see thirdparty folder for details).
 
-Cross-platform C++17 base library providing common features for C++ projects, such as logging, thread pool, TCP/UDP clien and server, etc. It uses CMake to build and integrate a set of thirdparty libraries (see thirdparty folder for details).
+## Directory tree
+```bash
+common
+├── common/BlockingQueue.h
+├── common/Encoding.h
+├── common/FileSystem.h
+├── common/Global.h
+├── common/MemoryLeaks.h
+├── common/Semaphore.h
+├── common/ThreadPool.h
+└── common/Timer.h
+config
+└── config/log.conf
+logging
+├── logging/Logging.h
+└── logging/spdlog_setup
+network
+├── network/Common.h
+├── network/TcpClient.h
+├── network/TcpServer.h
+├── network/UdpClient.h
+└── network/UdpServer.h
+```
 
-## 在QtCreator里配置clang-format (Setup clang-format in QtCreator)
-* 帮助->关于插件->勾选Beautifier 重启QtCreator (Help->Plugin->Beautifier Restart QtCreator)
-* 工具->选项->Beautifier->Clang-Format 添加程序所在目录，并配置风格 (Tools->Options->Beautifier->Clang-Format Choose command and style)
-* 工具->选项->环境->键盘->ClangFormat 配置快捷键 (Tools->Options->environment->keyboard->ClangFormat Set hotkeys)
+## Thirdparty libraries
+* asio (https://github.com/chriskohlhoff/asio) provides cross-platform network socket and serial port APIs
+* cxxopts (https://github.com/jarro2783/cxxopts) provides cross-platform command line options support
+* eigen (https://gitlab.com/libeigen/eigen) C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
+* fmt (https://github.com/fmtlib/fmt) provides cross-platform C++ string formatting
+* Google Test (https://github.com/google/googletest) C++ unit test framework
+* rapidjson (https://github.com/Tencent/rapidjson) provides JSON encoding/decoding functionalities
+* rapidxml (http://rapidxml.sourceforge.net/) provides XML encoding/decoding functionalities
+* sigslot (https://github.com/palacaze/sigslot) provides cross-platform event and handler functionalities similar to Qt signal/slot
+* spdlog (https://github.com/gabime/spdlog) provides cross-platform logging functionality
+* stduuid (https://github.com/mariusbancila/stduuid) provides cross-platform uuid functionality
+
+## Setup clang-format in QtCreator
+* Enable "Help->Plugin->Beautifier" and restart QtCreator
+* Add the source code directory in "Tools->Options->Beautifier->Clang-Format" and choose command and style
+* Setup hotkeys from "Tools->Options->environment->keyboard->ClangFormat"
