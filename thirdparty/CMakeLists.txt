@@ -184,3 +184,31 @@ target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
 # install(DIRECTORY ${stduuid_SOURCE_DIR}/include/gsl DESTINATION include)
 # install(FILES ${stduuid_SOURCE_DIR}/include/uuid.h DESTINATION include)
 endif()
+
+# ============================================================
+#                        zeromq
+# ============================================================
+#
+if(CPPBASE_BUILD_ZEROMQ)
+
+message("==> Configuring libzmq")
+set(ZMQ_BUILD_TESTS OFF)
+download_project(
+  PROJ     libzmq
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/libzmq-v4.3.4.tar.gz
+  URL_HASH MD5=cc20b769ac10afa352e5ed2769bb23b3
+  QUIET
+)
+add_subdirectory(${libzmq_SOURCE_DIR} ${libzmq_BINARY_DIR})
+
+message("==> Configuring cppzmq")
+set(CPPZMQ_BUILD_TESTS OFF)
+download_project(
+  PROJ     cppzmq
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/cppzmq-v4.7.1.tar.gz
+  URL_HASH MD5=e85cf23b5aed263c2c5c89657737d107
+  QUIET
+)
+add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
+
+endif()

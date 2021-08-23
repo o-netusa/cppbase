@@ -20,9 +20,11 @@ option(CPPBASE_BUILD_RAPIDXML  "Build RapidXml"    ON)
 option(CPPBASE_BUILD_SIGSLOT   "Build sigslot"     ON)
 option(CPPBASE_BUILD_SPDLOG    "Build spdlog"      ON)
 option(CPPBASE_BUILD_STDUUID   "Build stduuid"     ON)
+option(CPPBASE_BUILD_ZEROMQ    "Build zeromq"      ON)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CXX_STD cxx_std_17)
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 # Custom CMake modules/scripts
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
