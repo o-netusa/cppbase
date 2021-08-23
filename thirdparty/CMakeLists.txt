@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.16)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(DownloadProject)
@@ -95,8 +95,8 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCED)
 
 download_project(
   PROJ     googletest
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest-release-1.10.0.tar.gz
-  URL_HASH MD5=ecd1fa65e7de707cd5c00bdac56022cd
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest-release-1.11.0.tar.gz
+  URL_HASH MD5=e8a8df240b6938bb6384155d4c37d937
   QUIET
 )
 add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})

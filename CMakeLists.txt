@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18)
+cmake_minimum_required(VERSION 3.16)
 
 project(cppbase CXX)
 
@@ -9,8 +9,7 @@ if (CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(CPPBASE_STANDALONE_PROJECT ON)
 endif()
 
-option(CPPBASE_BUILD_TESTING "Build unit tests" ${CPPBASE_STANDALONE_PROJECT})
-option(GLIBCXX_USE_CXX11_ABI "Set -D_GLIBCXX_USE_CXX11_ABI=1" OFF)
+option(CPPBASE_BUILD_TESTING   "Build unit tests" ${CPPBASE_STANDALONE_PROJECT})
 option(CPPBASE_BUILD_ASIO      "Build Asio"        ON)
 option(CPPBASE_BUILD_CXXOPTS   "Build cxxopts"     ON)
 option(CPPBASE_BUILD_EIGEN     "Build Eigen"       ON)
@@ -40,12 +39,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # MODULE_NAME is for logger module name
 add_compile_definitions(MODULE_NAME="cppbase")
-
-if(GLIBCXX_USE_CXX11_ABI)
-  add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=1)
-else()
-  add_compile_definitions(_GLIBCXX_USE_CXX11_ABI=0)
-endif()
 
 add_subdirectory(thirdparty)
 

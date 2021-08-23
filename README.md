@@ -38,3 +38,8 @@ network
 * sigslot (https://github.com/palacaze/sigslot) provides cross-platform event and handler functionalities similar to Qt signal/slot
 * spdlog (https://github.com/gabime/spdlog) provides cross-platform logging functionality
 * stduuid (https://github.com/mariusbancila/stduuid) provides cross-platform uuid functionality
+
+## Setup clang-format in QtCreator
+* Enable "Help->Plugin->Beautifier" and restart QtCreator
+* Add the source code directory in "Tools->Options->Beautifier->Clang-Format" and choose command and style
+* Setup hotkeys from "Tools->Options->environment->keyboard->ClangFormat"
