@@ -193,6 +193,7 @@ if(CPPBASE_BUILD_ZEROMQ)
 
 message("==> Configuring libzmq")
 set(ZMQ_BUILD_TESTS OFF)
+set(WITH_PERF_TOOL OFF)
 download_project(
   PROJ     libzmq
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/libzmq-v4.3.4.tar.gz
