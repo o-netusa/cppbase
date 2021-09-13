@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(SOURCE
-  main.cpp
+  ../main.cpp
   TcpTests.cpp
   UdpTests.cpp
 )
@@ -24,7 +24,7 @@ include(GoogleTest)
 gtest_discover_tests(network_test)
 
 set(ZMQTESTS_SOURCE
-  main.cpp
+  ../main.cpp
   ZMQTests.cpp
 )
 

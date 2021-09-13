@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16)
 
 set(SOURCE
-  main.cpp
+  ../main.cpp
   LoggingTests.cpp
 )
 

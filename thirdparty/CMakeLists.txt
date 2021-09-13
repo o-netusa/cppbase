@@ -7,7 +7,29 @@ message(STATUS "===============================")
 message(STATUS "Thirdparty Libs (${CMAKE_BUILD_TYPE})")
 message(STATUS "===============================")
 
-set(BUILD_TESTING OFF CACHE BOOL "")
+##
+# For encoding/decoding and client/server communications, following options
+# have been considered, but no decision has been made yet:
+# [2021/02/01] rttr: RTTR is a reflection library and could also be used for serialization
+# because it indeed encodes/decodes types, and it seems planning to support JSON as well.
+# capnproto: this is the most likely choice, and there is only some cmake issue unresolved for Windows
+# nanopb: functionality is limited
+# protobuf: client/server communication is limited to http2
+# rpclib: inactive development
+#
+
+# ============================================================
+#                        abseil
+# ============================================================
+#
+# message("==> Configuring abseil")
+# download_project(
+#   PROJ     abseil
+#   URL      ${CMAKE_CURRENT_SOURCE_DIR}/abseil/20210324.2.tar.gz
+#   URL_HASH MD5=e0b585398b89ee92a10d8c68ef7eed48
+#   QUIET
+# )
+# add_subdirectory(${abseil_SOURCE_DIR} ${abseil_BINARY_DIR})
 
 # ============================================================
 #                        asio
@@ -23,32 +45,6 @@ download_project(
 )
 add_library(asio INTERFACE)
 target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
-endif()
-
-##
-# For encoding/decoding and client/server communications, following options
-# have been considered, but no decision has been made yet:
-# [2021/02/01] rttr: RTTR is a reflection library and could also be used for serialization
-# because it indeed encodes/decodes types, and it seems planning to support JSON as well.
-# capnproto: this is the most likely choice, and there is only some cmake issue unresolved for Windows
-# nanopb: functionality is limited
-# protobuf: client/server communication is limited to http2
-# rpclib: inactive development
-
-# ============================================================
-#                        cxxopts
-# ============================================================
-#
-if(CPPBASE_BUILD_CXXOPTS)
-message("==> Configuring cxxopts")
-download_project(
-  PROJ     cxxopts
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts/cxxopts-2.2.1.tar.gz
-  URL_HASH MD5=6e70da4fc17a09f32612443f1866042e
-  QUIET
-)
-add_library(cxxopts INTERFACE)
-target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
 endif()
 
 # ============================================================
@@ -67,7 +63,7 @@ add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR})
 endif()
 
 # ============================================================
-#                        fmt
+#                        fmt (TODO: to be replaced by abseil String Formatting)
 # ============================================================
 #
 if(CPPBASE_BUILD_FMT)
@@ -95,7 +91,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCED)
 
 download_project(
   PROJ     googletest
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/googletest-release-1.11.0.tar.gz
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/release-1.11.0.tar.gz
   URL_HASH MD5=e8a8df240b6938bb6384155d4c37d937
   QUIET
 )

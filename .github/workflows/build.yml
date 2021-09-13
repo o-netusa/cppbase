@@ -1,4 +1,4 @@
-name: Ubuntu/Windows CI
+name: Ubuntu/Windows
 
 on:
   push:
@@ -20,6 +20,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: true
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
@@ -45,6 +47,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        lfs: true
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.

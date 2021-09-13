@@ -1,4 +1,4 @@
-![workflow](https://github.com/o-netusa/cppbase/actions/workflows/cmake.yml/badge.svg)
+![workflow](https://github.com/o-netusa/cppbase/actions/workflows/build.yml/badge.svg)
 
 # cppbase
 Cross-platform C++17 base library providing common features for C++ projects, such as logging, thread pool, TCP/UDP clien and server, etc. It uses CMake [DownloadProject](https://github.com/Crascit/DownloadProject) to build and integrate a set of thirdparty libraries (see thirdparty folder for details).

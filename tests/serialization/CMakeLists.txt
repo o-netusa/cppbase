@@ -4,7 +4,7 @@ include(CapnProto)
 CAPNP_GENERATE_CPP(addressbookSources addressbookHeaders addressbook.capnp)
 
 set(SOURCE
-  main.cpp
+  ../main.cpp
   SerializationTests.cpp
   ${addressbookSources}
 )

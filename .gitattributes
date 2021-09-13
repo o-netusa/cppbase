@@ -1,18 +1,14 @@
 # In general, use LF for text
 * text eol=lf
-
 # Windows CMD does not like LF in batch files
 *.bat text eol=crlf
 *.cmd text eol=crlf
-
 # Visual Studio solutions like to switch to CRLF at times
 *.sln text eol=crlf
-
 # Encoding
 *.h   encoding=utf-8
 *.cpp encoding=utf-8
 *.txt encoding=utf-8
-
 # Binary files
 *.dll binary
 *.exe binary
@@ -21,7 +17,7 @@
 *.pdf binary
 *.png binary
 *.so binary
-*.zip binary
-*.gz binary
-*.bz2 binary
-
+*.zip filter=lfs diff=lfs merge=lfs -text
+*.gz filter=lfs diff=lfs merge=lfs -text
+*.tar.bz2 filter=lfs diff=lfs merge=lfs -text
+thirdparty/*.zip filter=lfs diff=lfs merge=lfs -text
