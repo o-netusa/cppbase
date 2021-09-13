@@ -38,6 +38,7 @@ network
 * sigslot (https://github.com/palacaze/sigslot) provides cross-platform event and handler functionalities similar to Qt signal/slot
 * spdlog (https://github.com/gabime/spdlog) provides cross-platform logging functionality
 * stduuid (https://github.com/mariusbancila/stduuid) provides cross-platform uuid functionality
+* ZeroMQ (https://github.com/zeromq) is an asynchronous messaging library, aimed at use in distributed or concurrent applications.
 
 ## Setup clang-format in QtCreator
 * Enable "Help->Plugin->Beautifier" and restart QtCreator

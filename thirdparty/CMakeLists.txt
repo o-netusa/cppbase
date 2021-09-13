@@ -192,8 +192,8 @@ endif()
 if(CPPBASE_BUILD_ZEROMQ)
 
 message("==> Configuring libzmq")
-set(ZMQ_BUILD_TESTS OFF)
-set(WITH_PERF_TOOL OFF)
+set(ZMQ_BUILD_TESTS OFF CACHE BOOL "")
+set(WITH_PERF_TOOL OFF CACHE BOOL "")
 download_project(
   PROJ     libzmq
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/libzmq-v4.3.4.tar.gz
@@ -203,7 +203,7 @@ download_project(
 add_subdirectory(${libzmq_SOURCE_DIR} ${libzmq_BINARY_DIR})
 
 message("==> Configuring cppzmq")
-set(CPPZMQ_BUILD_TESTS OFF)
+set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
   PROJ     cppzmq
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/cppzmq-v4.7.1.tar.gz
