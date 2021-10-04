@@ -48,6 +48,22 @@ target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
 endif()
 
 # ============================================================
+#                        cxxopts
+# ============================================================
+#
+if(CPPBASE_BUILD_CXXOPTS)
+message("==> Configuring cxxopts")
+download_project(
+  PROJ     cxxopts
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts/cxxopts-2.2.1.tar.gz
+  URL_HASH MD5=6e70da4fc17a09f32612443f1866042e
+  QUIET
+)
+add_library(cxxopts INTERFACE)
+target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
+endif()
+
+# ============================================================
 #                        eigen
 # ============================================================
 #
