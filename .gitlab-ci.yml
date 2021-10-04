@@ -15,10 +15,11 @@ nightly_windows:
   tags:
     - windows
   script:
+    - rm -rf build
     - mkdir build
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
-    - ninja
+    - cmake -DCMAKE_BUILD_TYPE=Release ..
+    - cmake --build . --config Release
     - ctest --output-on-failure
 
 nightly_linux:
@@ -42,10 +43,11 @@ build_windows:
   tags:
     - windows
   script:
+    - rm -rf build
     - mkdir build
     - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -GNinja ..
-    - ninja
+    - cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - cmake --build . --config Debug
     - ctest --output-on-failure
 
 build_linux:
