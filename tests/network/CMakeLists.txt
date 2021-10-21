@@ -23,6 +23,7 @@ include(CTest)
 include(GoogleTest)
 gtest_discover_tests(network_test)
 
+if (CPPBASE_BUILD_ZEROMQ)
 set(ZMQTESTS_SOURCE
   ../main.cpp
   ZMQTests.cpp
@@ -40,3 +41,4 @@ target_compile_features(zmq_test PRIVATE ${CXX_STD})
 target_link_libraries(zmq_test gtest spdlog_header_only cppzmq)
 
 gtest_discover_tests(zmq_test)
+endif()
