@@ -84,7 +84,6 @@ endif()
 #
 if(CPPBASE_BUILD_FMT)
 message("==> Configuring fmt")
-set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 download_project(
   PROJ     fmt
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/6.2.1.tar.gz
@@ -100,7 +99,6 @@ endif()
 #
 if(CPPBASE_BUILD_GTEST)
 message("==> Configuring googletest")
-set(BUILD_SHARED_LIBS ON CACHE BOOL "")
 set(INSTALL_GMOCK OFF CACHE BOOL "")
 set(INSTALL_GTEST OFF CACHE BOOL "")
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCED)
