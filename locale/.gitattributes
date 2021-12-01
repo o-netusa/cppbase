@@ -1,0 +1,4 @@
+bin/msginit.exe filter=lfs diff=lfs merge=lfs -text
+bin/msgmerge.exe filter=lfs diff=lfs merge=lfs -text
+bin/xgettext.exe filter=lfs diff=lfs merge=lfs -text
+bin/msgfmt.exe filter=lfs diff=lfs merge=lfs -text

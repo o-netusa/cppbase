@@ -79,7 +79,7 @@ add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR})
 endif()
 
 # ============================================================
-#                        fmt (TODO: to be replaced by abseil String Formatting)
+#                        fmt
 # ============================================================
 #
 if(CPPBASE_BUILD_FMT)
@@ -92,6 +92,30 @@ download_project(
   QUIET
 )
 add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
+endif()
+
+# ============================================================
+#                        gettext
+# ============================================================
+#
+if(CPPBASE_BUILD_GETTEXT AND (CMAKE_SYSTEM_NAME MATCHES "Windows"))
+message("==> Configuring gettext")
+download_project(
+  PROJ     gettext
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/gettext/gettext-0.21.tar.gz
+  URL_HASH MD5=b8166ac41b4ef3adf127b3fa0445e099
+  QUIET
+)
+add_library(gettext INTERFACE)
+target_include_directories(gettext INTERFACE ${gettext_SOURCE_DIR}/include)
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+target_link_libraries(gettext INTERFACE ${gettext_SOURCE_DIR}/lib/debug/libintl.lib)
+set(gettext_LIB_DIR "${gettext_SOURCE_DIR}/lib/debug" CACHE PATH "")
+else()
+target_link_libraries(gettext INTERFACE ${gettext_SOURCE_DIR}/lib/release/libintl.lib)
+set(gettext_LIB_DIR "${gettext_SOURCE_DIR}/lib/release" CACHE PATH "")
+endif()
 endif()
 
 # ============================================================
@@ -195,33 +219,4 @@ add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
 # install(DIRECTORY ${stduuid_SOURCE_DIR}/include/gsl DESTINATION include)
 # install(FILES ${stduuid_SOURCE_DIR}/include/uuid.h DESTINATION include)
-endif()
-
-# ============================================================
-#                        zeromq
-# ============================================================
-#
-if(CPPBASE_BUILD_ZEROMQ)
-
-message("==> Configuring libzmq")
-set(ZMQ_BUILD_TESTS OFF CACHE BOOL "")
-set(WITH_PERF_TOOL OFF CACHE BOOL "")
-download_project(
-  PROJ     libzmq
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/libzmq-v4.3.4.tar.gz
-  URL_HASH MD5=cc20b769ac10afa352e5ed2769bb23b3
-  QUIET
-)
-add_subdirectory(${libzmq_SOURCE_DIR} ${libzmq_BINARY_DIR})
-
-message("==> Configuring cppzmq")
-set(CPPZMQ_BUILD_TESTS OFF CACHE BOOL "")
-download_project(
-  PROJ     cppzmq
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/zeromq/cppzmq-v4.7.1.tar.gz
-  URL_HASH MD5=e85cf23b5aed263c2c5c89657737d107
-  QUIET
-)
-add_subdirectory(${cppzmq_SOURCE_DIR} ${cppzmq_BINARY_DIR})
-
 endif()
