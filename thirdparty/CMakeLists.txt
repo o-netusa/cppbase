@@ -171,6 +171,26 @@ target_include_directories(rapidxml INTERFACE ${rapidxml_SOURCE_DIR})
 endif()
 
 # ============================================================
+#                        RTTR
+# ============================================================
+#
+message(STATUS "Configuring RTTR")
+set(BUILD_UNIT_TESTS    OFF CACHE BOOL "")
+set(BUILD_EXAMPLES      OFF CACHE BOOL "")
+set(BUILD_DOCUMENTATION OFF CACHE BOOL "")
+set(BUILD_INSTALLER     OFF CACHE BOOL "") # Install rttr dll
+set(BUILD_PACKAGE       OFF CACHE BOOL "")
+set(BUILD_STATIC        OFF CACHE BOOL "")
+
+download_project(
+  PROJ     rttr
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/rttr/rttr-master.zip
+  URL_HASH MD5=78d80e22d52a460807812ffec9a88599
+  QUIET
+)
+add_subdirectory(${rttr_SOURCE_DIR} ${rttr_BINARY_DIR})
+
+# ============================================================
 #                        sigslot
 # ============================================================
 #
