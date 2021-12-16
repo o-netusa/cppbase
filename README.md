@@ -13,9 +13,11 @@ common
 ├── common/MemoryLeaks.h
 ├── common/Semaphore.h
 ├── common/ThreadPool.h
-└── common/Timer.h
+├── common/Timer.h
+└── common/Variant.h
 config
 └── config/log.conf
+locale
 logging
 ├── logging/Logging.h
 └── logging/spdlog_setup
@@ -25,20 +27,11 @@ network
 ├── network/TcpServer.h
 ├── network/UdpClient.h
 └── network/UdpServer.h
+tests
 ```
 
 ## Thirdparty libraries
-* asio (https://github.com/chriskohlhoff/asio) provides cross-platform network socket and serial port APIs
-* cxxopts (https://github.com/jarro2783/cxxopts) provides cross-platform command line options support
-* eigen (https://gitlab.com/libeigen/eigen) C++ template library for linear algebra: matrices, vectors, numerical solvers, and related algorithms.
-* fmt (https://github.com/fmtlib/fmt) provides cross-platform C++ string formatting
-* Google Test (https://github.com/google/googletest) C++ unit test framework
-* rapidjson (https://github.com/Tencent/rapidjson) provides JSON encoding/decoding functionalities
-* rapidxml (http://rapidxml.sourceforge.net/) provides XML encoding/decoding functionalities
-* sigslot (https://github.com/palacaze/sigslot) provides cross-platform event and handler functionalities similar to Qt signal/slot
-* spdlog (https://github.com/gabime/spdlog) provides cross-platform logging functionality
-* stduuid (https://github.com/mariusbancila/stduuid) provides cross-platform uuid functionality
-* ZeroMQ (https://github.com/zeromq) is an asynchronous messaging library, aimed at use in distributed or concurrent applications.
+[thirdparty/README.md](https://github.com/o-netusa/cppbase/tree/master/thirdparty/README.md)
 
 ## Setup clang-format in QtCreator
 * Enable "Help->Plugin->Beautifier" and restart QtCreator
