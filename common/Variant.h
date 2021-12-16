@@ -8,10 +8,10 @@
 
 #pragma once
 
-#include "Global.h"
-
 #include <memory>
 #include <type_traits>
+
+#include "Global.h"
 
 #ifdef USE_RTTR
 #include "Variant_rttr.h"
@@ -22,11 +22,12 @@
 namespace cppbase {
 
 /**
- * @brief The Variant class allows to store data of any type and convert between these types transparently.
+ * @brief The Variant class allows to store data of any type and convert between these types
+ *   transparently.
  * @remark The content is copied into the variant class.
  * @note When build with USE_RTTR option, uses rttr internally, otherwise use std::any.
  */
-class DLLEXPORT Variant
+class Variant
 {
 public:
     using Type = internal::Impl::Type;
