@@ -15,6 +15,7 @@
 
 #ifdef USE_RTTR
 #include "Variant_rttr.h"
+#define ENABLE_TYPE_INFO RTTR_ENABLE
 #else
 #include "Variant_any.h"
 #endif

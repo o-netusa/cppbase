@@ -7,6 +7,7 @@
  *************************************************************************/
 
 #include <rttr/variant.h>
+#include <rttr/type>
 
 namespace internal {
 
