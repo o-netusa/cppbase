@@ -39,12 +39,12 @@ if(CPPBASE_BUILD_ASIO)
 message("==> Configuring asio")
 download_project(
   PROJ     asio
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/asio/asio-1.18.0.tar.gz
-  URL_HASH MD5=a6f23c10db1d2a22c813e21f978e5049
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/asio/asio-1-22-0.tar.gz
+  URL_HASH MD5=7f0658ace1fb6416c85a0999027346b2
   QUIET
 )
 add_library(asio INTERFACE)
-target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/include)
+target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/asio/include)
 endif()
 
 # ============================================================
