@@ -69,6 +69,7 @@ endif()
 #
 if(CPPBASE_BUILD_EIGEN)
 message("==> Configuring eigen")
+set(BUILD_TESTING OFF CACHE BOOL "")
 download_project(
   PROJ     eigen
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-3.3.9.tar.gz
