@@ -21,6 +21,7 @@ option(CPPBASE_BUILD_RAPIDXML  "Build RapidXml"    ON)
 option(CPPBASE_BUILD_SIGSLOT   "Build sigslot"     ON)
 option(CPPBASE_BUILD_SPDLOG    "Build spdlog"      ON)
 option(CPPBASE_BUILD_STDUUID   "Build stduuid"     ON)
+option(CPPBASE_BUILD_YAML_CPP  "Build YAML-CPP"    ON)
 option(CPPBASE_USE_RTTR        "Use RTTR library (default=ON)" ON)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

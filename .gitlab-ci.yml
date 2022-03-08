@@ -7,60 +7,24 @@
 
 stages:
   - build
-  - test
 
-nightly_windows:
-  only:
-    - schedules
-  tags:
-    - windows
-  script:
-    - rm -rf build
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release ..
-    - cmake --build . --config Release
-    - ctest --output-on-failure
-
-nightly_linux:
-  image: ubuntu:lidar_dev
-  only:
-    - schedules
-  tags:
-    - linux
-  script:
-    - rm -rf build
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
-    - ninja -j 4
-    - ctest --output-on-failure
-
-build_windows:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  stage: build
-  tags:
-    - windows
-  script:
-    - rm -rf build
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug ..
-    - cmake --build . --config Debug
-    - ctest --output-on-failure
-
-build_linux:
-  image: ubuntu:lidar_dev
+merge_build_linux:
+  image: onet/visionet:latest
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: build
   tags:
     - linux
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
   script:
     - rm -rf build
     - mkdir build
     - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
-    - ninja -j 4
+    - ninja -j 12
     - ctest --output-on-failure

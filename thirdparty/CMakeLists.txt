@@ -236,6 +236,20 @@ download_project(
 )
 add_library(stduuid INTERFACE)
 target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
-# install(DIRECTORY ${stduuid_SOURCE_DIR}/include/gsl DESTINATION include)
-# install(FILES ${stduuid_SOURCE_DIR}/include/uuid.h DESTINATION include)
+endif()
+
+# ============================================================
+#                        yaml-cpp
+# ============================================================
+#
+if(CPPBASE_BUILD_YAML_CPP)
+message("==> Configuring yaml-cpp")
+set(UUID_BUILD_TESTS OFF CACHE BOOL "")
+download_project(
+  PROJ     yamlcpp
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/yamlcpp/yaml-cpp-0.7.0.tar.gz
+  URL_HASH MD5=74d646a3cc1b5d519829441db96744f0
+  QUIET
+)
+add_subdirectory(${yamlcpp_SOURCE_DIR} ${yamlcpp_BINARY_DIR})
 endif()
