@@ -10,6 +10,7 @@ set(SOURCE
   UuidTests.cpp
   EigenTests.cpp
   VariantTests.cpp
+  ForkJoinPoolTests.cpp
 )
 
 add_executable(common_test ${SOURCE})
@@ -21,7 +22,7 @@ target_include_directories(common_test PUBLIC
 # set_target_warnings_as_error(TARGET common_test)
 target_compile_features(common_test PRIVATE ${CXX_STD})
 
-target_link_libraries(common_test gtest spdlog_header_only stduuid eigen)
+target_link_libraries(common_test gtest asio spdlog_header_only stduuid eigen)
 target_link_libraries(common_test $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,9.0>>:stdc++fs>)
 if (CPPBASE_USE_RTTR)
   target_link_libraries(common_test rttr_core)

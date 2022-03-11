@@ -1,17 +1,39 @@
-# workflow:
-#   rules:
-#    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-#    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
-#      when: never
-#    - if: '$CI_COMMIT_BRANCH'
+variables:
+  GIT_STRATEGY: clone
+  GIT_SUBMODULE_STRATEGY: recursive
 
 stages:
   - build
 
-merge_build_linux:
-  image: onet/visionet:latest
+linux_merge_build:
+  image:
+    name: onet/visionet:latest
+    entrypoint: ['bash', '-c', 'exec su onet -c bash']
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  stage: build
+  tags:
+    - linux
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+linux_master_build:
+  image:
+    name: onet/visionet:latest
+    entrypoint: ['bash', '-c', 'exec su onet -c bash']
+  only:
+    - schedules
   stage: build
   tags:
     - linux
