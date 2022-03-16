@@ -1,44 +1,52 @@
 /**************************************************************************
- * @file: Variant_impl.h
+ * @file: Variant.impl.h
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  * All rights reserved.
  *************************************************************************/
 
+#include <rttr/property.h>
 #include <rttr/variant.h>
+
+#include <rttr/registration>
 #include <rttr/type>
 
-namespace internal {
+#define VARIANT_NULL_PROPERTY rttr::type::get_by_name("").get_property("")
 
-struct Impl
+namespace cppbase { namespace internal {
+
+using Value = rttr::variant;
+using Type = rttr::type;
+using Instance = rttr::instance;
+using Argument = rttr::argument;
+using Property = rttr::property;
+
+struct VariantImpl
 {
-    using Value = rttr::variant;
-    using Type = rttr::type;
-
-    Impl() = default;
-    ~Impl() = default;
+    VariantImpl() = default;
+    ~VariantImpl() = default;
 
     template <typename T, typename = std::enable_if_t<!std::is_reference_v<T> &&
                                                       !std::is_same_v<rttr::variant, T>>>
-    Impl(T&& val) : m_val(std::move(val))
+    VariantImpl(T&& val) : m_val(std::move(val))
     {}
 
     template <typename T, typename = std::enable_if_t<!std::is_same_v<rttr::variant, T>>>
-    Impl(T& val) : m_val(val)
+    VariantImpl(T& val) : m_val(val)
     {}
 
-    Impl(Impl&& other) : m_val(std::move(other.m_val)) {}
+    VariantImpl(VariantImpl&& other) : m_val(std::move(other.m_val)) {}
 
-    Impl(const Impl& other) : m_val(other.m_val) {}
+    VariantImpl(const VariantImpl& other) : m_val(other.m_val) {}
 
-    Impl& operator=(Impl&& other)
+    VariantImpl& operator=(VariantImpl&& other)
     {
         m_val = std::move(other.m_val);
         return *this;
     }
 
-    Impl& operator=(const Impl& other)
+    VariantImpl& operator=(const VariantImpl& other)
     {
         m_val = other.m_val;
         return *this;
@@ -62,9 +70,9 @@ struct Impl
         return m_val.get_value<T>();
     }
 
-    bool operator==(const Impl& other) const { return m_val == other.m_val; }
+    bool operator==(const VariantImpl& other) const { return m_val == other.m_val; }
 
-    bool operator!=(const Impl& other) const { return m_val != other.m_val; }
+    bool operator!=(const VariantImpl& other) const { return m_val != other.m_val; }
 
     void Clear() { m_val.clear(); }
 
@@ -81,4 +89,4 @@ struct Impl
     rttr::variant m_val;
 };
 
-}  // namespace internal
+}}  // namespace cppbase::internal
