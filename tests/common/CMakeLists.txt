@@ -11,6 +11,7 @@ set(SOURCE
   EigenTests.cpp
   VariantTests.cpp
   ForkJoinPoolTests.cpp
+  PropertyPathTests.cpp
 )
 
 add_executable(common_test ${SOURCE})

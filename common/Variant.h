@@ -14,10 +14,10 @@
 #include "Global.h"
 
 #ifdef USE_RTTR
-#include "Variant_rttr.h"
+#include "rttr/Variant.impl.h"
 #define ENABLE_TYPE_INFO RTTR_ENABLE
 #else
-#include "Variant_any.h"
+#include "std/Variant.impl.h"
 #endif
 
 namespace cppbase {
@@ -31,13 +31,16 @@ namespace cppbase {
 class Variant
 {
 public:
-    using Type = internal::Impl::Type;
-    using Value = internal::Impl::Value;
+    using Type = internal::Type;
+    using Value = internal::Value;
+    using Instance = internal::Instance;
+    using Argument = internal::Argument;
+    using Property = internal::Property;
 
     template <typename T>
     static Type GetType()
     {
-        return internal::Impl::GetType<T>();
+        return internal::VariantImpl::GetType<T>();
     }
 
     Variant() = default;
@@ -111,8 +114,10 @@ public:
 
     Type GetType() const { return m_impl.GetType(); }
 
+    std::string GetTypeName() const { return m_impl.GetType().get_name().to_string(); }
+
 private:
-    internal::Impl m_impl;
+    internal::VariantImpl m_impl;
 };
 
 }  // namespace cppbase

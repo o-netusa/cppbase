@@ -1,5 +1,5 @@
 /**************************************************************************
- * @file: Variant_any.h
+ * @file: Variant.impl
  * @brief:
  *
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
@@ -8,11 +8,11 @@
 
 #include <any>
 
-namespace internal {
+namespace cppbase { namespace internal {
 
-struct Impl
+struct VariantImpl
 {
     std::any m_val;
 };
     
-} // namespace
+}} // namespace cppbase::internal
