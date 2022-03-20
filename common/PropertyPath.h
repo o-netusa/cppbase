@@ -114,6 +114,8 @@ public:
 
     Variant::Type GetType() const { return m_impl.GetType(); }
 
+    bool IsEmpty() const { return m_impl.m_path.empty(); }
+
 private:
     internal::PropertyPathImpl m_impl;
 };

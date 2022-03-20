@@ -114,6 +114,8 @@ public:
 
     Type GetType() const { return m_impl.GetType(); }
 
+    std::string GetTypeName() const { return m_impl.GetType().get_name().to_string(); }
+
 private:
     internal::VariantImpl m_impl;
 };

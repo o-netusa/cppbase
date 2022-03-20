@@ -71,6 +71,8 @@ TEST(PropertyPathTests, Constructors)
     EXPECT_EQ(path_child_0.ToString(), "children[0]");
     EXPECT_EQ(path_child_a.ToString(), "children_map[a]");
     EXPECT_EQ(path_child_a_value.ToString(), "children_map[a].value");
+    EXPECT_TRUE(path_empty.IsEmpty());
+    EXPECT_FALSE(path_value.IsEmpty());
 
     EXPECT_EQ(path_empty.GetType(), Variant::GetType<SimpleType>());
     EXPECT_EQ(path_child_a_value.GetType(), Variant::GetType<int>());
