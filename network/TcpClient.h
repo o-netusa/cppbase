@@ -93,6 +93,11 @@ public:
         return ret;
     }
 
+    bool IsOpen() const
+    {
+        return m_is_connected;
+    }
+
 private:
     tcp::socket m_sock{network::io_context};
     bool m_is_connected{false};

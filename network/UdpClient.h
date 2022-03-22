@@ -111,6 +111,11 @@ public:
             network::logger->error("UdpClient::ShutDown: error stopping socket : {}", ec.message());
     }
 
+    bool IsOpen() const
+    {
+        return m_is_connected;
+    }
+
 private:
     udp::socket m_sock;
     bool m_is_connected{false};
