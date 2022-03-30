@@ -65,6 +65,7 @@ public:
 
     uint32_t Send(const uint8_t* buffer, uint32_t size)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         uint32_t ret = 0;
 
         if (!buffer || size == 0 || !m_is_connected)
@@ -80,6 +81,7 @@ public:
 
     uint32_t Receive(uint8_t* buffer, uint32_t size)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         uint32_t ret = 0;
 
         if (!buffer || size == 0 || !m_is_connected)
@@ -98,9 +100,10 @@ public:
         return m_is_connected;
     }
 
-private:
-    tcp::socket m_sock{network::io_context};
-    bool m_is_connected{false};
+protected:
+    tcp::socket m_sock{network::context.io_context};
+    std::atomic<bool> m_is_connected{false};
+    std::mutex m_mutex;
 };
 
 }  // namespace cppbase

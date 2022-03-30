@@ -13,9 +13,7 @@ using namespace cppbase;
 
 TEST(TCPTests, TCPServerClient)
 {
-    network::Init();
-
-    auto tcp_server = std::make_shared<TcpServer>(1234);
+    auto tcp_server = std::make_shared<TcpServer>("127.0.0.1", 1234);
     tcp_server->Start([](std::shared_ptr<TcpConnection> connection) {
         static char text[] = "hello";
         uint8_t buf[256] = {0};
@@ -35,6 +33,4 @@ TEST(TCPTests, TCPServerClient)
     ret = tcp_client->Receive(buf, 256);
     EXPECT_EQ(msg.length(), ret);
     EXPECT_STREQ(reinterpret_cast<char*>(buf), msg.c_str());
-
-    network::Terminate();
 }

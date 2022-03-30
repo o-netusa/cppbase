@@ -47,6 +47,34 @@ linux_master_build:
     - rm -rf build
     - mkdir build
     - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+windows_merge_build:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  stage: build
+  tags:
+    - windows
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+windows_master_build:
+  only:
+    - schedules
+  stage: build
+  tags:
+    - windows
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
     - ninja -j 12
     - ctest --output-on-failure

@@ -16,10 +16,9 @@ uint16_t specified_port{2368};
 
 TEST(UDPTests, UDPServerClient)
 {
-    network::Init();
     uint16_t conn_port = 5656;
 
-    auto udp_server = std::make_shared<UdpServer>(port);
+    auto udp_server = std::make_shared<UdpServer>("127.0.0.1", port);
     udp_server->Start(
         [udp_server, &conn_port](uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint) {
             static char text[] = "hello";
@@ -51,6 +50,4 @@ TEST(UDPTests, UDPServerClient)
     EXPECT_EQ(msg.length(), ret);
     EXPECT_STREQ(reinterpret_cast<char*>(buf), msg.c_str());
     EXPECT_EQ(conn_port, specified_port);
-
-    network::Terminate();
 }
