@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <atomic>
+
 #include "Common.h"
 
 namespace cppbase {
@@ -34,6 +36,8 @@ public:
         if (!buffer || bufsz == 0)
             return ret;
 
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         asio::error_code error;
         ret = m_socket.write_some(asio::buffer(buffer, bufsz), error);
         if (error)
@@ -50,6 +54,8 @@ public:
         if (!buffer || bufsz == 0)
             return ret;
 
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         asio::error_code error;
         ret = m_socket.read_some(asio::buffer(buffer, bufsz), error);
         if (error)
@@ -64,6 +70,7 @@ public:
 private:
     TcpConnection(asio::io_context& io_context) : m_socket(io_context) {}
     tcp::socket m_socket;
+    std::mutex m_mutex;
 };
 
 /**
@@ -72,9 +79,11 @@ private:
 class TcpServer
 {
 public:
-    TcpServer(uint16_t port_num)
-        : m_acceptor(network::io_context, tcp::endpoint(tcp::v4(), port_num))
-    {}
+    TcpServer(const std::string& ip, uint16_t port_num)
+        : m_acceptor(network::context.io_context, tcp::endpoint(address::from_string(ip), port_num))
+    {
+        m_acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
+    }
 
     void Start(std::function<void(std::shared_ptr<TcpConnection>)> accept_handler)
     {
@@ -91,15 +100,20 @@ public:
         if (!m_started)
             return;
 
-        if (m_started)
-            m_acceptor.cancel();
         m_started = false;
+        if (m_acceptor.is_open())
+        {
+            m_acceptor.cancel();
+            m_acceptor.close();
+        }
     }
 
-private:
+    bool IsOpen() { return m_started; }
+
+protected:
     void StartAccept()
     {
-        auto new_connection = TcpConnection::Create(network::io_context);
+        auto new_connection = TcpConnection::Create(network::context.io_context);
         m_acceptor.async_accept(new_connection->GetSocket(), [new_connection,
                                                               this](const asio::error_code& ec) {
             if (ec)
@@ -108,17 +122,21 @@ private:
                                        ec.message());
                 return;
             }
+            if (!m_started)
+                return;
             auto client_addr = new_connection->GetSocket().local_endpoint().address().to_string();
             network::logger->debug("TcpServer::StartAccept: accepted connection from: {}",
                                    client_addr);
-            m_accept_handler(new_connection);
-            StartAccept();
+            if (m_accept_handler)
+                m_accept_handler(new_connection);
+            if (m_started)
+                StartAccept();
         });
     }
 
-private:
+protected:
     tcp::acceptor m_acceptor;
     std::function<void(std::shared_ptr<TcpConnection>)> m_accept_handler;
-    bool m_started{false};
+    std::atomic<bool> m_started{false};
 };
 }  // namespace cppbase

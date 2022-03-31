@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(SOURCE
+set(SOURCES
   ../main.cpp
   BlockingQueueTests.cpp
   MemoryLeaksTests.cpp
@@ -10,11 +10,13 @@ set(SOURCE
   UuidTests.cpp
   EigenTests.cpp
   VariantTests.cpp
-  ForkJoinPoolTests.cpp
   PropertyPathTests.cpp
 )
+if (UNIX)
+  set(SOURCES ${SOURCES} ForkJoinPoolTests.cpp)
+endif()
 
-add_executable(common_test ${SOURCE})
+add_executable(common_test ${SOURCES})
 
 target_include_directories(common_test PUBLIC
   ${CMAKE_SOURCE_DIR}

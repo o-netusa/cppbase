@@ -7,7 +7,9 @@
 
 #pragma once
 
+#include <atomic>
 #include <functional>
+#include <mutex>
 
 #include "Common.h"
 
@@ -19,7 +21,8 @@ namespace cppbase {
 class UdpServer
 {
 public:
-    UdpServer(uint16_t port_num) : m_socket(network::io_context, udp::endpoint(udp::v4(), port_num))
+    UdpServer(const std::string& ip, uint16_t port_num)
+        : m_socket(network::context.io_context, udp::endpoint(address::from_string(ip), port_num))
     {}
     ~UdpServer() { Stop(); }
 
@@ -35,11 +38,20 @@ public:
 
     void Stop()
     {
-        if (!m_started)
+        if (!m_socket.is_open())
             return;
+        asio::error_code ec;
+        m_socket.shutdown(asio::socket_base::shutdown_both, ec);
+        if (ec)
+        {
+            network::logger->error("UdpServer::Stop: error shutting down socket: {}", ec.message());
+        }
+        if (m_started)
+        {
+            m_started = false;
+            m_receive_future.wait();
+        }
         m_socket.close();
-        m_started = false;
-        m_receive_future.wait();
     }
 
     uint32_t Send(const uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)
@@ -50,6 +62,7 @@ public:
             network::logger->error("UdpServier::Send: invalid input buffer");
             return ret;
         }
+        std::lock_guard<std::mutex> lock(m_mutex);
         return m_socket.send_to(asio::buffer(buffer, bufsz), endpoint);
     }
 
@@ -61,10 +74,13 @@ public:
             network::logger->error("UdpServier::Receive: invalid input buffer");
             return ret;
         }
+        std::lock_guard<std::mutex> lock(m_mutex);
         return m_socket.receive_from(asio::buffer(buffer, bufsz), endpoint);
     }
 
-private:
+    bool IsOpen() { return m_started; }
+
+protected:
     void StartReceive()
     {
         memset(m_buffer, 0, DEFAULT_BUFSZ);
@@ -79,12 +95,13 @@ private:
         StartReceive();
     }
 
-private:
+protected:
     udp::socket m_socket;
     std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)> m_receive_handler;
     std::future<void> m_receive_future;
-    bool m_started{false};
+    std::atomic<bool> m_started{false};
     uint8_t m_buffer[DEFAULT_BUFSZ];
+    std::mutex m_mutex;
 };
 
 }  // namespace cppbase

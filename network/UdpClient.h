@@ -7,6 +7,9 @@
 
 #pragma once
 
+#include <atomic>
+#include <mutex>
+
 #include "Common.h"
 
 namespace cppbase {
@@ -17,11 +20,10 @@ namespace cppbase {
 class UdpClient
 {
 public:
-    UdpClient() : m_sock(network::io_context) {}
-    UdpClient(uint16_t specified_port)
-        : m_sock(network::io_context, udp::endpoint(udp::v4(), specified_port))
+    UdpClient() : m_sock(network::context.io_context) {}
+    UdpClient(uint16_t port_num)
+        : m_sock(network::context.io_context, udp::endpoint(udp::v4(), port_num))
     {}
-
     ~UdpClient() { Disconnect(); }
 
     bool Connect(const std::string& ip_addr, uint16_t port_num)
@@ -32,7 +34,7 @@ public:
             network::logger->error("UdpClient::Connect: already connected.");
             return false;
         }
-        auto address = asio::ip::address::from_string(ip_addr.c_str(), ec);
+        auto address = address::from_string(ip_addr.c_str(), ec);
         if (ec)
         {
             network::logger->error("UdpClient::Connect: invalid ip address({}): {}", ip_addr,
@@ -69,6 +71,7 @@ public:
 
     uint32_t Send(const uint8_t* buffer, uint32_t size)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         uint32_t ret = 0;
 
         if (!buffer || size == 0 || !m_is_connected)
@@ -84,6 +87,7 @@ public:
 
     uint32_t Receive(uint8_t* buffer, uint32_t size)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         uint32_t ret = 0;
 
         if (!buffer || size == 0 || !m_is_connected)
@@ -111,14 +115,12 @@ public:
             network::logger->error("UdpClient::ShutDown: error stopping socket : {}", ec.message());
     }
 
-    bool IsOpen() const
-    {
-        return m_is_connected;
-    }
+    bool IsOpen() const { return m_is_connected; }
 
-private:
+protected:
     udp::socket m_sock;
-    bool m_is_connected{false};
+    std::atomic<bool> m_is_connected{false};
+    std::mutex m_mutex;
 };
 
 }  // namespace cppbase
