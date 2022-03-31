@@ -46,12 +46,16 @@ public:
         {
             network::logger->error("UdpServer::Stop: error shutting down socket: {}", ec.message());
         }
+        m_socket.close(ec);
+        if (ec)
+        {
+            network::logger->error("UdpServer::Stop: error closing socket: {}", ec.message());
+        }
         if (m_started)
         {
             m_started = false;
             m_receive_future.wait();
         }
-        m_socket.close();
     }
 
     uint32_t Send(const uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)
