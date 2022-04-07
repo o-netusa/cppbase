@@ -9,24 +9,11 @@
 #pragma once
 
 #include <assert.h>
+#include <common/Encoding.h>
 #include <rttr/variant_associative_view.h>
 #include <rttr/variant_sequential_view.h>
 
-#include <sstream>
-
 namespace cppbase { namespace internal {
-
-static std::vector<std::string> SplitString(const std::string& str, char delimiter)
-{
-    std::vector<std::string> tokens;
-    std::string token;
-    std::istringstream tokenStream(str);
-    while (std::getline(tokenStream, token, delimiter))
-    {
-        tokens.push_back(token);
-    }
-    return tokens;
-}
 
 struct PropertyPathImpl
 {
@@ -256,7 +243,7 @@ struct PropertyPathImpl
             return m_type;
         }
         return m_path.back().GetType();
-}
+    }
 };
 
 }}  // namespace cppbase::internal
