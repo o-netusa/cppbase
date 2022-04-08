@@ -29,6 +29,8 @@ public:
     void Start(std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)>
                    receive_handler)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         if (m_started)
             return;
         m_receive_handler = receive_handler;
@@ -38,6 +40,8 @@ public:
 
     void Stop()
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         if (!m_socket.is_open())
             return;
         asio::error_code ec;
@@ -87,6 +91,9 @@ public:
 protected:
     void StartReceive()
     {
+        if (!m_started)
+            return;
+
         memset(m_buffer, 0, DEFAULT_BUFSZ);
         udp::endpoint client_endpoint;
         auto size = m_socket.receive_from(asio::buffer(m_buffer, DEFAULT_BUFSZ), client_endpoint);
@@ -94,8 +101,6 @@ protected:
             return;
         if (size > 0)
             m_receive_handler(m_buffer, size, client_endpoint);
-        if (!m_started)
-            return;
         StartReceive();
     }
 

@@ -87,6 +87,8 @@ public:
 
     void Start(std::function<void(std::shared_ptr<TcpConnection>)> accept_handler)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         if (m_started)
             return;
 
@@ -97,6 +99,8 @@ public:
 
     void Stop()
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
+
         if (!m_started)
             return;
 
@@ -138,5 +142,6 @@ protected:
     tcp::acceptor m_acceptor;
     std::function<void(std::shared_ptr<TcpConnection>)> m_accept_handler;
     std::atomic<bool> m_started{false};
+    std::mutex m_mutex;
 };
 }  // namespace cppbase
