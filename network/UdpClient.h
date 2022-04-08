@@ -28,6 +28,7 @@ public:
 
     bool Connect(const std::string& ip_addr, uint16_t port_num)
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         asio::error_code ec;
         if (m_is_connected)
         {
@@ -56,6 +57,7 @@ public:
 
     void Disconnect()
     {
+        std::lock_guard<std::mutex> lock(m_mutex);
         if (m_is_connected)
         {
             asio::error_code ec;
