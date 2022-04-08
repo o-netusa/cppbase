@@ -41,7 +41,11 @@ struct Context
     std::thread io_thread;
 };
 
-inline static Context context{};
+static asio::io_context& get_io_context()
+{
+    static Context context{};
+    return context.io_context;
+}
 
 } // namespace network
 

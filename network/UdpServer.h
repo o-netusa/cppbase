@@ -22,7 +22,7 @@ class UdpServer
 {
 public:
     UdpServer(const std::string& ip, uint16_t port_num)
-        : m_socket(network::context.io_context, udp::endpoint(address::from_string(ip), port_num))
+        : m_socket(network::get_io_context(), udp::endpoint(address::from_string(ip), port_num))
     {}
     ~UdpServer() { Stop(); }
 

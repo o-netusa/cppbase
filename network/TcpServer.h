@@ -80,7 +80,7 @@ class TcpServer
 {
 public:
     TcpServer(const std::string& ip, uint16_t port_num)
-        : m_acceptor(network::context.io_context, tcp::endpoint(address::from_string(ip), port_num))
+        : m_acceptor(network::get_io_context(), tcp::endpoint(address::from_string(ip), port_num))
     {
         m_acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
     }
@@ -92,7 +92,8 @@ public:
         if (m_started)
             return;
 
-        m_accept_handler = accept_handler;
+        if (accept_handler)
+            m_accept_handler = accept_handler;
         StartAccept();
         m_started = true;
     }
@@ -117,7 +118,7 @@ public:
 protected:
     void StartAccept()
     {
-        auto new_connection = TcpConnection::Create(network::context.io_context);
+        auto new_connection = TcpConnection::Create(network::get_io_context());
         m_acceptor.async_accept(new_connection->GetSocket(), [new_connection,
                                                               this](const asio::error_code& ec) {
             if (ec)
@@ -140,7 +141,7 @@ protected:
 
 protected:
     tcp::acceptor m_acceptor;
-    std::function<void(std::shared_ptr<TcpConnection>)> m_accept_handler;
+    std::function<void(std::shared_ptr<TcpConnection>)> m_accept_handler{nullptr};
     std::atomic<bool> m_started{false};
     std::mutex m_mutex;
 };
