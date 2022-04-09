@@ -20,9 +20,9 @@ namespace cppbase {
 class UdpClient
 {
 public:
-    UdpClient() : m_sock(network::context.io_context) {}
+    UdpClient() : m_sock(network::get_io_context()) {}
     UdpClient(uint16_t port_num)
-        : m_sock(network::context.io_context, udp::endpoint(udp::v4(), port_num))
+        : m_sock(network::get_io_context(), udp::endpoint(udp::v4(), port_num))
     {}
     ~UdpClient() { Disconnect(); }
 
