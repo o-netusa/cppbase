@@ -105,7 +105,8 @@ public:
     }
 
 protected:
-    tcp::socket m_sock{network::get_io_context()};
+    asio::io_context m_io_context;
+    tcp::socket m_sock{m_io_context};
     std::atomic<bool> m_is_connected{false};
     std::mutex m_mutex;
 };

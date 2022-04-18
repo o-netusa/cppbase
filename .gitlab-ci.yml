@@ -5,7 +5,7 @@ variables:
 stages:
   - build
 
-linux_merge_build:
+merge_ubuntu2004:
   image:
     name: onet/visionet:latest
     entrypoint: ['bash', '-c', 'exec su onet -c bash']
@@ -13,7 +13,8 @@ linux_merge_build:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: build
   tags:
-    - linux
+    - ubuntu2004
+    - visionet
   before_script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -28,7 +29,7 @@ linux_merge_build:
     - ninja -j 12
     - ctest --output-on-failure
 
-linux_master_build:
+master_ubuntu2004:
   image:
     name: onet/visionet:latest
     entrypoint: ['bash', '-c', 'exec su onet -c bash']
@@ -36,7 +37,8 @@ linux_master_build:
     - schedules
   stage: build
   tags:
-    - linux
+    - ubuntu2004
+    - visionet
   before_script:
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
@@ -51,12 +53,22 @@ linux_master_build:
     - ninja -j 12
     - ctest --output-on-failure
 
-windows_merge_build:
+merge_ubuntu1804:
+  image:
+    name: piqs/visionet:ubuntu1804
+    entrypoint: ['bash', '-c', 'exec su onet -c bash']
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
   stage: build
   tags:
-    - windows
+    - ubuntu1804
+    - visionet
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
   script:
     - rm -rf build
     - mkdir build
@@ -65,12 +77,82 @@ windows_merge_build:
     - ninja -j 12
     - ctest --output-on-failure
 
-windows_master_build:
+master_ubuntu1804:
+  image:
+    name: piqs/visionet:ubuntu1804
+    entrypoint: ['bash', '-c', 'exec su onet -c bash']
   only:
     - schedules
   stage: build
   tags:
-    - windows
+    - ubuntu1804
+    - visionet
+  before_script:
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+merge_vs2017:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  stage: build
+  tags:
+    - visionet
+    - vs2017
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+master_vs2017:
+  only:
+    - schedules
+  stage: build
+  tags:
+    - visionet
+    - vs2017
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+merge_vs2019:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+  stage: build
+  tags:
+    - visionet
+    - vs2019
+  script:
+    - rm -rf build
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+    - ninja -j 12
+    - ctest --output-on-failure
+
+master_vs2019:
+  only:
+    - schedules
+  stage: build
+  tags:
+    - visionet
+    - vs2019
   script:
     - rm -rf build
     - mkdir build
