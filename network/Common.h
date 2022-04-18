@@ -20,14 +20,14 @@ namespace cppbase { namespace network {
 
 static logging::LoggerPtr logger{logging::GetLoggerForCurrentModule()};
 
-struct Context
+struct ServerContext
 {
-    Context()
+    ServerContext()
     {
         io_thread = std::thread([this] { io_context.run(); });
     }
 
-    ~Context()
+    ~ServerContext()
     {
         io_context.stop();
         io_thread.join();
@@ -40,12 +40,6 @@ struct Context
     // io_thread keeps io_context running
     std::thread io_thread;
 };
-
-static asio::io_context& get_io_context()
-{
-    static Context context{};
-    return context.io_context;
-}
 
 } // namespace network
 
