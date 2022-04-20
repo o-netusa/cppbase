@@ -1,3 +1,5 @@
 add_subdirectory(common)
 add_subdirectory(logging)
-add_subdirectory(network)
+if(CPPBASE_BUILD_ASIO)
+  add_subdirectory(network)
+endif()

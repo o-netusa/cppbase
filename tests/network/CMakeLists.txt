@@ -6,6 +6,10 @@ set(SOURCE
   UdpTests.cpp
 )
 
+if(UNIX)
+  list(APPEND SOURCE ForkJoinPoolTests.cpp)
+endif()
+
 add_executable(network_test ${SOURCE})
 
 target_include_directories(network_test PUBLIC

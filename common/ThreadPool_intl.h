@@ -118,7 +118,7 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
         set_affinity(i, m_threads[i]);
     }
     logger->info("Created thread pool with {} threads at priority {}, {} CPU core(s) reserved",
-                 threads, priority, cpu_reserved);
+                 threads, static_cast<int>(priority), cpu_reserved);
 }
 
 // the destructor joins all threads
