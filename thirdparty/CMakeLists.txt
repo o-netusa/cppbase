@@ -48,6 +48,24 @@ target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/asio/include)
 endif()
 
 # ============================================================
+#                        cereal
+# ============================================================
+#
+if(CPPBASE_BUILD_CEREAL)
+message("==> Configuring cereal")
+set(BUILD_DOC OFF CACHE BOOL "")
+set(BUILD_SANDBOX OFF CACHE BOOL "")
+set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "")
+download_project(
+  PROJ     cereal
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cereal/v1.3.2.tar.gz
+  URL_HASH MD5=ab6070fadc7c50072ef4153fb1c46a87
+  QUIET
+)
+add_subdirectory(${cereal_SOURCE_DIR} ${cereal_BINARY_DIR})
+endif()
+
+# ============================================================
 #                        cxxopts
 # ============================================================
 #
@@ -55,8 +73,8 @@ if(CPPBASE_BUILD_CXXOPTS)
 message("==> Configuring cxxopts")
 download_project(
   PROJ     cxxopts
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts/cxxopts-2.2.1.tar.gz
-  URL_HASH MD5=6e70da4fc17a09f32612443f1866042e
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts/v3.0.0.tar.gz
+  URL_HASH MD5=4c4cb6e2f252157d096fe18451ab451e
   QUIET
 )
 add_library(cxxopts INTERFACE)
@@ -88,8 +106,8 @@ if(CPPBASE_BUILD_FMT)
 message("==> Configuring fmt")
 download_project(
   PROJ     fmt
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/6.2.1.tar.gz
-  URL_HASH MD5=f77569874b25ff3ece7f0229a4236feb
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/8.1.1.tar.gz
+  URL_HASH MD5=fe7f1585844b14c647bd332ad5562832
   QUIET
 )
 add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
@@ -215,8 +233,8 @@ message("==> Configuring spdlog")
 set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "")
 download_project(
   PROJ     spdlog
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.8.5.tar.gz
-  URL_HASH MD5=8755cdbc857794730a022722a66d431a
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.10.0.tar.gz
+  URL_HASH MD5=effea813cd81cfb5588806c5754e14f1
   QUIET
 )
 add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
@@ -231,12 +249,11 @@ message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
   PROJ     stduuid
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/stduuid-1.0.tar.gz
-  URL_HASH MD5=05ac92614b195dee6b1af0ba04684c57
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/v1.2.2.tar.gz
+  URL_HASH MD5=2d85213945c231bcfdf40b382ed41620
   QUIET
 )
-add_library(stduuid INTERFACE)
-target_include_directories(stduuid INTERFACE ${stduuid_SOURCE_DIR}/include)
+add_subdirectory(${stduuid_SOURCE_DIR} ${stduuid_BINARY_DIR})
 endif()
 
 # ============================================================

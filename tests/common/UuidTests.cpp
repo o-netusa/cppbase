@@ -20,19 +20,19 @@ TEST(UuidTests, Basic)
 TEST(UuidTests, Parse)
 {
     {
-        auto guid = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e43");
+        auto guid = uuids::uuid::from_string("47183823-2574-4bfd-b411-99ed177d3e43").value();
         EXPECT_EQ("47183823-2574-4bfd-b411-99ed177d3e43", uuids::to_string(guid));
     }
     {
         auto str = "";
-        EXPECT_THROW(uuids::uuid::from_string(str), uuids::uuid_error);
+        EXPECT_FALSE(uuids::uuid::is_valid_uuid(str));
     }
     {
-        auto guid = uuids::uuid::from_string(L"47183823-2574-4bfd-b411-99ed177d3e43");
+        auto guid = uuids::uuid::from_string(L"47183823-2574-4bfd-b411-99ed177d3e43").value();
         EXPECT_EQ("47183823-2574-4bfd-b411-99ed177d3e43", uuids::to_string(guid));
     }
     {
-        auto guid = uuids::uuid::from_string("00000000-0000-0000-0000-000000000000");
+        auto guid = uuids::uuid::from_string("00000000-0000-0000-0000-000000000000").value();
         EXPECT_EQ("00000000-0000-0000-0000-000000000000", uuids::to_string(guid));
     }
 }
