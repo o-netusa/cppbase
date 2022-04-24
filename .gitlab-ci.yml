@@ -20,7 +20,7 @@ merge_ubuntu2004:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa 192.168.222.223 >> ~/.ssh/known_hosts
   script:
     - rm -rf build
     - mkdir build
@@ -44,7 +44,7 @@ master_ubuntu2004:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa 192.168.222.223 >> ~/.ssh/known_hosts
   script:
     - rm -rf build
     - mkdir build
@@ -68,7 +68,7 @@ merge_ubuntu1804:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa 192.168.222.223 >> ~/.ssh/known_hosts
   script:
     - rm -rf build
     - mkdir build
@@ -92,7 +92,7 @@ master_ubuntu1804:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - ssh-keyscan -t rsa -p 2222 192.168.10.1 >> ~/.ssh/known_hosts
+    - ssh-keyscan -t rsa 192.168.222.223 >> ~/.ssh/known_hosts
   script:
     - rm -rf build
     - mkdir build
