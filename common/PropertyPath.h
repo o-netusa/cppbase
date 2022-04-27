@@ -114,6 +114,8 @@ public:
 
     Variant::Type GetType() const { return m_impl.GetType(); }
 
+    Variant::Type GetRootType() const { return m_impl.GetRootType(); }
+
     bool IsEmpty() const { return m_impl.m_path.empty(); }
 
 private:

@@ -68,8 +68,13 @@ struct PropertyPathImpl
                     }
                 } else
                 {
+                    auto property = type.get_property(token);
+                    if (!property.is_valid())
+                    {
+                        throw std::runtime_error("Invalid path: " + path);
+                    }
                     m_path.emplace_back(type, token);
-                    type = type.get_property(token).get_type();
+                    type = property.get_type();
                 }
             }
         }
@@ -243,6 +248,11 @@ struct PropertyPathImpl
             return m_type;
         }
         return m_path.back().GetType();
+    }
+
+    Variant::Type GetRootType() const
+    {
+        return m_type;
     }
 };
 

@@ -66,6 +66,9 @@ TEST(PropertyPathTests, Constructors)
     PropertyPath path_child_a{Variant::GetType<SimpleType>(), "children_map[a]"};
     PropertyPath path_child_a_value{Variant::GetType<SimpleType>(), "children_map[a].value"};
 
+    EXPECT_THROW(PropertyPath(Variant::GetType<SimpleType>(), "invalid"), std::runtime_error);
+    EXPECT_THROW(PropertyPath(Variant::GetType<SimpleType>(), "value.invalid"), std::runtime_error);
+
     EXPECT_EQ(path_value.ToString(), "value");
     EXPECT_EQ(path_name.ToString(), "name");
     EXPECT_EQ(path_child_0.ToString(), "children[0]");
@@ -76,6 +79,9 @@ TEST(PropertyPathTests, Constructors)
 
     EXPECT_EQ(path_empty.GetType(), Variant::GetType<SimpleType>());
     EXPECT_EQ(path_child_a_value.GetType(), Variant::GetType<int>());
+
+    EXPECT_EQ(path_empty.GetRootType(), Variant::GetType<SimpleType>());
+    EXPECT_EQ(path_child_a_value.GetRootType(), Variant::GetType<SimpleType>());
 }
 
 TEST(PropertyPathTests, GetSetValue)
