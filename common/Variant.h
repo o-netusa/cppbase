@@ -51,11 +51,13 @@ public:
      * @note The value will be copied or moved into the variant.
      */
     template <typename T,
-              typename = std::enable_if_t<!std::is_reference_v<T> && !std::is_same_v<Variant, T>>>
+              typename = std::enable_if_t<!std::is_reference_v<T> && !std::is_same_v<Variant, T> &&
+                                          !std::is_same_v<Variant::Value, T>>>
     Variant(T&& val) : m_impl(std::move(val))
     {}
 
-    template <typename T, typename = std::enable_if_t<!std::is_same_v<Variant, T>>>
+    template <typename T, typename = std::enable_if_t<!std::is_same_v<Variant, T> &&
+                                                      !std::is_same_v<Variant::Value, T>>>
     Variant(T& val) : m_impl(val)
     {}
 
@@ -63,7 +65,10 @@ public:
 
     Variant(Variant&& other) : m_impl(std::move(other.m_impl)) {}
 
-    template <typename T, typename = std::enable_if_t<!std::is_same_v<T, Variant>>>
+    Variant(const Variant::Value& val) { m_impl.m_val = val; }
+
+    template <typename T, typename = std::enable_if_t<!std::is_same_v<T, Variant> &&
+                                                      !std::is_same_v<Variant::Value, T>>>
     Variant& operator=(T& val)
     {
         m_impl = val;
@@ -79,6 +84,12 @@ public:
     Variant& operator=(const Variant& other)
     {
         m_impl = other.m_impl;
+        return *this;
+    }
+
+    Variant& operator=(const Variant::Value& val)
+    {
+        m_impl.m_val = val;
         return *this;
     }
 
@@ -110,7 +121,7 @@ public:
         return m_impl.GetValue<T>();
     }
 
-    Value GetInternalValue() { return m_impl.m_val; }
+    const Value& GetInternalValue() const { return m_impl.m_val; }
 
     Type GetType() const { return m_impl.GetType(); }
 
