@@ -101,7 +101,7 @@ public:
     /**
      * @brief 获取obj中访问路径对应属性值
      */
-    Variant::Value GetValue(Variant::Instance obj) { return m_impl.GetValue(obj); }
+    Variant::Value GetValue(const Variant& obj) { return m_impl.GetValue(obj); }
     /**
      * @brief 设置obj中访问路径对应属性值
      */

@@ -98,14 +98,14 @@ struct PropertyPathImpl
         return false;
     }
 
-    Variant::Value GetInstanceValue(Variant::Instance obj, const PropertyInfo& prop_info)
+    Variant::Value GetInstanceValue(const Variant::Value& obj, const PropertyInfo& prop_info)
     {
         if (!prop_info.IsValid())
         {
             return Variant::Value();
         }
 
-        auto value = prop_info.property.get_value(obj);
+        auto value = prop_info.property.get_value(rttr::instance(obj));
         if (prop_info.property.get_type().is_sequential_container())
         {
             rttr::variant_sequential_view view = value.create_sequential_view();
@@ -127,9 +127,9 @@ struct PropertyPathImpl
         return value;
     }
 
-    Variant::Value GetValue(Variant::Instance obj)
+    Variant::Value GetValue(const Variant& obj)
     {
-        if (!IsValid() || !obj.is_valid())
+        if (!IsValid() || !obj.IsValid())
         {
             return Variant::Value();
         }
@@ -139,7 +139,7 @@ struct PropertyPathImpl
         {
             auto& info = m_path[idx];
             assert(info.IsValid());
-            value = GetInstanceValue((idx == 0) ? obj : Variant::Instance(value), info);
+            value = GetInstanceValue((idx == 0) ? obj.GetInternalValue() : value, info);
         }
         return value;
     }
