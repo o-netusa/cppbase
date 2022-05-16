@@ -84,6 +84,7 @@ public:
     {
         m_acceptor.set_option(asio::ip::tcp::acceptor::reuse_address(true));
     }
+    virtual ~TcpServer() { Stop(); }
 
     void Start(std::function<void(std::shared_ptr<TcpConnection>)> accept_handler)
     {
