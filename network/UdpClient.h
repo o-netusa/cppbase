@@ -24,7 +24,7 @@ public:
     UdpClient(uint16_t port_num)
         : m_sock(m_io_context, udp::endpoint(udp::v4(), port_num))
     {}
-    ~UdpClient() { Disconnect(); }
+    virtual ~UdpClient() { Disconnect(); }
 
     bool Connect(const std::string& ip_addr, uint16_t port_num)
     {

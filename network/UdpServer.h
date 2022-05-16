@@ -24,7 +24,7 @@ public:
     UdpServer(const std::string& ip, uint16_t port_num)
         : m_socket(m_context.io_context, udp::endpoint(address::from_string(ip), port_num))
     {}
-    ~UdpServer() { Stop(); }
+    virtual ~UdpServer() { Stop(); }
 
     void Start(std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)>
                    receive_handler)

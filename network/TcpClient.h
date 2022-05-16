@@ -18,7 +18,7 @@ class TcpClient
 {
 public:
     TcpClient() = default;
-    ~TcpClient() { Disconnect(); }
+    virtual ~TcpClient() { Disconnect(); }
 
     bool Connect(const std::string& ip_addr, uint16_t port_num)
     {
