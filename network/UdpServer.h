@@ -34,16 +34,17 @@ public:
         if (m_started)
             return;
         m_receive_handler = receive_handler;
-        m_receive_future = std::async(std::launch::async, [this]() { StartReceive(); });
         m_started = true;
+        m_receive_thread = std::thread([this]() { StartReceive(); });
     }
 
     void Stop()
     {
         std::lock_guard<std::mutex> lock(m_mutex);
 
-        if (!m_socket.is_open())
+        if (!m_socket.is_open() || !m_started)
             return;
+        m_started = false;
         asio::error_code ec;
         m_socket.shutdown(asio::socket_base::shutdown_both, ec);
         if (ec)
@@ -55,11 +56,8 @@ public:
         {
             network::logger->error("UdpServer::Stop: error closing socket: {}", ec.message());
         }
-        if (m_started)
-        {
-            m_started = false;
-            m_receive_future.wait();
-        }
+        if (m_receive_thread.joinable())
+            m_receive_thread.join();
     }
 
     uint32_t Send(const uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)
@@ -91,24 +89,30 @@ public:
 protected:
     void StartReceive()
     {
-        if (!m_started)
-            return;
-
-        memset(m_buffer, 0, DEFAULT_BUFSZ);
-        udp::endpoint client_endpoint;
-        auto size = m_socket.receive_from(asio::buffer(m_buffer, DEFAULT_BUFSZ), client_endpoint);
-        if (!m_started)
-            return;
-        if (size > 0)
-            m_receive_handler(m_buffer, size, client_endpoint);
-        StartReceive();
+        while (m_started)
+        {
+            memset(m_buffer, 0, DEFAULT_BUFSZ);
+            udp::endpoint client_endpoint;
+            asio::error_code ec;
+            auto size =
+                m_socket.receive_from(asio::buffer(m_buffer, DEFAULT_BUFSZ), client_endpoint, 0, ec);
+            if (ec)
+            {
+                network::logger->error("UdpServer::StartReceive: error receiving message: ",
+                                       ec.message());
+            }
+            if (!m_started)
+                break;
+            if (size > 0)
+                m_receive_handler(m_buffer, size, client_endpoint);
+        }
     }
 
 protected:
     network::ServerContext m_context;
     udp::socket m_socket;
     std::function<void(uint8_t* buffer, uint32_t bufsz, udp::endpoint& endpoint)> m_receive_handler;
-    std::future<void> m_receive_future;
+    std::thread m_receive_thread;
     std::atomic<bool> m_started{false};
     uint8_t m_buffer[DEFAULT_BUFSZ];
     std::mutex m_mutex;
