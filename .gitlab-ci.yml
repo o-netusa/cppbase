@@ -7,7 +7,7 @@ stages:
 
 merge_ubuntu2004:
   image:
-    name: onet/visionet:latest
+    name: piqs/visionet:ubuntu2004
     entrypoint: ['bash', '-c', 'exec su onet -c bash']
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -31,7 +31,7 @@ merge_ubuntu2004:
 
 master_ubuntu2004:
   image:
-    name: onet/visionet:latest
+    name: piqs/visionet:ubuntu2004
     entrypoint: ['bash', '-c', 'exec su onet -c bash']
   only:
     - schedules

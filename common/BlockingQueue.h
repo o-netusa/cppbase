@@ -21,61 +21,50 @@ template <typename T>
 class BlockingQueue
 {
 public:
-    BlockingQueue() = default;
+    BlockingQueue(uint32_t max_size = 0)
+        : m_max_size(max_size)
+    {}
     ~BlockingQueue() = default;
 
     void Push(const T& data)
     {
         {
             std::lock_guard<std::mutex> lock(m_mutex);
+            while (m_max_size > 0 && m_queue.size() >= m_max_size)
+            {
+                m_queue.pop();
+            }
             m_queue.push(data);
         }
         m_signal.notify_one();
     }
 
-    void Pop(T& data)
+    T Pop()
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         while (m_queue.empty())
             m_signal.wait(lock);
 
-        data = m_queue.front();
+        auto data = m_queue.front();
         m_queue.pop();
+        return data;
     }
 
-    void Pop(T& data, const std::function<bool()>& f)
-    {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        while (m_queue.empty() && f())
-            m_signal.wait(lock);
-
-        if (!f())
-            return;
-        data = m_queue.front();
-        m_queue.pop();
-    }
-
-    void PopFuncNotify()
-    {
-        std::unique_lock<std::mutex> lock(m_mutex);
-        m_signal.notify_one();
-    }
-
-    bool TryPop(T& value, int32_t timeout_ms = 0)
+    T TryPop(int32_t timeout_ms = 0)
     {
         std::unique_lock<std::mutex> lock(m_mutex);
         if (m_queue.empty())
         {
             if (m_signal.wait_for(lock, std::chrono::milliseconds(timeout_ms)) ==
                 std::cv_status::timeout)
-                return false;
+                throw std::runtime_error("BlockingQueue::TryPop timeout");
 
             if (m_queue.empty())
-                return false;
+                throw std::runtime_error("BlockingQueue::TryPop empty");
         }
-        value = m_queue.front();
+        auto value = m_queue.front();
         m_queue.pop();
-        return true;
+        return value;
     }
 
     bool Empty() const { return m_queue.empty(); }
@@ -90,6 +79,7 @@ public:
     size_t Size() const { return m_queue.size(); }
 
 private:
+    uint32_t m_max_size{0};
     std::queue<T> m_queue;
     mutable std::mutex m_mutex;
     std::condition_variable m_signal;
