@@ -5,9 +5,9 @@
  * Copyright (c) 2021 O-Net Technologies (Group) Limited.
  ****************************************************************************/
 
-#include <logging/Logging.h>
+#pragma once
 
-#include "ThreadPool.h"
+#include <logging/Logging.h>
 
 namespace cppbase {
 
