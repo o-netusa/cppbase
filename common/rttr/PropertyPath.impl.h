@@ -106,15 +106,14 @@ struct PropertyPathImpl
         }
 
         auto value = prop_info.property.get_value(rttr::instance(obj));
-        if (prop_info.property.get_type().is_sequential_container())
+        if (prop_info.property.get_type().is_sequential_container() && prop_info.index >= 0)
         {
             rttr::variant_sequential_view view = value.create_sequential_view();
-            assert(prop_info.index >= 0 && prop_info.index < view.get_size());
+            assert(prop_info.index < view.get_size());
             value = view.get_value(prop_info.index).extract_wrapped_value();
-        } else if (prop_info.property.get_type().is_associative_container())
+        } else if (prop_info.property.get_type().is_associative_container() && !prop_info.key.empty())
         {
             rttr::variant_associative_view view = value.create_associative_view();
-            assert(!prop_info.key.empty());
             for (const auto& item : view)
             {
                 if (item.first.extract_wrapped_value().to_string() == prop_info.key)

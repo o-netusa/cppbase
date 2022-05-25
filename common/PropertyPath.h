@@ -14,6 +14,20 @@
 
 namespace cppbase {
 
+/**
+ * @brief PropertyInfo defines the information of a property of a type.
+ * e.g.
+ *   struct SimpleType
+ *   {
+ *       int value;
+ *       std::string name;
+ *       std::vector<SimpleType> children;
+ *       std::unordered_map<std::string, SimpleType*> children_map;
+ *   };
+ *   PropertyInfo b(Variant::GetType<SimpleType>(), "value");
+ *
+ *   b represents the property "value" of type SimpleType.
+ */
 struct PropertyInfo
 {
     PropertyInfo() = default;
@@ -84,6 +98,21 @@ struct PropertyInfo
 
 namespace cppbase {
 
+/**
+ * @brief PropertyPath defines a chained PropertyInfos that can be used to access a property of a type.
+ * e.g.
+ *   struct SimpleType
+ *   {
+ *       int value;
+ *       std::string name;
+ *       std::vector<SimpleType> children;
+ *       std::unordered_map<std::string, SimpleType*> children_map;
+ *   };
+ *   PropertyPath path_child_a_value{Variant::GetType<SimpleType>(), "children_map[a].value"};
+ *
+ *   path_child_a_value can be used to access "SimpleType.children_map[a].value".
+ *   The client code can use GetValue() and SetValue() to access the property of a SimpleType instance.
+ */
 class PropertyPath
 {
 public:
@@ -101,7 +130,7 @@ public:
     /**
      * @brief 获取obj中访问路径对应属性值
      */
-    Variant::Value GetValue(const Variant& obj) { return m_impl.GetValue(obj); }
+    Variant::Value GetValue(const Variant &obj) { return m_impl.GetValue(obj); }
     /**
      * @brief 设置obj中访问路径对应属性值
      */
