@@ -16,6 +16,12 @@
 #define DECL_IMPORT __attribute__((visibility("default")))
 #endif
 
+#if defined(API_EXPORTS)
+#define DLLEXPORT DECL_EXPORT
+#else
+#define DLLEXPORT DECL_IMPORT
+#endif
+
 #define DISALLOW_COPY_AND_ASSIGN(T)  \
     T(const T&) = delete;            \
     T& operator=(const T&) = delete; \
