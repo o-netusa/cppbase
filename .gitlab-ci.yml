@@ -101,35 +101,35 @@ master_ubuntu1804:
     - ninja -j 12
     - ctest --output-on-failure
 
-merge_vs2017:
-  rules:
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-  stage: build
-  tags:
-    - visionet
-    - vs2017
-  script:
-    - rm -rf build
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
-    - ninja -j 12
-    - ctest --output-on-failure
+# merge_vs2017:
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#   stage: build
+#   tags:
+#     - visionet
+#     - vs2017
+#   script:
+#     - rm -rf build
+#     - mkdir build
+#     - cd build
+#     - cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja ..
+#     - ninja -j 12
+#     - ctest --output-on-failure
 
-master_vs2017:
-  only:
-    - schedules
-  stage: build
-  tags:
-    - visionet
-    - vs2017
-  script:
-    - rm -rf build
-    - mkdir build
-    - cd build
-    - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
-    - ninja -j 12
-    - ctest --output-on-failure
+# master_vs2017:
+#   only:
+#     - schedules
+#   stage: build
+#   tags:
+#     - visionet
+#     - vs2017
+#   script:
+#     - rm -rf build
+#     - mkdir build
+#     - cd build
+#     - cmake -DCMAKE_BUILD_TYPE=Release -G Ninja ..
+#     - ninja -j 12
+#     - ctest --output-on-failure
 
 merge_vs2019:
   rules:
