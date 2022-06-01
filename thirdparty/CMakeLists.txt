@@ -207,6 +207,7 @@ download_project(
   QUIET
 )
 add_subdirectory(${rttr_SOURCE_DIR} ${rttr_BINARY_DIR})
+install(TARGETS rttr_core DESTINATION $<$<PLATFORM_ID:Windows>:bin>$<$<PLATFORM_ID:Linux>:lib>)
 
 # ============================================================
 #                        sigslot
