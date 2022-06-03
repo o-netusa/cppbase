@@ -10,7 +10,7 @@
 #include <common/Serializer.h>
 #include <uuid.h>
 
-struct Obj
+struct Object
 {
     int i = 1;
     std::string s = "hello";
@@ -21,7 +21,7 @@ struct Obj
     std::list<int> l = {1, 2, 3};
     uuids::uuid u = uuids::uuid::from_string("00000000-0000-0000-0000-000000000000").value();
 
-    bool operator==(const Obj& other) const
+    bool operator==(const Object& other) const
     {
         return i == other.i && s == other.s && b == other.b && d == other.d && v == other.v && m == other.m && l == other.l && u == other.u;
     }
@@ -32,6 +32,34 @@ struct Obj
         archive(i, s, b, d, v, m, l, u);
     }
 };
+
+class Object2
+{
+public:
+    bool operator==(const Object2& other) const
+    {
+        return m_data == other.m_data;
+    }
+
+    void SetData(int data)
+    {
+        m_data = data;
+    }
+private:
+    int m_data{0};
+
+    SERIALIZATION_FRIEND_ACCESS(Object2)
+};
+
+void save(OUTPUT_ARCHIVE& archive, const Object2& obj, const uint32_t)
+{
+    archive(obj.m_data);
+}
+
+void load(INPUT_ARCHIVE& archive, Object2& obj, const uint32_t)
+{
+    archive(obj.m_data);
+}
 
 TEST(SerializationTests, BasicTypes)
 {
@@ -77,10 +105,19 @@ TEST(SerializationTests, BasicTypes)
         uuids::uuid u_deser = cppbase::Serializer::LoadObjectFromStringBinary<uuids::uuid>(u_ser);
         EXPECT_EQ(u, u_deser);
 
-        Obj obj;
+        Object obj;
         std::string archivePath = "./test.bin";
         cppbase::Serializer::SaveObjectToFileBinary(obj, archivePath);
-        Obj obj2 = cppbase::Serializer::LoadObjectFromFileBinary<Obj>(archivePath);
+        Object obj2 = cppbase::Serializer::LoadObjectFromFileBinary<Object>(archivePath);
         EXPECT_EQ(obj, obj2);
+    }
+
+    // external serialization function
+    {
+        std::shared_ptr<Object2> obj = std::make_shared<Object2>();
+        obj->SetData(10);
+        auto obj_ser = cppbase::Serializer::SaveObjectToStringBinary(obj);
+        auto obj_deser = cppbase::Serializer::LoadObjectFromStringBinary<std::shared_ptr<Object2>>(obj_ser);
+        EXPECT_EQ(*obj, *obj_deser);
     }
 }
