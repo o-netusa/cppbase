@@ -117,11 +117,28 @@ class PropertyPath
 {
 public:
     PropertyPath() = default;
+    ~PropertyPath() = default;
+
     PropertyPath(Variant::Type type, const std::initializer_list<PropertyInfo> &list)
         : m_impl(type, list)
     {}
     PropertyPath(Variant::Type type, const std::string &path = "") : m_impl(type, path) {}
-    ~PropertyPath() = default;
+
+    PropertyPath(const PropertyPath &rhs) : m_impl(rhs.m_impl) {}
+
+    PropertyPath &operator=(const PropertyPath &rhs)
+    {
+        m_impl = rhs.m_impl;
+        return *this;
+    }
+
+    PropertyPath(PropertyPath &&rhs) noexcept : m_impl(std::move(rhs.m_impl)) {}
+
+    PropertyPath &operator=(PropertyPath &&rhs) noexcept
+    {
+        m_impl = std::move(rhs.m_impl);
+        return *this;
+    }
 
     bool operator==(const PropertyPath &rhs) const { return m_impl == rhs.m_impl; }
 

@@ -48,18 +48,14 @@ public:
 private:
     int m_data{0};
 
-    SERIALIZATION_FRIEND_ACCESS(Object2)
+    template<class Archive>
+    void serialize(Archive& archive, const uint32_t)
+    {
+        archive(m_data);
+    }
+
+    SERIALIZATION_FRIEND_ACCESS
 };
-
-void save(OUTPUT_ARCHIVE& archive, const Object2& obj, const uint32_t)
-{
-    archive(obj.m_data);
-}
-
-void load(INPUT_ARCHIVE& archive, Object2& obj, const uint32_t)
-{
-    archive(obj.m_data);
-}
 
 TEST(SerializationTests, BasicTypes)
 {
