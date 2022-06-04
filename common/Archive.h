@@ -9,9 +9,6 @@
 #pragma once
 
 #include <cereal/cereal.hpp>
-#include <cereal/archives/portable_binary.hpp>
-#include <cereal/archives/json.hpp>
-#include <cereal/archives/xml.hpp>
 #include <cereal/types/array.hpp>
 #include <cereal/types/list.hpp>
 #include <cereal/types/memory.hpp>
@@ -21,17 +18,45 @@
 #include <cereal/types/vector.hpp>
 // Include additional types as needed
 
+#include <cereal/archives/portable_binary.hpp>
+// #include <cereal/archives/json.hpp>
+// #include <cereal/archives/xml.hpp>
+
 #include <uuid.h>
+#include "PropertyPath.h"
 // Include serializable utilities
+
+// There is no save/load functions for std::pair<> https://github.com/USCiLab/cereal/issues/547
+namespace cereal {
+
+template<class Archive>
+void save(Archive& archive, const cppbase::PropertyPath& path, const uint32_t)
+{
+    archive(path.GetType().get_name().to_string(), path.ToString());
+}
+
+template<class Archive>
+void load(Archive& archive, cppbase::PropertyPath& path, const uint32_t)
+{
+    std::string type_name;
+    std::string path_str;
+    archive(type_name, path_str);
+    path = cppbase::PropertyPath(cppbase::Variant::Type::get_by_name(type_name.c_str()), path_str);
+}
+
+template <class Archive>
+struct specialize<Archive, cppbase::PropertyPath, cereal::specialization::non_member_load_save> {};
+
+} // namespace cereal
 
 namespace cppbase {
 
 using BinaryInputArchive = cereal::PortableBinaryInputArchive;
 using BinaryOutputArchive = cereal::PortableBinaryOutputArchive;
-using JSONInputArchive = cereal::JSONInputArchive;
-using JSONOutputArchive = cereal::JSONOutputArchive;
-using XMLInputArchive = cereal::XMLInputArchive;
-using XMLOutputArchive = cereal::XMLOutputArchive;
+// using JSONInputArchive = cereal::JSONInputArchive;
+// using JSONOutputArchive = cereal::JSONOutputArchive;
+// using XMLInputArchive = cereal::XMLInputArchive;
+// using XMLOutputArchive = cereal::XMLOutputArchive;
 
 }  // namespace cppbase
 
@@ -77,16 +102,8 @@ void load(Archive& archive, uuid& id, const uint32_t)
 // we don't use virtual inheritance very often.
 #define SERIALIZE_BASE_CLASS(A, T) A(cereal::base_class<T>(this))
 #define SERIALIZE_VIRTUAL_BASE_CLASS(A, T) A(cereal::virtual_base_class<T>(this))
-#define SERIALIZE_OBJ_BASE_CLASS(A, T, O) A(cereal::base_class<T>(O))
-#define SERIALIZE_VIRTUAL_OBJ_BASE_CLASS(A, T, O) A(cereal::virtual_base_class<T>(O))
 
-#define INPUT_ARCHIVE cppbase::BinaryInputArchive
-#define OUTPUT_ARCHIVE cppbase::BinaryOutputArchive
 #define SERIALIZATION_FRIEND_ACCESS friend class cereal::access;
-#define SERIALIZATION_FUNCTION_FRIEND_ACCESS(T) \
-    friend class cereal::access; \
-    friend void save(OUTPUT_ARCHIVE&, const T&, const uint32_t); \
-    friend void load(INPUT_ARCHIVE&, T&, const uint32_t);
 
 // When the inherited archive function is different from truely used one,
 // such as Derived class is using save-load pair while base class achieved
