@@ -55,6 +55,7 @@ public:
             throw std::runtime_error("Failed to open file for reading: " + archive_path);
         }
         InArchive arch(ifs);
+        // std::shared_ptr<T> obj;
         T obj;
         arch(obj);
         return obj;
@@ -87,6 +88,7 @@ public:
         std::stringstream ss;
         ss << archive;
         InArchive arch(ss);
+        // std::shared_ptr<T> obj;
         T obj;
         arch(obj);
         return obj;

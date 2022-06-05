@@ -20,6 +20,9 @@ struct PropertyPathImpl
     Variant::Type m_type;
     std::vector<PropertyInfo> m_path;
 
+    PropertyPathImpl() : m_type(Variant{}.GetType()) {}
+    ~PropertyPathImpl() = default;
+
     PropertyPathImpl(Variant::Type type, const std::initializer_list<PropertyInfo>& list)
         : m_type(type), m_path(list)
     {}
