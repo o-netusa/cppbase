@@ -23,31 +23,43 @@
 // #include <cereal/archives/xml.hpp>
 
 #include <uuid.h>
+
 #include "PropertyPath.h"
 // Include serializable utilities
 
 // There is no save/load functions for std::pair<> https://github.com/USCiLab/cereal/issues/547
 namespace cereal {
 
-template<class Archive>
+template <class Archive>
 void save(Archive& archive, const cppbase::PropertyPath& path, const uint32_t)
 {
-    archive(path.GetType().get_name().to_string(), path.ToString());
-}
-
-template<class Archive>
-void load(Archive& archive, cppbase::PropertyPath& path, const uint32_t)
-{
-    std::string type_name;
-    std::string path_str;
-    archive(type_name, path_str);
-    path = cppbase::PropertyPath(cppbase::Variant::Type::get_by_name(type_name.c_str()), path_str);
+    archive(path.GetType().get_name().to_string(), path.GetRootType().get_name().to_string(),
+            path.ToString());
 }
 
 template <class Archive>
-struct specialize<Archive, cppbase::PropertyPath, cereal::specialization::non_member_load_save> {};
+void load(Archive& archive, cppbase::PropertyPath& path, const uint32_t)
+{
+    std::string type_name;
+    std::string root_type_name;
+    std::string path_str;
+    archive(type_name, root_type_name, path_str);
+    try
+    {
+        path = cppbase::PropertyPath(cppbase::Variant::Type::get_by_name(type_name.c_str()),
+                                     path_str);
+    } catch (const std::exception&)
+    {
+        path = cppbase::PropertyPath(cppbase::Variant::Type::get_by_name(root_type_name.c_str()),
+                                     path_str);
+    }
+}
 
-} // namespace cereal
+template <class Archive>
+struct specialize<Archive, cppbase::PropertyPath, cereal::specialization::non_member_load_save>
+{};
+
+}  // namespace cereal
 
 namespace cppbase {
 
@@ -110,6 +122,6 @@ void load(Archive& archive, uuid& id, const uint32_t)
 // serialize function, call SPECIALIZE_SAVE_LOAD_ARCHIVE(Derived) to provide
 // a disambiguation for cereal.
 #define SPECIALIZE_SERIALIZE_ARCHIVE(T) \
-  CEREAL_SPECIALIZE_FOR_ALL_ARCHIVES(T, cereal::specialization::member_serialize)
+    CEREAL_SPECIALIZE_FOR_ALL_ARCHIVES(T, cereal::specialization::member_serialize)
 #define SPECIALIZE_SAVE_LOAD_ARCHIVE(T) \
-  CEREAL_SPECIALIZE_FOR_ALL_ARCHIVES(T, cereal::specialization::member_load_save)
+    CEREAL_SPECIALIZE_FOR_ALL_ARCHIVES(T, cereal::specialization::member_load_save)
