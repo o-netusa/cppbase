@@ -12,7 +12,7 @@ using namespace cppbase::logging;
 
 TEST(LoggingTests, GetLoggers)
 {
-    auto default_logger = GetLogger();
+    auto default_logger = Instance::GetInstance().GetLogger();
     EXPECT_NE(nullptr, default_logger);
     default_logger->info("This is logged from default logger.");
 
