@@ -18,25 +18,10 @@ public:
     static constexpr const char log_pattern[] = "[%Y-%m-%dT%T%z] [%L] <%n>: %v";
     static Instance& GetInstance()
     {
-        static Instance m_instance;
-        return m_instance;
+        static Instance instance;
+        return instance;
     }
 
-    /**
-     * @brief GetLogger
-     *   Get the specified logger. If \p logger_name is empty, the global logger
-     *   will be returned. A logger will be created if the specified name cannot
-     *   be found.
-     *   Logging class is responsible for creating specialized loggers.
-     *   Each module (.so or .dll) can get its own logger, as long as
-     *   it has ONET_MODULE_NAME macro defined.
-     * @param[in] logger_name
-     * @return A spdlog logger
-     * @note
-     *   By default, in Debug mode, all logs will be logged into std::cout,
-     *   while in Release mode, all logs will be logged into a log file.
-     *   But the configuration can be changed in the \b log.conf file.
-     */
     LoggerPtr GetLogger(const std::string& logger_name = "") noexcept
     {
         if (logger_name.empty())  // return the global logger
@@ -47,9 +32,14 @@ public:
             auto logger = spdlog::get(logger_name);
             if (!logger)
             {
+                logger = spdlog::get("default");
+                if (logger)
+                {
+                    return logger->clone(logger_name);
+                }
                 try
                 {
-                    // TODO: for debug only
+                    // create a new logger if neighter "logger_name" nor "default" exist
                     logger = spdlog::stdout_color_mt(logger_name.c_str());
                 } catch (std::exception ex)
                 {
