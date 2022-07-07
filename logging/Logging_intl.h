@@ -54,7 +54,6 @@ public:
         }
     }
 
-private:
     Instance()
     {
         fs::path log_conf = fs::path(filesystem::GetConfigDir()) / filesystem::LogConfigFilename;

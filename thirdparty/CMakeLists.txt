@@ -210,6 +210,22 @@ add_subdirectory(${rttr_SOURCE_DIR} ${rttr_BINARY_DIR})
 install(TARGETS rttr_core DESTINATION $<$<PLATFORM_ID:Windows>:bin>$<$<PLATFORM_ID:Linux>:lib>)
 
 # ============================================================
+#                        sigslot
+# ============================================================
+#
+if(CPPBASE_BUILD_SIGSLOT)
+message("==> Configuring sigslot")
+download_project(
+  PROJ     sigslot
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/sigslot/sigslot-master.zip
+  URL_HASH MD5=209a71004526e5d66025ab233200da0f
+  QUIET
+)
+add_library(sigslot INTERFACE)
+target_include_directories(sigslot INTERFACE ${sigslot_SOURCE_DIR}/include)
+endif()
+
+# ============================================================
 #                        spdlog
 # ============================================================
 #
@@ -240,23 +256,6 @@ download_project(
 )
 add_subdirectory(${stduuid_SOURCE_DIR} ${stduuid_BINARY_DIR})
 endif()
-
-# ============================================================
-#                        TaskFlow
-# ============================================================
-#
-message(STATUS "Configuring TaskFlow")
-set(TF_BUILD_TESTS    OFF CACHE BOOL "")
-set(TF_BUILD_EXAMPLES OFF CACHE BOOL "")
-download_project(
-  PROJ     taskflow
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/taskflow/v3.1.0.tar.gz
-  URL_HASH MD5=de98b4ac60352f2bdc259d135a6c9594
-  UPDATE_DISCONNECTED TRUE
-  QUIET
-)
-add_library(taskflow INTERFACE)
-target_include_directories(taskflow INTERFACE ${taskflow_SOURCE_DIR})
 
 # ============================================================
 #                        yaml-cpp
