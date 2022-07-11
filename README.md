@@ -1,5 +1,5 @@
 ![workflow](https://github.com/o-netusa/cppbase/actions/workflows/build.yml/badge.svg)
-![Language: C++17](https://img.shields.io/badge/Language-C%2B%2B17-yellow)
+![Language: C++17](https://img.shields.io/badge/Language-C%2B%2B17-blue)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Open in Visual Studio Code](https://img.shields.io/badge/-Open%20in%20Visual%20Studio%20Code-007acc)](https://vscode.dev/github/o-netusa/cppbase)
 
