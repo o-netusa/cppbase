@@ -79,7 +79,7 @@ public:
     /**
      * @brief Deserialize an object from a string
      *
-     * @param str String representation of the object
+     * @param archive String representation of the object
      * @return The loaded object
      */
     template <typename InArchive, typename T>
@@ -88,27 +88,53 @@ public:
         std::stringstream ss;
         ss << archive;
         InArchive arch(ss);
-        // std::shared_ptr<T> obj;
         T obj;
         arch(obj);
         return obj;
     }
 
+    /**
+     * @brief Serialize an object to a binary archive file
+     *
+     * @param obj Object to be serialized
+     * @param archive_path Path to the archive file to be created
+     */
     template<typename T>
     static void SaveObjectToFileBinary(const T& obj, const std::string& archive_path)
     {
         SaveObjectToFile<BinaryOutputArchive, T>(obj, archive_path);
     }
+
+    /**
+     * @brief Serialize an object to a binary archive string
+     *
+     * @param obj Object to be serialized
+     * @return std::string String that contains the archive data
+     */
     template<typename T>
     static std::string SaveObjectToStringBinary(const T& obj)
     {
         return SaveObjectToString<BinaryOutputArchive, T>(obj);
     }
+
+    /**
+     * @brief Deserialize an object from a binary archive file
+     *
+     * @param archive_path Path to the archive file to be loaded
+     * @return The loaded object
+     */
     template<typename T>
     static T LoadObjectFromFileBinary(const std::string& archive_path)
     {
         return LoadObjectFromFile<BinaryInputArchive, T>(archive_path);
     }
+
+    /**
+     * @brief Deserialize an object from a binary archive string
+     *
+     * @param archive String that contains the archive data
+     * @return The loaded object
+     */
     template<typename T>
     static T LoadObjectFromStringBinary(const std::string& archive)
     {

@@ -1,4 +1,7 @@
 ![workflow](https://github.com/o-netusa/cppbase/actions/workflows/build.yml/badge.svg)
+![Language: C++17](https://img.shields.io/badge/Language-C%2B%2B17-yellow)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Open in Visual Studio Code](https://img.shields.io/badge/-Open%20in%20Visual%20Studio%20Code-007acc)](https://vscode.dev/github/o-netusa/cppbase)
 
 # cppbase
 C++17 cross-platform header-only library providing common features for C++ projects, such as variant, logging, serialization, task sequence, thread pool, TCP/UDP client and server, etc.
@@ -12,6 +15,8 @@ C++17 cross-platform header-only library providing common features for C++ proje
 **Serialization** internally uses [cereal](https://github.com/USCiLab/cereal) to serialize and deserialize data. [Serializer](common/Serializer.h) provides a set of convenient functions to serialize and deserialize objects to/from a string or a file in binary format, which can be easily changed to JSON or XML.
 ### Sequence
 **Sequence** is a set of classes ([Processor](sequence/Processor.h), [Sequence](sequence/Sequence.h), [Link](sequence/Link.h)) that allows user to execute a series of processing unit. It internally uses [taskflow](https://github.com/taskflow/taskflow) as the execution engine. Together with **Variant**, it provides an easy way to create a sequence that contains multiple processors with different functionalities to finish complex tasks. Refer to [tests/common/SequenceTests.cpp](tests/sequence/SequenceTests.cpp) and [tests/sequence/ProcessorTests.cpp] for examples.
+
+![Processor, Sequence and link](docs/images/sequence_processor.png)
 ### Thread Pool
 There are two threadpools in this library: **ThreadPool** and **ForkJoinPool**. The former is based on https://github.com/progschj/ThreadPool.git and the latter is based on [asio's fork join pool](https://raw.githubusercontent.com/boostorg/asio/develop/example/cpp14/executors/fork_join.cpp).
 ### TCP/UDP Client and Server

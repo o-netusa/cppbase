@@ -23,6 +23,7 @@ option(CPPBASE_BUILD_RAPIDJSON "Build RapidJson"   ${CPPBASE_STANDALONE_PROJECT}
 option(CPPBASE_BUILD_RAPIDXML  "Build RapidXml"    ${CPPBASE_STANDALONE_PROJECT})
 option(CPPBASE_BUILD_SIGSLOT   "Build sigslot"     ${CPPBASE_STANDALONE_PROJECT})
 option(CPPBASE_BUILD_YAML_CPP  "Build YAML-CPP"    OFF)
+option(CPPBASE_BUILD_DOCS      "Build document"    ${CPPBASE_STANDALONE_PROJECT})
 option(CPPBASE_USE_RTTR        "Use RTTR library (default=ON)" ON)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -68,6 +69,10 @@ add_subdirectory(thirdparty)
 if(CPPBASE_BUILD_TESTING)
   enable_testing()
   add_subdirectory(tests)
+endif()
+
+if(CPPBASE_BUILD_DOCS)
+  add_subdirectory(docs)
 endif()
 
 include(ClangFormat)
