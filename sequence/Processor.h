@@ -1,8 +1,8 @@
 /*****************************************************************************
  * @file: Processor.h
- * @brief: 处理单元基类，该类是序列中的最小可执行单元。
+ * @brief: The minimal executable unit in a sequence.
  *
- * Copyright (c) 2022 PIQS Technologies.
+ * Copyright (c) 2022 O-Net Communications Inc.
  * All rights reserved.
  * **************************************************************************/
 

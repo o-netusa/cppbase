@@ -32,6 +32,6 @@ target_include_directories(sequence_test PUBLIC
 
 # set_target_warnings_as_error(TARGET sequence_test)
 target_compile_features(sequence_test PRIVATE ${CXX_STD})
-target_link_libraries(sequence_test gtest cereal spdlog_header_only stduuid taskflow rttr_core)
+target_link_libraries(sequence_test gtest cereal spdlog_header_only stduuid Taskflow rttr_core)
 
 gtest_discover_tests(sequence_test)

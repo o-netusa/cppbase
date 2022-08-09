@@ -2,7 +2,7 @@
  * @file:  Logging_intl.h
  * @brief: Logging internal implementations
  *
- * Copyright (c) 2021 O-Net Technologies (Group) Limited.
+ * Copyright (c) 2022 O-Net Communications Inc.
  **************************************************************************/
 
 #include <common/FileSystem.h>
