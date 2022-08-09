@@ -38,13 +38,16 @@ message(STATUS "===============================")
 if(CPPBASE_BUILD_ASIO)
 message("==> Configuring asio")
 download_project(
-  PROJ     asio
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/asio/asio-1-22-0.tar.gz
-  URL_HASH MD5=7f0658ace1fb6416c85a0999027346b2
+  PROJ           asio
+  GIT_REPOSITORY https://github.com/chriskohlhoff/asio.git
+  GIT_TAG        asio-1-23-0
+  GIT_SHALLOW    ON
   QUIET
 )
 add_library(asio INTERFACE)
 target_include_directories(asio INTERFACE ${asio_SOURCE_DIR}/asio/include)
+install(DIRECTORY ${asio_SOURCE_DIR}/asio/include/asio DESTINATION include)
+install(FILES ${asio_SOURCE_DIR}/asio/include/asio.hpp DESTINATION include)
 endif()
 
 # ============================================================
@@ -57,9 +60,10 @@ set(BUILD_DOC OFF CACHE BOOL "")
 set(BUILD_SANDBOX OFF CACHE BOOL "")
 set(SKIP_PERFORMANCE_COMPARISON ON CACHE BOOL "")
 download_project(
-  PROJ     cereal
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cereal/v1.3.2.tar.gz
-  URL_HASH MD5=ab6070fadc7c50072ef4153fb1c46a87
+  PROJ           cereal
+  GIT_REPOSITORY https://github.com/USCiLab/cereal.git
+  GIT_TAG        v1.3.2
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${cereal_SOURCE_DIR} ${cereal_BINARY_DIR})
@@ -72,13 +76,15 @@ endif()
 if(CPPBASE_BUILD_CXXOPTS)
 message("==> Configuring cxxopts")
 download_project(
-  PROJ     cxxopts
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/cxxopts/v3.0.0.tar.gz
-  URL_HASH MD5=4c4cb6e2f252157d096fe18451ab451e
+  PROJ           cxxopts
+  GIT_REPOSITORY https://github.com/jarro2783/cxxopts.git
+  GIT_TAG        v3.0.0
+  GIT_SHALLOW    ON
   QUIET
 )
 add_library(cxxopts INTERFACE)
 target_include_directories(cxxopts INTERFACE ${cxxopts_SOURCE_DIR}/include)
+install(FILES ${cxxopts_SOURCE_DIR}/include/cxxopts.hpp DESTINATION include)
 endif()
 
 # ============================================================
@@ -91,8 +97,8 @@ set(BUILD_TESTING OFF CACHE BOOL "")
 set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "")
 download_project(
   PROJ     eigen
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-3.3.9.tar.gz
-  URL_HASH MD5=609286804b0f79be622ccf7f9ff2b660
+  URL      https://gitlab.com/libeigen/eigen/-/archive/3.4.0/eigen-3.4.0.tar.gz
+  URL_HASH MD5=4c527a9171d71a72a9d4186e65bea559
   QUIET
 )
 add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR})
@@ -105,9 +111,10 @@ endif()
 if(CPPBASE_BUILD_FMT)
 message("==> Configuring fmt")
 download_project(
-  PROJ     fmt
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/fmt/8.1.1.tar.gz
-  URL_HASH MD5=fe7f1585844b14c647bd332ad5562832
+  PROJ           fmt
+  GIT_REPOSITORY https://github.com/fmtlib/fmt.git
+  GIT_TAG        9.0.0
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${fmt_SOURCE_DIR} ${fmt_BINARY_DIR})
@@ -121,7 +128,7 @@ if(CPPBASE_BUILD_GETTEXT AND (CMAKE_SYSTEM_NAME MATCHES "Windows"))
 message("==> Configuring gettext")
 download_project(
   PROJ     gettext
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/gettext/gettext-0.21.tar.gz
+  URL      https://ftp.gnu.org/gnu/gettext/gettext-0.21.tar.gz
   URL_HASH MD5=b8166ac41b4ef3adf127b3fa0445e099
   QUIET
 )
@@ -148,9 +155,10 @@ set(INSTALL_GTEST OFF CACHE BOOL "")
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCED)
 
 download_project(
-  PROJ     googletest
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/googletest/release-1.11.0.tar.gz
-  URL_HASH MD5=e8a8df240b6938bb6384155d4c37d937
+  PROJ           googletest
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG        release-1.12.1
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})
@@ -163,9 +171,10 @@ endif()
 if(CPPBASE_BUILD_RAPIDJSON)
 message("==> Configuring rapidjson")
 download_project(
-  PROJ     rapidjson
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidjson/rapidjson-master.zip
-  URL_HASH MD5=fb721489c7f4aa384372050993e37d1d
+  PROJ           rapidjson
+  GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+  GIT_TAG        master
+  GIT_SHALLOW    ON
   QUIET
 )
 add_library(rapidjson INTERFACE)
@@ -176,17 +185,17 @@ endif()
 #                        rapidxml
 # ============================================================
 #
-if(CPPBASE_BUILD_RAPIDXML)
-message("==> Configuring rapidxml")
-download_project(
-  PROJ     rapidxml
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml/rapidxml.zip
-  URL_HASH MD5=113b9040ccaba2cc652f8aeac7fd9536
-  QUIET
-)
-add_library(rapidxml INTERFACE)
-target_include_directories(rapidxml INTERFACE ${rapidxml_SOURCE_DIR})
-endif()
+# if(CPPBASE_BUILD_RAPIDXML)
+# message("==> Configuring rapidxml")
+# download_project(
+#   PROJ     rapidxml
+#   URL      ${CMAKE_CURRENT_SOURCE_DIR}/rapidxml/rapidxml.zip
+#   URL_HASH MD5=113b9040ccaba2cc652f8aeac7fd9536
+#   QUIET
+# )
+# add_library(rapidxml INTERFACE)
+# target_include_directories(rapidxml INTERFACE ${rapidxml_SOURCE_DIR})
+# endif()
 
 # ============================================================
 #                        RTTR
@@ -196,18 +205,16 @@ message(STATUS "Configuring RTTR")
 set(BUILD_UNIT_TESTS    OFF CACHE BOOL "")
 set(BUILD_EXAMPLES      OFF CACHE BOOL "")
 set(BUILD_DOCUMENTATION OFF CACHE BOOL "")
-set(BUILD_INSTALLER     OFF CACHE BOOL "") # Install rttr dll
-set(BUILD_PACKAGE       OFF CACHE BOOL "")
 set(BUILD_STATIC        OFF CACHE BOOL "")
 
 download_project(
-  PROJ     rttr
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/rttr/rttr-master.zip
-  URL_HASH MD5=78d80e22d52a460807812ffec9a88599
+  PROJ           rttr
+  GIT_REPOSITORY https://github.com/rttrorg/rttr.git
+  GIT_TAG        master
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${rttr_SOURCE_DIR} ${rttr_BINARY_DIR})
-install(TARGETS rttr_core DESTINATION $<$<PLATFORM_ID:Windows>:bin>$<$<PLATFORM_ID:Linux>:lib>)
 
 # ============================================================
 #                        spdlog
@@ -217,9 +224,10 @@ if(CPPBASE_BUILD_SPDLOG)
 message("==> Configuring spdlog")
 set(SPDLOG_FMT_EXTERNAL_HO ON CACHE BOOL "")
 download_project(
-  PROJ     spdlog
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/spdlog/v1.10.0.tar.gz
-  URL_HASH MD5=effea813cd81cfb5588806c5754e14f1
+  PROJ           spdlog
+  GIT_REPOSITORY https://github.com/gabime/spdlog.git
+  GIT_TAG        v1.10.0
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
@@ -233,9 +241,10 @@ if(CPPBASE_BUILD_STDUUID)
 message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
-  PROJ     stduuid
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/v1.2.2.tar.gz
-  URL_HASH MD5=2d85213945c231bcfdf40b382ed41620
+  PROJ           stduuid
+  GIT_REPOSITORY https://github.com/mariusbancila/stduuid.git
+  GIT_TAG        v1.2.2
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${stduuid_SOURCE_DIR} ${stduuid_BINARY_DIR})
@@ -249,14 +258,13 @@ message(STATUS "Configuring TaskFlow")
 set(TF_BUILD_TESTS    OFF CACHE BOOL "")
 set(TF_BUILD_EXAMPLES OFF CACHE BOOL "")
 download_project(
-  PROJ     taskflow
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/taskflow/v3.1.0.tar.gz
-  URL_HASH MD5=de98b4ac60352f2bdc259d135a6c9594
-  UPDATE_DISCONNECTED TRUE
+  PROJ           taskflow
+  GIT_REPOSITORY https://github.com/taskflow/taskflow.git
+  GIT_TAG        v3.4.0
+  GIT_SHALLOW    ON
   QUIET
 )
-add_library(taskflow INTERFACE)
-target_include_directories(taskflow INTERFACE ${taskflow_SOURCE_DIR})
+add_subdirectory(${taskflow_SOURCE_DIR} ${taskflow_BINARY_DIR})
 
 # ============================================================
 #                        yaml-cpp
@@ -266,9 +274,10 @@ if(CPPBASE_BUILD_YAML_CPP)
 message("==> Configuring yaml-cpp")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
 download_project(
-  PROJ     yamlcpp
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/yamlcpp/yaml-cpp-0.7.0.tar.gz
-  URL_HASH MD5=74d646a3cc1b5d519829441db96744f0
+  PROJ           yamlcpp
+  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+  GIT_TAG        yaml-cpp-0.7.0
+  GIT_SHALLOW    ON
   QUIET
 )
 add_subdirectory(${yamlcpp_SOURCE_DIR} ${yamlcpp_BINARY_DIR})
