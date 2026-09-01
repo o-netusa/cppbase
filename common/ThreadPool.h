@@ -7,11 +7,9 @@
 
 #pragma once
 
-#include <chrono>
 #include <condition_variable>
 #include <functional>
 #include <future>
-#include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>
@@ -62,10 +60,20 @@ public:
     ~ThreadPool();
 
     template <class F, class... Args>
-    auto Enqueue(F&& f, Args&&... args) -> std::future<typename std::result_of<F(Args...)>::type>;
+    auto Enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>;
 
     ThreadPriority GetThreadPriority() const;
     uint32_t GetReservedCpu() const;
+
+    /**
+     * @brief QueueSize Number of tasks currently waiting to be picked up by a worker thread.
+     */
+    size_t QueueSize() const;
+
+    /**
+     * @brief ThreadCount Number of worker threads in the pool.
+     */
+    size_t ThreadCount() const;
 
 private:
     // need to keep track of threads so we can join them
@@ -74,7 +82,7 @@ private:
     std::queue<std::function<void()> > m_tasks;
 
     // synchronization
-    std::mutex m_queue_mutex;
+    mutable std::mutex m_queue_mutex;
     std::condition_variable m_condition;
     bool m_stop{false};
     ThreadPriority m_priority;
@@ -84,12 +92,14 @@ private:
 // add new work item to the pool
 template <class F, class... Args>
 auto ThreadPool::Enqueue(F&& f, Args&&... args)
-    -> std::future<typename std::result_of<F(Args...)>::type>
+    -> std::future<typename std::invoke_result<F, Args...>::type>
 {
-    using return_type = typename std::result_of<F(Args...)>::type;
+    using return_type = typename std::invoke_result<F, Args...>::type;
 
     auto task = std::make_shared<std::packaged_task<return_type()> >(
-        std::bind(std::forward<F>(f), std::forward<Args>(args)...));
+        [f = std::forward<F>(f), ... args = std::forward<Args>(args)]() mutable -> return_type {
+            return std::invoke(f, args...);
+        });
 
     std::future<return_type> res = task->get_future();
     {
@@ -99,13 +109,7 @@ auto ThreadPool::Enqueue(F&& f, Args&&... args)
         if (m_stop)
             throw std::runtime_error("enqueue on stopped ThreadPool");
 
-        m_tasks.emplace([task]() {
-            using namespace std::chrono;
-            auto start = high_resolution_clock::now();
-            (*task)();
-            auto stop = high_resolution_clock::now();
-            auto duration = duration_cast<microseconds>(stop - start);
-        });
+        m_tasks.emplace([task]() { (*task)(); });
     }
     m_condition.notify_one();
     return res;

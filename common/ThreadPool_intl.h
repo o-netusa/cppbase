@@ -9,12 +9,22 @@
 
 #include <logging/Logging.h>
 
+#ifdef __linux__
+#include <cerrno>
+#include <cstring>
+#include <pthread.h>
+#endif
+
 namespace cppbase {
 
-static auto logger = logging::GetLoggerForCurrentModule();
+inline logging::LoggerPtr GetThreadPoolLogger()
+{
+    static logging::LoggerPtr logger = logging::GetLoggerForCurrentModule();
+    return logger;
+}
 
-// #ifdef __linux__
-#if 0
+#ifdef __linux__
+
 int32_t SetThreadPriority(ThreadPriority priority)
 {
     pthread_t id = pthread_self();
@@ -26,8 +36,8 @@ int32_t SetThreadPriority(ThreadPriority priority)
     if (rv != 0)
         return rv;
 
-    olog_info("ThreadUtils", "thread {}, policy: {}, priority: {}, new priority: {}",
-              id, policy, sp.sched_priority, pri);
+    GetThreadPoolLogger()->info("thread {}, policy: {}, priority: {}, new priority: {}", id,
+                                 policy, sp.sched_priority, pri);
 
     if (sp.sched_priority == pri && policy == SCHED_RR)
         return 0;
@@ -35,18 +45,16 @@ int32_t SetThreadPriority(ThreadPriority priority)
     int priority_max = sched_get_priority_max(SCHED_RR);
     pri = std::min(pri, priority_max);
     sp.sched_priority = pri;
-    rv = pthread_setschedparam(pthread_self(), SCHED_RR, &sp);
+    rv = pthread_setschedparam(id, SCHED_RR, &sp);
     if (rv != 0)
     {
-        olog_warning("ThreadUtils", "warning: sched_rr set fail: {}", strerror(errno));
+        GetThreadPoolLogger()->warn("sched_rr set fail: {}", strerror(rv));
         return rv;
     }
-    else
-    {
-        pthread_getschedparam(pthread_self(), &policy, &sp);
-        olog_info("ThreadUtils", "thread {}, new policy: {}, priority is: {}", id, policy,
-                  sp.sched_priority);
-    }
+
+    pthread_getschedparam(id, &policy, &sp);
+    GetThreadPoolLogger()->info("thread {}, new policy: {}, priority is: {}", id, policy,
+                                 sp.sched_priority);
 
     return 0;
 }
@@ -55,9 +63,12 @@ int32_t GetThreadPriority(int64_t id)
 {
     int policy;
     struct sched_param sp;
-    int rv = pthread_getschedparam(id, &policy, &sp);
+    int rv = pthread_getschedparam(static_cast<pthread_t>(id), &policy, &sp);
     if (rv != 0)
-        throw InternalErrorException("Error getting thread sched param");
+    {
+        GetThreadPoolLogger()->error("Error getting thread sched param: {}", strerror(rv));
+        return -1;
+    }
     return sp.sched_priority;
 }
 
@@ -91,7 +102,7 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
             auto rc = pthread_setaffinity_np(thread.native_handle(), sizeof(cpu_set_t), &cpuset);
             if (rc != 0)
             {
-                logger->error("Error calling pthread_setaffinity_np: {}", rc);
+                GetThreadPoolLogger()->error("Error calling pthread_setaffinity_np: {}", rc);
             }
 #endif
         }
@@ -117,8 +128,9 @@ ThreadPool::ThreadPool(uint32_t threads, ThreadPriority priority, uint32_t cpu_r
         });
         set_affinity(i, m_threads[i]);
     }
-    logger->info("Created thread pool with {} threads at priority {}, {} CPU core(s) reserved",
-                 threads, static_cast<int>(priority), cpu_reserved);
+    GetThreadPoolLogger()->info(
+        "Created thread pool with {} threads at priority {}, {} CPU core(s) reserved", threads,
+        static_cast<int>(priority), cpu_reserved);
 }
 
 // the destructor joins all threads
@@ -141,6 +153,17 @@ ThreadPriority ThreadPool::GetThreadPriority() const
 uint32_t ThreadPool::GetReservedCpu() const
 {
     return m_cpu_reserved;
+}
+
+size_t ThreadPool::QueueSize() const
+{
+    std::unique_lock<std::mutex> lock(m_queue_mutex);
+    return m_tasks.size();
+}
+
+size_t ThreadPool::ThreadCount() const
+{
+    return m_threads.size();
 }
 
 }  // namespace cppbase
