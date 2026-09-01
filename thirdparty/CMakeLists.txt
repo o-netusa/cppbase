@@ -232,6 +232,10 @@ endif()
 if(CPPBASE_BUILD_STDUUID)
 message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
+# stduuid's vendored gsl/ dir gets added to the include path when this is OFF,
+# which shadows the real std <span> header and breaks anything that pulls in
+# <format> (e.g. via <chrono>) under C++20. Use std::span instead.
+set(UUID_USING_CXX20_SPAN ON CACHE BOOL "")
 download_project(
   PROJ     stduuid
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/v1.2.2.tar.gz
