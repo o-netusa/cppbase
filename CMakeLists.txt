@@ -27,7 +27,7 @@ option(CPPBASE_BUILD_DOCS      "Build document"    OFF)
 option(CPPBASE_USE_RTTR        "Use RTTR library (default=ON)" ON)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CXX_STD cxx_std_17)
+set(CXX_STD cxx_std_20)
 
 # Custom CMake modules/scripts
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
@@ -78,8 +78,17 @@ endif()
 include(ClangFormat)
 clang_format_recurse("common" "logging" "network" "tests")
 
-install(FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/Global.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/common/Semaphore.h
-    DESTINATION include/common
-)
+file(GLOB_RECURSE HEADERS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+  "common/*.h" "config/*.h" "locale/*.h" "logging/*.h" "network/*.h")
+
+foreach (file ${HEADERS})
+    get_filename_component(dir ${file} DIRECTORY)
+    install(FILES ${file} DESTINATION include/${dir})
+endforeach()
+
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+    set(CPACK_GENERATOR ZIP)
+elseif(CMAKE_SYSTEM_NAME MATCHES "Linux")
+    set(CPACK_GENERATOR TGZ)
+endif()
+include(CPack)

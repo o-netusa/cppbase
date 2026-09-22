@@ -3,6 +3,13 @@ cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(DownloadProject)
 
+# Some vendored sources still declare a cmake_minimum_required() below 3.5,
+# which CMake 4.0+ rejects outright. Scope a compatibility floor to the
+# thirdparty tree only; it is inherited by the add_subdirectory() calls below.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.0 AND NOT DEFINED CMAKE_POLICY_VERSION_MINIMUM)
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
+
 message(STATUS "===============================")
 message(STATUS "Thirdparty Libs (${CMAKE_BUILD_TYPE})")
 message(STATUS "===============================")
@@ -240,6 +247,10 @@ endif()
 if(CPPBASE_BUILD_STDUUID)
 message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
+# stduuid's vendored gsl/ dir gets added to the include path when this is OFF,
+# which shadows the real std <span> header and breaks anything that pulls in
+# <format> (e.g. via <chrono>) under C++20. Use std::span instead.
+set(UUID_USING_CXX20_SPAN ON CACHE BOOL "")
 download_project(
   PROJ           stduuid
   GIT_REPOSITORY https://github.com/mariusbancila/stduuid.git

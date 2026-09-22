@@ -4,7 +4,7 @@
 [![Open in Visual Studio Code](https://img.shields.io/badge/-Open%20in%20Visual%20Studio%20Code-007acc)](https://vscode.dev/github/o-netusa/cppbase)
 
 # cppbase
-C++17 cross-platform header-only library providing common features for C++ projects, such as variant, logging, serialization, task sequence, thread pool, TCP/UDP client and server, etc.
+C++20 cross-platform header-only library providing common features for C++ projects, such as variant, logging, serialization, task sequence, thread pool, TCP/UDP client and server, etc.
 
 ## Features
 ### Variant
@@ -22,7 +22,7 @@ There are two threadpools in this library: **ThreadPool** and **ForkJoinPool**. 
 ### TCP/UDP Client and Server
 Our implementation uses non-boost version [asio](https://github.com/chriskohlhoff/asio) internally.
 ### Others
-There are other features that are commonly used in C++ projects, such as [BlockingQueue](common/BlockingQueue.h), [Encoding](common/Encoding.h), [FileSystem](common/FileSystem.h) (wraps up C++17 std::filesystem), [Semaphore](common/Semaphore.h), [Timer](common/Timer.h), [Uuid](common/Uuid.h).
+There are other features that are commonly used in C++ projects, such as [BlockingQueue](common/BlockingQueue.h), [Encoding](common/Encoding.h), [FileSystem](common/FileSystem.h) (wraps up C++ std::filesystem), [Semaphore](common/Semaphore.h), [Timer](common/Timer.h), [Uuid](common/Uuid.h).
 
 **Please create issues if you find any bugs or have any suggestions.**
 

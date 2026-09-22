@@ -7,16 +7,16 @@
 
 #pragma once
 
-#include <chrono>
 #include <condition_variable>
 #include <functional>
 #include <future>
-#include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>
 #include <stdexcept>
 #include <thread>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "Global.h"
@@ -42,7 +42,7 @@ int32_t SetThreadPriority(ThreadPriority priority);
  * @brief GetThreadPriority
  * @param id
  */
-int32_t GetThreadPriority(int64_t id);
+int32_t GetThreadPriority(std::thread::native_handle_type id);
 
 class ThreadPool
 {
@@ -61,11 +61,45 @@ public:
     ThreadPool() = delete;
     ~ThreadPool();
 
+    // Defined inline (rather than declared here and defined out-of-line below) because MSVC
+    // fails to match a template member function's out-of-line definition to its declaration
+    // when the trailing return type is a dependent std::invoke_result<...>::type (C2244).
     template <class F, class... Args>
-    auto Enqueue(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>;
+    auto Enqueue(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
+    {
+        using return_type = std::invoke_result_t<F, Args...>;
+
+        auto task = std::make_shared<std::packaged_task<return_type()> >(
+            [f = std::forward<F>(f), ... args = std::forward<Args>(args)]() mutable -> return_type {
+                return std::invoke(std::move(f), std::move(args)...);
+            });
+
+        std::future<return_type> res = task->get_future();
+        {
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
+
+            // don't allow enqueueing after stopping the pool
+            if (m_stop)
+                throw std::runtime_error("enqueue on stopped ThreadPool");
+
+            m_tasks.emplace([task]() { (*task)(); });
+        }
+        m_condition.notify_one();
+        return res;
+    }
 
     ThreadPriority GetThreadPriority() const;
     uint32_t GetReservedCpu() const;
+
+    /**
+     * @brief QueueSize Number of tasks currently waiting to be picked up by a worker thread.
+     */
+    size_t QueueSize() const;
+
+    /**
+     * @brief ThreadCount Number of worker threads in the pool.
+     */
+    size_t ThreadCount() const;
 
 private:
     // need to keep track of threads so we can join them
@@ -74,41 +108,12 @@ private:
     std::queue<std::function<void()> > m_tasks;
 
     // synchronization
-    std::mutex m_queue_mutex;
+    mutable std::mutex m_queue_mutex;
     std::condition_variable m_condition;
     bool m_stop{false};
     ThreadPriority m_priority;
     uint32_t m_cpu_reserved{0};
 };
-
-// add new work item to the pool
-template <class F, class... Args>
-auto ThreadPool::Enqueue(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
-{
-    using return_type = std::invoke_result_t<F, Args...>;
-
-    auto task = std::make_shared<std::packaged_task<return_type()> >(
-        std::bind(std::forward<F>(f), std::forward<Args>(args)...));
-
-    std::future<return_type> res = task->get_future();
-    {
-        std::unique_lock<std::mutex> lock(m_queue_mutex);
-
-        // don't allow enqueueing after stopping the pool
-        if (m_stop)
-            throw std::runtime_error("enqueue on stopped ThreadPool");
-
-        m_tasks.emplace([task]() {
-            using namespace std::chrono;
-            auto start = high_resolution_clock::now();
-            (*task)();
-            auto stop = high_resolution_clock::now();
-            auto duration = duration_cast<microseconds>(stop - start);
-        });
-    }
-    m_condition.notify_one();
-    return res;
-}
 
 }  // namespace cppbase
 
