@@ -61,8 +61,32 @@ public:
     ThreadPool() = delete;
     ~ThreadPool();
 
+    // Defined inline (rather than declared here and defined out-of-line below) because MSVC
+    // fails to match a template member function's out-of-line definition to its declaration
+    // when the trailing return type is a dependent std::invoke_result<...>::type (C2244).
     template <class F, class... Args>
-    auto Enqueue(F&& f, Args&&... args) -> std::future<typename std::invoke_result<F, Args...>::type>;
+    auto Enqueue(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
+    {
+        using return_type = std::invoke_result_t<F, Args...>;
+
+        auto task = std::make_shared<std::packaged_task<return_type()> >(
+            [f = std::forward<F>(f), ... args = std::forward<Args>(args)]() mutable -> return_type {
+                return std::invoke(std::move(f), std::move(args)...);
+            });
+
+        std::future<return_type> res = task->get_future();
+        {
+            std::unique_lock<std::mutex> lock(m_queue_mutex);
+
+            // don't allow enqueueing after stopping the pool
+            if (m_stop)
+                throw std::runtime_error("enqueue on stopped ThreadPool");
+
+            m_tasks.emplace([task]() { (*task)(); });
+        }
+        m_condition.notify_one();
+        return res;
+    }
 
     ThreadPriority GetThreadPriority() const;
     uint32_t GetReservedCpu() const;
@@ -90,31 +114,6 @@ private:
     ThreadPriority m_priority;
     uint32_t m_cpu_reserved{0};
 };
-
-// add new work item to the pool
-template <class F, class... Args>
-auto ThreadPool::Enqueue(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
-{
-    using return_type = std::invoke_result_t<F, Args...>;
-
-    auto task = std::make_shared<std::packaged_task<return_type()> >(
-        [f = std::forward<F>(f), ... args = std::forward<Args>(args)]() mutable -> return_type {
-            return std::invoke(std::move(f), std::move(args)...);
-        });
-
-    std::future<return_type> res = task->get_future();
-    {
-        std::unique_lock<std::mutex> lock(m_queue_mutex);
-
-        // don't allow enqueueing after stopping the pool
-        if (m_stop)
-            throw std::runtime_error("enqueue on stopped ThreadPool");
-
-        m_tasks.emplace([task]() { (*task)(); });
-    }
-    m_condition.notify_one();
-    return res;
-}
 
 }  // namespace cppbase
 
