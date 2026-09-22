@@ -2,7 +2,7 @@
  * @file: SequenceTests.cpp
  * @brief:
  *
- * Copyright (c) 2022 PIQS Technologies.
+ * Copyright (c) 2022 O-Net Communications Inc.
  * All rights reserved.
  *************************************************************************/
 

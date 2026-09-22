@@ -2,7 +2,7 @@
  * @file:  EncodingTests.cpp
  * @brief:
  *
- * Copyright (c) 2021 O-Net Technologies (Group) Limited.
+ * Copyright (c) 2022 O-Net Communications Inc.
  **************************************************************************/
 
 #include <common/Encoding.h>

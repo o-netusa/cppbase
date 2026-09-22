@@ -2,7 +2,7 @@
  * @file:  Common.h
  * @brief: Network common header
  *
- * Copyright (c) 2021 O-Net Technologies (Group) Limited.
+ * Copyright (c) 2022 O-Net Communications Inc.
  *************************************************************************/
 
 #pragma once
