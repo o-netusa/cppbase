@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.16)
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
   set(gettext_msgfmt "${CMAKE_SOURCE_DIR}/locale/bin/msgfmt.exe")
