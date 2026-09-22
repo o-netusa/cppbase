@@ -26,7 +26,7 @@ option(CPPBASE_BUILD_YAML_CPP  "Build YAML-CPP"    OFF)
 option(CPPBASE_USE_RTTR        "Use RTTR library (default=ON)" ON)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CXX_STD cxx_std_17)
+set(CXX_STD cxx_std_20)
 
 # Custom CMake modules/scripts
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")

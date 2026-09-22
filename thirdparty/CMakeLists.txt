@@ -3,6 +3,13 @@ cmake_minimum_required(VERSION 3.16)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 include(DownloadProject)
 
+# Some vendored sources still declare a cmake_minimum_required() below 3.5,
+# which CMake 4.0+ rejects outright. Scope a compatibility floor to the
+# thirdparty tree only; it is inherited by the add_subdirectory() calls below.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL 4.0 AND NOT DEFINED CMAKE_POLICY_VERSION_MINIMUM)
+  set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
+endif()
+
 message(STATUS "===============================")
 message(STATUS "Thirdparty Libs (${CMAKE_BUILD_TYPE})")
 message(STATUS "===============================")
@@ -91,8 +98,8 @@ set(BUILD_TESTING OFF CACHE BOOL "")
 set(EIGEN_BUILD_PKGCONFIG OFF CACHE BOOL "")
 download_project(
   PROJ     eigen
-  URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-3.3.9.tar.gz
-  URL_HASH MD5=609286804b0f79be622ccf7f9ff2b660
+  URL      ${CMAKE_CURRENT_SOURCE_DIR}/eigen/eigen-3.4.0.tar.gz
+  URL_HASH MD5=4c527a9171d71a72a9d4186e65bea559
   QUIET
 )
 add_subdirectory(${eigen_SOURCE_DIR} ${eigen_BINARY_DIR})
@@ -232,6 +239,10 @@ endif()
 if(CPPBASE_BUILD_STDUUID)
 message("==> Configuring stduuid")
 set(UUID_BUILD_TESTS OFF CACHE BOOL "")
+# stduuid's vendored gsl/ dir gets added to the include path when this is OFF,
+# which shadows the real std <span> header and breaks anything that pulls in
+# <format> (e.g. via <chrono>) under C++20. Use std::span instead.
+set(UUID_USING_CXX20_SPAN ON CACHE BOOL "")
 download_project(
   PROJ     stduuid
   URL      ${CMAKE_CURRENT_SOURCE_DIR}/stduuid/v1.2.2.tar.gz

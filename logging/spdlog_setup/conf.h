@@ -224,7 +224,6 @@ inline void save_logger_to_file(const std::shared_ptr<spdlog::logger> &logger,
     using details::names::NAME;
 
     // fmt
-    using fmt::format;
 
     // std
     using std::exception;
@@ -246,7 +245,7 @@ inline void save_logger_to_file(const std::shared_ptr<spdlog::logger> &logger,
 
         if (!config)
         {
-            throw setup_error(format("Unable to parse file at '{}' for saving", toml_path));
+            throw setup_error(fmt::format("Unable to parse file at '{}' for saving", toml_path));
         }
 
         auto &config_ref = *config;
@@ -308,7 +307,6 @@ inline auto delete_logger_in_file(const std::string &logger_name, const std::str
     using details::names::NAME;
 
     // fmt
-    using fmt::format;
 
     // std
     using std::exception;
@@ -322,7 +320,7 @@ inline auto delete_logger_in_file(const std::string &logger_name, const std::str
 
         if (!config)
         {
-            throw setup_error(format("Unable to parse file at '{}' for deleting logger '{}'",
+            throw setup_error(fmt::format("Unable to parse file at '{}' for deleting logger '{}'",
                                      toml_path, logger_name));
         }
 
@@ -332,7 +330,7 @@ inline auto delete_logger_in_file(const std::string &logger_name, const std::str
         if (!curr_loggers)
         {
             throw setup_error(
-                format("Unable to find any logger table array for file at '{}'", toml_path));
+                fmt::format("Unable to find any logger table array for file at '{}'", toml_path));
         }
 
         auto &curr_loggers_ref = *curr_loggers;
