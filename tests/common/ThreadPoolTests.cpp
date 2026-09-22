@@ -8,8 +8,18 @@
 #include <common/ThreadPool.h>
 #include <gtest/gtest.h>
 
+#include <chrono>
+#include <condition_variable>
+#include <cstdint>
+#include <future>
+#include <iostream>
+#include <mutex>
+#include <thread>
+#include <vector>
+
 #ifdef __linux__
 #include <pthread.h>
+#include <sched.h>
 #endif
 
 using namespace cppbase;
@@ -77,20 +87,29 @@ TEST(ThreadPoolTests, QueueSizeTest)
 
     std::mutex mtx;
     std::condition_variable cv;
+    bool started = false;
     bool release = false;
 
     // Occupy the single worker thread so subsequently enqueued tasks pile up in the queue.
     auto blocker = pool.Enqueue([&] {
         std::unique_lock<std::mutex> lock(mtx);
+        started = true;
+        cv.notify_one();
         cv.wait(lock, [&] { return release; });
     });
+
+    {
+        std::unique_lock<std::mutex> lock(mtx);
+        cv.wait(lock, [&] { return started; });
+    }
 
     std::vector<std::future<int32_t>> results;
     for (int32_t i = 0; i < 3; ++i)
         results.emplace_back(pool.Enqueue([i] { return i; }));
 
-    // Give the queued tasks time to land in the queue (the worker is blocked, so they can't run).
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(1);
+    while (pool.QueueSize() != 3u && std::chrono::steady_clock::now() < deadline)
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
     EXPECT_EQ(pool.QueueSize(), 3u);
 
     {
@@ -112,7 +131,7 @@ TEST(ThreadPoolTests, SetGetThreadPriorityTest)
     if (rv != 0)
         GTEST_SKIP() << "Insufficient privileges to set real-time thread priority";
 
-    int32_t priority = GetThreadPriority(static_cast<int64_t>(pthread_self()));
+    int32_t priority = GetThreadPriority(pthread_self());
     EXPECT_EQ(priority, static_cast<int32_t>(ThreadPriority::HIGH));
 }
 #endif

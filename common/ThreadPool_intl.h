@@ -10,9 +10,11 @@
 #include <logging/Logging.h>
 
 #ifdef __linux__
+#include <algorithm>
 #include <cerrno>
 #include <cstring>
 #include <pthread.h>
+#include <sched.h>
 #endif
 
 namespace cppbase {
@@ -59,11 +61,11 @@ int32_t SetThreadPriority(ThreadPriority priority)
     return 0;
 }
 
-int32_t GetThreadPriority(int64_t id)
+int32_t GetThreadPriority(std::thread::native_handle_type id)
 {
     int policy;
     struct sched_param sp;
-    int rv = pthread_getschedparam(static_cast<pthread_t>(id), &policy, &sp);
+    int rv = pthread_getschedparam(id, &policy, &sp);
     if (rv != 0)
     {
         GetThreadPoolLogger()->error("Error getting thread sched param: {}", strerror(rv));
@@ -79,7 +81,7 @@ int32_t SetThreadPriority(ThreadPriority)
     return 0;
 }
 
-int32_t GetThreadPriority(int64_t)
+int32_t GetThreadPriority(std::thread::native_handle_type)
 {
     return 0;
 }

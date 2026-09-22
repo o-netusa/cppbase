@@ -15,6 +15,8 @@
 #include <queue>
 #include <stdexcept>
 #include <thread>
+#include <type_traits>
+#include <utility>
 #include <vector>
 
 #include "Global.h"
@@ -40,7 +42,7 @@ int32_t SetThreadPriority(ThreadPriority priority);
  * @brief GetThreadPriority
  * @param id
  */
-int32_t GetThreadPriority(int64_t id);
+int32_t GetThreadPriority(std::thread::native_handle_type id);
 
 class ThreadPool
 {
@@ -91,14 +93,13 @@ private:
 
 // add new work item to the pool
 template <class F, class... Args>
-auto ThreadPool::Enqueue(F&& f, Args&&... args)
-    -> std::future<typename std::invoke_result<F, Args...>::type>
+auto ThreadPool::Enqueue(F&& f, Args&&... args) -> std::future<std::invoke_result_t<F, Args...>>
 {
-    using return_type = typename std::invoke_result<F, Args...>::type;
+    using return_type = std::invoke_result_t<F, Args...>;
 
     auto task = std::make_shared<std::packaged_task<return_type()> >(
         [f = std::forward<F>(f), ... args = std::forward<Args>(args)]() mutable -> return_type {
-            return std::invoke(f, args...);
+            return std::invoke(std::move(f), std::move(args)...);
         });
 
     std::future<return_type> res = task->get_future();
